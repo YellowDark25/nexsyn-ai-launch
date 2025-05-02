@@ -79,26 +79,24 @@ const HeroSection = () => {
   }, []);
 
   return (
-    <section id="home" className="relative min-h-screen bg-nexbg flex items-center pt-20 overflow-hidden">
+    <section id="home" className="relative min-h-screen bg-[#15191F] flex items-center pt-20 overflow-hidden">
       {/* Background animado */}
       <div id="hero-background" className="absolute inset-0 particle-container z-0"></div>
       
       <div className="container mx-auto px-4 md:px-8 py-16 z-10 relative">
         <div className="flex flex-col md:flex-row items-center justify-between">
           <div className="w-full md:w-1/2 mb-10 md:mb-0">
-            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-4 md:mb-6 leading-tight">
-              <span className="text-nexorange">Inteligência Artificial</span> que<br />
-              <span className="text-nexblue">realmente gera resultados</span>
+            <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-6 md:mb-8 leading-tight">
+              <span className="text-nexorange">Você quer aplicar IA no seu negócio,</span><br />
+              <span className="text-nexblue">mas não sabe por onde começar?</span>
             </h1>
             
-            <h2 className="text-xl md:text-2xl font-medium mb-6 md:mb-8">
-              Você quer aplicar IA, mas se perde em ferramentas e promessas vazias?<br />
-              <span className="font-bold">Nós aplicamos por você.</span>
-            </h2>
+            <p className="text-xl md:text-2xl font-medium mb-6 md:mb-8 text-white">
+              Nós aplicamos por você. Em até <span className="text-nexorange font-bold">15 dias</span>, sua empresa já estará colhendo os resultados.
+            </p>
             
-            <p className="text-lg md:text-xl mb-8 md:mb-10">
-              Em até <span className="font-bold text-nexorange">15 dias</span>, sua empresa estará operando com 
-              inteligência real, sem que você precise aprender nada técnico.
+            <p className="text-lg md:text-xl mb-8 md:mb-10 text-gray-300">
+              🎯 Consultoria estratégica em Inteligência Artificial sem enrolação técnica, sem ferramentas confusas e sem precisar aprender IA.
             </p>
             
             <a 
@@ -127,16 +125,16 @@ const HeroSection = () => {
                 </div>
               )}
               
-              <div className="absolute -bottom-4 w-full h-10 bg-gradient-to-t from-nexbg to-transparent"></div>
+              <div className="absolute -bottom-4 w-full h-10 bg-gradient-to-t from-[#15191F] to-transparent"></div>
             </div>
           </div>
         </div>
       </div>
       
       {/* Forma decorativa */}
-      <div className="absolute bottom-0 left-0 right-0 h-[50px] bg-nexbg z-10">
+      <div className="absolute bottom-0 left-0 right-0 h-[50px] bg-[#15191F] z-10">
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 80" preserveAspectRatio="none" className="w-full h-full">
-          <path fill="#1A1F2C" d="M0,10 C300,60 600,80 900,50 C1200,20 1440,40 1440,80 L1440,120 L0,120 Z"></path>
+          <path fill="#222632" d="M0,10 C300,60 600,80 900,50 C1200,20 1440,40 1440,80 L1440,120 L0,120 Z"></path>
         </svg>
       </div>
     </section>

@@ -37,10 +37,10 @@ const ProblemCard = ({ icon: Icon, title, description }: {
   return (
     <div 
       ref={cardRef}
-      className="card-hover bg-[#222632] rounded-xl p-6 shadow-md opacity-0 transform transition duration-500"
+      className="card-hover bg-[#222632] rounded-xl p-6 shadow-md opacity-0 transform transition duration-500 border border-gray-800"
     >
-      <div className="rounded-full bg-nexlime/20 p-3 inline-flex mb-4">
-        <Icon size={28} className="text-nexblue" />
+      <div className="rounded-full bg-nexorange/20 p-3 inline-flex mb-4">
+        <Icon size={28} className="text-nexorange" />
       </div>
       <h3 className="text-xl font-bold mb-3 text-white">{title}</h3>
       <p className="text-gray-300">{description}</p>
@@ -50,11 +50,11 @@ const ProblemCard = ({ icon: Icon, title, description }: {
 
 const ProblemSection = () => {
   return (
-    <section id="problema" className="py-20 bg-[#15191F]">
+    <section id="problema" className="py-20 bg-[#1A1F2C]">
       <div className="container mx-auto px-4 md:px-8">
         <div className="text-center mb-16">
           <h2 className="text-3xl md:text-4xl font-bold mb-4">
-            <span className="text-nexblue">A dor real</span> das empresas com IA
+            <span className="text-nexorange">A dor real</span> das empresas com IA
           </h2>
           <p className="text-lg md:text-xl max-w-3xl mx-auto text-gray-300">
             Lidamos diariamente com empresas que investiram em promessas de IA que não entregaram resultados.
@@ -83,7 +83,7 @@ const ProblemSection = () => {
         </div>
 
         <div className="mt-12 text-center">
-          <p className="text-lg md:text-xl font-semibold text-nexblue">
+          <p className="text-lg md:text-xl font-semibold text-nexorange">
             Esses desafios impedem que sua empresa capture o verdadeiro valor da Inteligência Artificial.
           </p>
         </div>

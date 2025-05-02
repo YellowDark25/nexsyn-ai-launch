@@ -46,20 +46,20 @@ const SolutionStep = ({ number, title, description, icon: Icon, delay }: StepPro
       ref={stepRef}
       className="flex flex-col md:flex-row items-start md:items-center gap-4 opacity-0 transform"
     >
-      <div className="flex items-center justify-center w-12 h-12 rounded-full bg-nexlime text-nexblue font-bold text-xl shrink-0">
+      <div className="flex items-center justify-center w-12 h-12 rounded-full bg-nexorange text-white font-bold text-xl shrink-0">
         {number}
       </div>
       
-      <div className="bg-white p-6 rounded-xl shadow-md w-full md:flex items-center">
+      <div className="bg-[#222632] p-6 rounded-xl shadow-md w-full md:flex items-center border border-gray-800">
         <div className="flex justify-center md:justify-start mb-4 md:mb-0 md:mr-6">
-          <div className="w-14 h-14 rounded-full bg-nexblue/10 flex items-center justify-center">
+          <div className="w-14 h-14 rounded-full bg-nexblue/20 flex items-center justify-center">
             <Icon size={24} className="text-nexblue" />
           </div>
         </div>
         
         <div>
-          <h3 className="text-xl font-bold mb-2">{title}</h3>
-          <p className="text-gray-600">{description}</p>
+          <h3 className="text-xl font-bold mb-2 text-white">{title}</h3>
+          <p className="text-gray-300">{description}</p>
         </div>
       </div>
     </div>
@@ -69,6 +69,7 @@ const SolutionStep = ({ number, title, description, icon: Icon, delay }: StepPro
 const SolutionSection = () => {
   const imageRef = useRef<HTMLDivElement>(null);
   const [lottieLoaded, setLottieLoaded] = useState(false);
+  const [lottieError, setLottieError] = useState(false);
 
   // Load lottie player
   useEffect(() => {
@@ -78,10 +79,21 @@ const SolutionSection = () => {
         setLottieLoaded(true);
       } catch (error) {
         console.error("Could not load lottie:", error);
+        setLottieError(true);
       }
     };
     
     loadLottie();
+    
+    // Set a timeout to show placeholder if lottie takes too long
+    const timeoutId = setTimeout(() => {
+      if (!lottieLoaded) {
+        console.warn("Lottie animation taking too long to load");
+        setLottieError(true);
+      }
+    }, 5000);
+    
+    return () => clearTimeout(timeoutId);
   }, []);
 
   useEffect(() => {
@@ -110,13 +122,13 @@ const SolutionSection = () => {
   }, []);
 
   return (
-    <section id="solucao" className="py-20 bg-nexbg">
+    <section id="solucao" className="py-20 bg-[#15191F]">
       <div className="container mx-auto px-4 md:px-8">
         <div className="text-center mb-16">
-          <h2 className="text-3xl md:text-4xl font-bold mb-4">
+          <h2 className="text-3xl md:text-4xl font-bold mb-4 text-white">
             A <span className="text-nexorange">solução Nexsyn</span>
           </h2>
-          <p className="text-lg md:text-xl max-w-3xl mx-auto text-gray-600">
+          <p className="text-lg md:text-xl max-w-3xl mx-auto text-gray-300">
             Implementamos inteligência artificial de forma prática, rápida e focada em resultados.
             Nossa metodologia simplifica o complexo e entrega valor desde o primeiro dia.
           </p>
@@ -127,7 +139,7 @@ const SolutionSection = () => {
             ref={imageRef} 
             className="order-2 md:order-1 opacity-0"
           >
-            {lottieLoaded ? (
+            {lottieLoaded && !lottieError ? (
               <lottie-player 
                 src="https://lottie.host/5ec35c0e-7117-41bc-b95a-c98c2fe7e710/mT4nhbhArE.json"
                 background="transparent"
@@ -137,25 +149,27 @@ const SolutionSection = () => {
                 autoplay
               ></lottie-player>
             ) : (
-              <div className="flex items-center justify-center w-full h-[400px] bg-gray-100 rounded-lg animate-pulse">
-                <p className="text-gray-500">Carregando animação...</p>
+              <div className="flex items-center justify-center w-full h-[400px] bg-[#222632] rounded-lg border border-gray-800">
+                <p className="text-gray-400">
+                  {lottieError ? "Não foi possível carregar a animação" : "Carregando animação..."}
+                </p>
               </div>
             )}
           </div>
 
           <div className="order-1 md:order-2">
-            <h3 className="text-2xl md:text-3xl font-bold mb-6">
+            <h3 className="text-2xl md:text-3xl font-bold mb-6 text-white">
               Transformamos complexidade em clareza
             </h3>
             
-            <p className="text-lg mb-6 text-gray-700">
+            <p className="text-lg mb-6 text-gray-300">
               Nossa abordagem conecta sua operação atual com as possibilidades da inteligência artificial, 
-              criando uma <span className="font-semibold">ponte entre desafios reais e soluções inteligentes</span>.
+              criando uma <span className="font-semibold text-white">ponte entre desafios reais e soluções inteligentes</span>.
             </p>
             
-            <p className="text-lg mb-6 text-gray-700">
+            <p className="text-lg mb-6 text-gray-300">
               Ao contrário de consultores que apenas indicam ferramentas ou desenvolvedores que apenas criam código, 
-              nós focamos em <span className="font-semibold">resultados mensuráveis para o seu negócio</span>.
+              nós focamos em <span className="font-semibold text-white">resultados mensuráveis para o seu negócio</span>.
             </p>
             
             <a href="#contato" className="inline-flex items-center bg-nexorange hover:bg-nexorange/90 text-white px-6 py-3 rounded-lg font-semibold transition-all duration-300 hover:shadow-lg">

@@ -1,12 +1,23 @@
 
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { ArrowRight } from "lucide-react";
 import { ensureLottiePlayerLoaded } from "../utils/lottieLoader";
 
 const HeroSection = () => {
+  const [lottieLoaded, setLottieLoaded] = useState(false);
+  
   // Load lottie player
   useEffect(() => {
-    ensureLottiePlayerLoaded();
+    const loadLottie = async () => {
+      try {
+        await ensureLottiePlayerLoaded();
+        setLottieLoaded(true);
+      } catch (error) {
+        console.error("Could not load lottie:", error);
+      }
+    };
+    
+    loadLottie();
   }, []);
 
   // Função para criar efeito de partículas
@@ -103,14 +114,20 @@ const HeroSection = () => {
           
           <div className="w-full md:w-1/2 flex justify-center">
             <div className="w-full max-w-md relative animate-float">
-              <lottie-player 
-                src="https://lottie.host/d30aa13c-5e48-415e-b057-f059a0a674b2/6HPj8ElGhm.json"
-                background="transparent"
-                speed="1"
-                style={{ width: "100%", height: "400px" }}
-                loop
-                autoplay
-              ></lottie-player>
+              {lottieLoaded ? (
+                <lottie-player 
+                  src="https://lottie.host/d30aa13c-5e48-415e-b057-f059a0a674b2/6HPj8ElGhm.json"
+                  background="transparent"
+                  speed="1"
+                  style={{ width: "100%", height: "400px" }}
+                  loop
+                  autoplay
+                ></lottie-player>
+              ) : (
+                <div className="flex items-center justify-center w-full h-[400px] bg-gray-100 rounded-lg animate-pulse">
+                  <p className="text-gray-500">Carregando animação...</p>
+                </div>
+              )}
               
               <div className="absolute -bottom-4 w-full h-10 bg-gradient-to-t from-nexbg to-transparent"></div>
             </div>

@@ -69,8 +69,6 @@ const HeroSection = () => {
           easing: "ease-in-out",
         }
       );
-      
-      // Conexões entre partículas seriam mais complexas e exigiriam canvas
     }
     
     return () => {
@@ -124,8 +122,8 @@ const HeroSection = () => {
                   autoplay
                 ></lottie-player>
               ) : (
-                <div className="flex items-center justify-center w-full h-[400px] bg-gray-100 rounded-lg animate-pulse">
-                  <p className="text-gray-500">Carregando animação...</p>
+                <div className="flex items-center justify-center w-full h-[400px] bg-gray-800 rounded-lg animate-pulse">
+                  <p className="text-gray-400">Carregando animação...</p>
                 </div>
               )}
               
@@ -138,7 +136,7 @@ const HeroSection = () => {
       {/* Forma decorativa */}
       <div className="absolute bottom-0 left-0 right-0 h-[50px] bg-nexbg z-10">
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 80" preserveAspectRatio="none" className="w-full h-full">
-          <path fill="#F1F5F5" d="M0,10 C300,60 600,80 900,50 C1200,20 1440,40 1440,80 L1440,120 L0,120 Z"></path>
+          <path fill="#1A1F2C" d="M0,10 C300,60 600,80 900,50 C1200,20 1440,40 1440,80 L1440,120 L0,120 Z"></path>
         </svg>
       </div>
     </section>

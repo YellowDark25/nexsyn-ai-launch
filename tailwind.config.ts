@@ -31,11 +31,11 @@ export default {
 				background: 'hsl(var(--background))',
 				foreground: 'hsl(var(--foreground))',
 				// Nexsyn Colors
-				nexbg: '#F1F5F5',
+				nexbg: '#1A1F2C',
 				nexlime: '#C9D921',
 				nexorange: '#FF6F00',
-				nexblue: '#002147',
-				nexblack: '#100F13',
+				nexblue: '#2D97FF',
+				nexblack: '#F1F5F5',
 				primary: {
 					DEFAULT: 'hsl(var(--primary))',
 					foreground: 'hsl(var(--primary-foreground))'

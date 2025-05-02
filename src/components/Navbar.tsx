@@ -34,7 +34,7 @@ const Navbar = () => {
     <header
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ease-in-out px-4 md:px-8 ${
         isScrolled
-          ? "bg-white/90 backdrop-blur-md shadow-md py-2"
+          ? "bg-[#15191F]/90 backdrop-blur-md shadow-md py-2"
           : "bg-transparent py-4"
       }`}
     >
@@ -53,7 +53,7 @@ const Navbar = () => {
             <a
               key={item.name}
               href={item.href}
-              className="text-nexblack hover:text-nexorange transition-colors duration-300 font-medium"
+              className="text-gray-200 hover:text-nexorange transition-colors duration-300 font-medium"
             >
               {item.name}
             </a>
@@ -70,7 +70,7 @@ const Navbar = () => {
 
         {/* Mobile Menu Button */}
         <button
-          className="md:hidden text-nexblack"
+          className="md:hidden text-gray-200"
           onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
         >
           {isMobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
@@ -79,13 +79,13 @@ const Navbar = () => {
 
       {/* Mobile Menu */}
       {isMobileMenuOpen && (
-        <div className="md:hidden bg-white absolute top-full left-0 right-0 shadow-lg animate-slide-up">
+        <div className="md:hidden bg-[#222632] absolute top-full left-0 right-0 shadow-lg animate-slide-up">
           <nav className="flex flex-col p-4">
             {menuItems.map((item) => (
               <a
                 key={item.name}
                 href={item.href}
-                className="py-3 text-nexblack hover:text-nexorange border-b border-gray-100"
+                className="py-3 text-gray-200 hover:text-nexorange border-b border-gray-700"
                 onClick={() => setIsMobileMenuOpen(false)}
               >
                 {item.name}

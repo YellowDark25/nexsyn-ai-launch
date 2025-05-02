@@ -5,7 +5,7 @@ const Footer = () => {
   const currentYear = new Date().getFullYear();
   
   return (
-    <footer className="bg-nexblue text-white py-12">
+    <footer className="bg-[#15191F] text-white py-12">
       <div className="container mx-auto px-4 md:px-8">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           <div className="flex flex-col">
@@ -58,11 +58,11 @@ const Footer = () => {
           </div>
         </div>
         
-        <div className="border-t border-white/20 mt-8 pt-8 flex flex-col md:flex-row justify-between items-center">
-          <p className="text-sm text-gray-300 mb-4 md:mb-0">
+        <div className="border-t border-white/10 mt-8 pt-8 flex flex-col md:flex-row justify-between items-center">
+          <p className="text-sm text-gray-400 mb-4 md:mb-0">
             &copy; {currentYear} NEXSYN Intelligence. Todos os direitos reservados.
           </p>
-          <div className="flex space-x-4 text-sm text-gray-300">
+          <div className="flex space-x-4 text-sm text-gray-400">
             <a href="#" className="hover:text-nexlime transition-colors duration-300">Termos de Uso</a>
             <span>|</span>
             <a href="#" className="hover:text-nexlime transition-colors duration-300">Política de Privacidade</a>
@@ -70,7 +70,7 @@ const Footer = () => {
         </div>
         
         <div className="text-center mt-8">
-          <p className="text-sm text-gray-400">
+          <p className="text-sm text-gray-500">
             Powered by <span className="text-nexlime">NEXSYN Intelligence</span>
           </p>
         </div>

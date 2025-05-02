@@ -1,8 +1,14 @@
 
 import React, { useEffect } from "react";
 import { ArrowRight } from "lucide-react";
+import { ensureLottiePlayerLoaded } from "../utils/lottieLoader";
 
 const HeroSection = () => {
+  // Load lottie player
+  useEffect(() => {
+    ensureLottiePlayerLoaded();
+  }, []);
+
   // Função para criar efeito de partículas
   useEffect(() => {
     const heroSection = document.getElementById("hero-background");

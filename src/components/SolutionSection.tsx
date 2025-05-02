@@ -1,6 +1,6 @@
-
 import React, { useEffect, useRef } from "react";
 import { Search, CalendarCheck, Compass, Headphones } from "lucide-react";
+import { ensureLottiePlayerLoaded } from "../utils/lottieLoader";
 
 interface StepProps {
   number: number;
@@ -67,6 +67,11 @@ const SolutionStep = ({ number, title, description, icon: Icon, delay }: StepPro
 
 const SolutionSection = () => {
   const imageRef = useRef<HTMLDivElement>(null);
+
+  // Load lottie player
+  useEffect(() => {
+    ensureLottiePlayerLoaded();
+  }, []);
 
   useEffect(() => {
     const observer = new IntersectionObserver(

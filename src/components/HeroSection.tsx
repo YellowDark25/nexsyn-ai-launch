@@ -85,7 +85,7 @@ const HeroSection = () => {
           <div className="w-full md:w-1/2 mb-10 md:mb-0">
             <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-6 md:mb-8 leading-tight">
               <span className="text-[#c9d921]">Você quer aplicar IA no seu negócio,</span><br />
-              <span className="text-[#c9d921]">mas não sabe por onde começar?</span>
+              <span className="text-[#ff6f00]">mas não sabe por onde começar?</span>
             </h1>
             
             <p className="text-xl md:text-2xl font-medium mb-6 md:mb-8 text-white">

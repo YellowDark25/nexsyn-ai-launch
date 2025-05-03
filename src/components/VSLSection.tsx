@@ -2,13 +2,19 @@
 import React, { useState, useRef, useEffect } from "react";
 import { AspectRatio } from "@/components/ui/aspect-ratio";
 import { Button } from "@/components/ui/button";
-import { Play, Volume2, VolumeX } from "lucide-react";
+import { Play, Pause, Volume2, VolumeX } from "lucide-react";
+import { Progress } from "@/components/ui/progress";
+import { Slider } from "@/components/ui/slider";
 
 const VSLSection = () => {
   const [isPlaying, setIsPlaying] = useState(false);
   const [isMuted, setIsMuted] = useState(true);
   const [isVideoLoaded, setIsVideoLoaded] = useState(false);
+  const [progress, setProgress] = useState(0);
+  const [duration, setDuration] = useState(0);
+  const [currentTime, setCurrentTime] = useState(0);
   const videoContainerRef = useRef<HTMLDivElement>(null);
+  const progressInterval = useRef<number | null>(null);
 
   // YouTube iframe API reference
   const youtubePlayerRef = useRef<HTMLIFrameElement>(null);
@@ -29,8 +35,13 @@ const VSLSection = () => {
     if (youtubePlayerRef.current && youtubePlayerRef.current.contentWindow) {
       if (isPlaying) {
         youtubePlayerRef.current.contentWindow.postMessage('{"event":"command","func":"pauseVideo","args":""}', '*');
+        if (progressInterval.current) {
+          window.clearInterval(progressInterval.current);
+          progressInterval.current = null;
+        }
       } else {
         youtubePlayerRef.current.contentWindow.postMessage('{"event":"command","func":"playVideo","args":""}', '*');
+        startProgressTracker();
       }
       setIsPlaying(!isPlaying);
     }
@@ -46,6 +57,95 @@ const VSLSection = () => {
       }
       setIsMuted(!isMuted);
     }
+  };
+
+  // Function to track video progress
+  const startProgressTracker = () => {
+    if (progressInterval.current) {
+      window.clearInterval(progressInterval.current);
+    }
+
+    progressInterval.current = window.setInterval(() => {
+      if (youtubePlayerRef.current && youtubePlayerRef.current.contentWindow) {
+        // Get current time
+        youtubePlayerRef.current.contentWindow.postMessage('{"event":"command","func":"getCurrentTime","args":""}', '*');
+        
+        // Get duration
+        youtubePlayerRef.current.contentWindow.postMessage('{"event":"command","func":"getDuration","args":""}', '*');
+      }
+    }, 1000);
+  };
+
+  // Handle YouTube messages
+  useEffect(() => {
+    const handleYouTubeMessage = (event: MessageEvent) => {
+      try {
+        if (typeof event.data === 'string') {
+          const data = JSON.parse(event.data);
+          
+          // Handle player state changes
+          if (data.event === 'onStateChange') {
+            if (data.info === 0) { // video ended
+              setIsPlaying(false);
+              if (progressInterval.current) {
+                window.clearInterval(progressInterval.current);
+                progressInterval.current = null;
+              }
+            } else if (data.info === 1) { // video playing
+              setIsPlaying(true);
+              if (!progressInterval.current) {
+                startProgressTracker();
+              }
+            } else if (data.info === 2) { // video paused
+              setIsPlaying(false);
+              if (progressInterval.current) {
+                window.clearInterval(progressInterval.current);
+                progressInterval.current = null;
+              }
+            }
+          }
+          
+          // Handle duration info
+          if (data.event === 'getDuration') {
+            setDuration(data.info);
+          }
+          
+          // Handle current time info
+          if (data.event === 'getCurrentTime') {
+            setCurrentTime(data.info);
+            if (duration > 0) {
+              setProgress((data.info / duration) * 100);
+            }
+          }
+        }
+      } catch (error) {
+        // Ignore parsing errors for non-JSON messages
+      }
+    };
+
+    window.addEventListener('message', handleYouTubeMessage);
+    return () => {
+      window.removeEventListener('message', handleYouTubeMessage);
+      if (progressInterval.current) {
+        window.clearInterval(progressInterval.current);
+      }
+    };
+  }, [duration]);
+
+  // Handle video seek
+  const handleSeek = (value: number[]) => {
+    const seekTime = (value[0] / 100) * duration;
+    if (youtubePlayerRef.current && youtubePlayerRef.current.contentWindow) {
+      youtubePlayerRef.current.contentWindow.postMessage(`{"event":"command","func":"seekTo","args":[${seekTime}, true]}`, '*');
+      setProgress(value[0]);
+    }
+  };
+
+  // Format time (seconds to MM:SS)
+  const formatTime = (seconds: number) => {
+    const minutes = Math.floor(seconds / 60);
+    const remainingSeconds = Math.floor(seconds % 60);
+    return `${minutes}:${remainingSeconds < 10 ? '0' : ''}${remainingSeconds}`;
   };
 
   // Handle YouTube iframe load event
@@ -86,7 +186,7 @@ const VSLSection = () => {
                 <iframe 
                   ref={youtubePlayerRef}
                   className="w-full h-full"
-                  src="https://www.youtube.com/embed/s6mtYJ-pO6o?enablejsapi=1&rel=0&modestbranding=1&autoplay=0&mute=1"
+                  src="https://www.youtube.com/embed/s6mtYJ-pO6o?enablejsapi=1&rel=0&modestbranding=1&autoplay=0&mute=1&controls=0"
                   title="Nexsyn IA - Transformando seu negócio"
                   allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                   onLoad={handleIframeLoad}
@@ -107,13 +207,41 @@ const VSLSection = () => {
               )}
             </div>
             
-            <div className="absolute bottom-4 right-4 flex space-x-2 z-20">
-              <button 
-                onClick={toggleMute} 
-                className="p-2 bg-black/70 rounded-full hover:bg-nexorange/80 transition-colors"
-              >
-                {isMuted ? <VolumeX size={20} className="text-white" /> : <Volume2 size={20} className="text-white" />}
-              </button>
+            {/* Custom video controls */}
+            <div className="bg-black/90 p-3 flex flex-col gap-2">
+              {/* Progress bar */}
+              <div className="flex items-center gap-2">
+                <span className="text-xs text-white min-w-[40px]">{formatTime(currentTime)}</span>
+                <Slider
+                  value={[progress]}
+                  min={0}
+                  max={100}
+                  step={0.1}
+                  onValueChange={handleSeek}
+                  className="flex-1"
+                />
+                <span className="text-xs text-white min-w-[40px]">{formatTime(duration)}</span>
+              </div>
+              
+              {/* Controls */}
+              <div className="flex justify-between items-center">
+                <button 
+                  onClick={togglePlay}
+                  className="p-2 bg-nexorange/20 rounded-full hover:bg-nexorange/40 transition-colors"
+                >
+                  {isPlaying ? 
+                    <Pause size={20} className="text-white" /> : 
+                    <Play size={20} className="text-white ml-0.5" />
+                  }
+                </button>
+                
+                <button 
+                  onClick={toggleMute} 
+                  className="p-2 bg-black/70 rounded-full hover:bg-nexorange/40 transition-colors"
+                >
+                  {isMuted ? <VolumeX size={20} className="text-white" /> : <Volume2 size={20} className="text-white" />}
+                </button>
+              </div>
             </div>
           </div>
         </div>

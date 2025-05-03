@@ -96,14 +96,14 @@ const HeroSection = () => {
             </p>
             
             <p className="text-lg md:text-xl mb-8 md:mb-10 text-gray-300">
-              🎯 Consultoria estratégica em Inteligência Artificial sem enrolação técnica, sem ferramentas confusas e sem precisar aprender IA.
+              🎯 Descubra como a IA pode gerar lucro na sua empresa
             </p>
             
             <a 
               href="#contato" 
               className="inline-flex items-center bg-nexorange hover:bg-nexorange/90 text-white px-8 py-4 rounded-lg font-semibold text-lg transition-all duration-300 hover:shadow-lg group"
             >
-              Quero meu diagnóstico gratuito
+              Agende agora. é GRÁTIS
               <ArrowRight className="ml-2 group-hover:translate-x-2 transition-transform duration-300" />
             </a>
           </div>

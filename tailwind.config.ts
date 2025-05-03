@@ -20,9 +20,8 @@ export default {
 		},
 		extend: {
 			fontFamily: {
-				sans: ["Inter", "sans-serif"],
-				montserrat: ["Montserrat", "sans-serif"],
-				inter: ["Inter", "sans-serif"]
+				sans: ["Poppins", "sans-serif"],
+				poppins: ["Poppins", "sans-serif"]
 			},
 			colors: {
 				border: 'hsl(var(--border))',
@@ -137,3 +136,4 @@ export default {
 	},
 	plugins: [require("tailwindcss-animate")],
 } satisfies Config;
+

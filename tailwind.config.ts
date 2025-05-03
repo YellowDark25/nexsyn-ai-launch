@@ -29,12 +29,13 @@ export default {
 				ring: 'hsl(var(--ring))',
 				background: 'hsl(var(--background))',
 				foreground: 'hsl(var(--foreground))',
-				// Nexsyn Colors
+				// Nexsyn Brand Colors
 				nexbg: '#1A1F2C',
 				nexlime: '#C9D921',
 				nexorange: '#FF6F00',
-				nexblue: '#2D97FF',
-				nexblack: '#F1F5F5',
+				nexblue: '#002147',
+				nexblack: '#100F13',
+				nexwhite: '#F1F5F5',
 				primary: {
 					DEFAULT: 'hsl(var(--primary))',
 					foreground: 'hsl(var(--primary-foreground))'
@@ -136,4 +137,3 @@ export default {
 	},
 	plugins: [require("tailwindcss-animate")],
 } satisfies Config;
-

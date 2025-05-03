@@ -25,7 +25,7 @@ const HeroSection = () => {
     const heroSection = document.getElementById("hero-background");
     if (!heroSection) return;
 
-    // Criar partículas
+    // Criar partículas - alternando entre laranja e verde
     for (let i = 0; i < 30; i++) {
       const particle = document.createElement("div");
       particle.classList.add("particle");
@@ -43,6 +43,13 @@ const HeroSection = () => {
       
       // Opacidade aleatória
       particle.style.opacity = (Math.random() * 0.5 + 0.2).toString();
+      
+      // Alternando cores entre laranja e verde para as partículas
+      if (i % 3 === 0) {
+        particle.style.background = "rgba(201, 217, 33, 0.3)"; // Verde #C9D921
+      } else {
+        particle.style.background = "rgba(255, 111, 0, 0.3)"; // Laranja #FF6F00
+      }
       
       // Adicionar ao container
       heroSection.appendChild(particle);
@@ -131,7 +138,7 @@ const HeroSection = () => {
         </div>
       </div>
       
-      {/* Forma decorativa */}
+      {/* Forma decorativa com as cores da marca */}
       <div className="absolute bottom-0 left-0 right-0 h-[50px] bg-[#15191F] z-10">
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 80" preserveAspectRatio="none" className="w-full h-full">
           <path fill="#222632" d="M0,10 C300,60 600,80 900,50 C1200,20 1440,40 1440,80 L1440,120 L0,120 Z"></path>

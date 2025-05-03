@@ -93,7 +93,7 @@
   }
 
   body {
-    @apply bg-[#1A1F2C] text-nexblack font-poppins;
+    @apply bg-[#1A1F2C] text-nexwhite font-poppins;
     overflow-x: hidden;
     scroll-behavior: smooth;
   }
@@ -107,7 +107,7 @@
   }
   
   .text-gradient {
-    background: linear-gradient(90deg, #2D97FF 0%, #FF6F00 100%);
+    background: linear-gradient(90deg, #002147 0%, #FF6F00 100%);
     -webkit-background-clip: text;
     color: transparent;
   }
@@ -127,7 +127,6 @@
   
   .particle {
     position: absolute;
-    background: rgba(255, 111, 0, 0.3);
     border-radius: 50%;
     pointer-events: none;
   }
@@ -161,4 +160,3 @@
     @apply backdrop-blur-2xl bg-black/40 border border-white/10;
   }
 }
-

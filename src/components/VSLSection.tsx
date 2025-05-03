@@ -86,7 +86,7 @@ const VSLSection = () => {
                 <iframe 
                   ref={youtubePlayerRef}
                   className="w-full h-full"
-                  src="https://www.youtube.com/embed/YOUR_YOUTUBE_VIDEO_ID?enablejsapi=1&rel=0&modestbranding=1&autoplay=0&mute=1"
+                  src="https://www.youtube.com/embed/s6mtYJ-pO6o?enablejsapi=1&rel=0&modestbranding=1&autoplay=0&mute=1"
                   title="Nexsyn IA - Transformando seu negócio"
                   allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                   onLoad={handleIframeLoad}

@@ -10,42 +10,38 @@ const SolutionSection = () => {
   const playerRef = useRef<HTMLElement | null>(null);
 
   useEffect(() => {
-    // Cleanup function to prevent memory leaks and DOM manipulation errors
-    return () => {
-      if (playerRef.current && lottieRef.current?.contains(playerRef.current)) {
-        try {
-          lottieRef.current.removeChild(playerRef.current);
-        } catch (e) {
-          console.error("Error removing lottie player:", e);
-        }
-      }
-    };
-  }, []);
-
-  useEffect(() => {
     const loadLottie = async () => {
       try {
         await ensureLottiePlayerLoaded();
         
-        if (lottieRef.current) {
-          // Clean up any previous player to avoid DOM conflicts
-          while (lottieRef.current.firstChild) {
-            lottieRef.current.removeChild(lottieRef.current.firstChild);
+        // Make sure lottieRef is still valid (component hasn't unmounted)
+        if (!lottieRef.current) return;
+        
+        // Safely remove previous content
+        if (playerRef.current) {
+          try {
+            playerRef.current.remove();
+          } catch (e) {
+            console.error("Error removing previous lottie player:", e);
           }
-          
-          const player = createLottiePlayerElement(solutionAnimation, {
-            width: "100%",
-            height: "100%",
-            loop: true,
-            autoplay: true,
-            speed: "1"
-          });
-          
-          playerRef.current = player;
-          lottieRef.current.appendChild(player);
-          setLottieLoaded(true);
-          setLottieError(false);
+          playerRef.current = null;
         }
+        
+        const player = createLottiePlayerElement(solutionAnimation, {
+          width: "100%",
+          height: "100%",
+          loop: true,
+          autoplay: true,
+          speed: "1"
+        });
+        
+        // Store reference to player
+        playerRef.current = player;
+        
+        // Append to container
+        lottieRef.current.appendChild(player);
+        setLottieLoaded(true);
+        setLottieError(false);
       } catch (error) {
         console.error("Could not load lottie animation:", error);
         setLottieError(true);
@@ -57,7 +53,7 @@ const SolutionSection = () => {
 
     // Cleanup function
     return () => {
-      if (playerRef.current && lottieRef.current?.contains(playerRef.current)) {
+      if (playerRef.current) {
         try {
           playerRef.current.remove();
         } catch (e) {

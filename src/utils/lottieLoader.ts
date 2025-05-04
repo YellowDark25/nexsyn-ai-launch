@@ -31,7 +31,13 @@ export const ensureLottiePlayerLoaded = async (): Promise<void> => {
     });
   }
   
-  return lottieLoadPromise;
+  // Add a timeout to prevent hanging
+  const timeoutPromise = new Promise<void>((_, reject) => {
+    setTimeout(() => reject(new Error("Lottie player load timeout")), 5000);
+  });
+  
+  // Race between loading and timeout
+  return Promise.race([lottieLoadPromise, timeoutPromise]);
 };
 
 export const createLottiePlayerElement = (

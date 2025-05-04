@@ -11,36 +11,7 @@ const HeroSection = () => {
   const [isVisible, setIsVisible] = useState(false);
   const [lottieError, setLottieError] = useState(false);
   const lottieRef = useRef<HTMLDivElement>(null);
-
-  // Load lottie player
-  useEffect(() => {
-    const loadLottie = async () => {
-      try {
-        await ensureLottiePlayerLoaded();
-        
-        if (lottieRef.current) {
-          // Clear previous content
-          lottieRef.current.innerHTML = '';
-          
-          const player = createLottiePlayerElement(heroAnimation, {
-            width: "100%",
-            height: "100%",
-            loop: true,
-            autoplay: true,
-            speed: "1"
-          });
-          
-          lottieRef.current.appendChild(player);
-          setLottieLoaded(true);
-        }
-      } catch (error) {
-        console.error("Could not load lottie:", error);
-        setLottieError(true);
-      }
-    };
-    
-    loadLottie();
-  }, []);
+  const playerRef = useRef<HTMLElement | null>(null);
 
   // Animation on load
   useEffect(() => {
@@ -49,6 +20,61 @@ const HeroSection = () => {
       setIsVisible(true);
     }, 300);
     return () => clearTimeout(timer);
+  }, []);
+
+  // Load lottie player
+  useEffect(() => {
+    const loadLottie = async () => {
+      try {
+        await ensureLottiePlayerLoaded();
+        
+        // Make sure lottieRef is still valid (component hasn't unmounted)
+        if (!lottieRef.current) return;
+        
+        // Safely remove previous content
+        if (playerRef.current) {
+          try {
+            playerRef.current.remove();
+          } catch (e) {
+            console.error("Error removing previous lottie player:", e);
+          }
+          playerRef.current = null;
+        }
+        
+        const player = createLottiePlayerElement(heroAnimation, {
+          width: "100%",
+          height: "100%",
+          loop: true,
+          autoplay: true,
+          speed: "1"
+        });
+        
+        // Store reference to player
+        playerRef.current = player;
+        
+        // Append to container
+        lottieRef.current.appendChild(player);
+        setLottieLoaded(true);
+        setLottieError(false);
+      } catch (error) {
+        console.error("Could not load lottie:", error);
+        setLottieError(true);
+      }
+    };
+    
+    loadLottie();
+    
+    // Cleanup function
+    return () => {
+      if (playerRef.current) {
+        try {
+          playerRef.current.remove();
+        } catch (e) {
+          console.error("Error removing lottie player on unmount:", e);
+        }
+        playerRef.current = null;
+      }
+    };
   }, []);
   
   // Função para criar efeito de partículas aprimorado

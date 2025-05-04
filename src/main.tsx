@@ -13,27 +13,15 @@ if (!rootElement) {
 
 const root = createRoot(rootElement);
 
-// Try to load Lottie before rendering the app, but render anyway after a timeout
-// This prevents waiting forever if there's an issue with lottie loading
-const renderApp = () => {
-  root.render(<App />);
-};
+// Render the app immediately to avoid blank screen
+// We'll handle Lottie loading in the components
+root.render(<App />);
 
-// Try to load lottie first
+// Pre-load Lottie in the background after app render
 ensureLottiePlayerLoaded()
   .then(() => {
-    renderApp();
+    console.log("Lottie player preloaded successfully");
   })
   .catch(error => {
-    console.error("Failed to load lottie-player:", error);
-    // Render the app anyway
-    renderApp();
+    console.error("Failed to preload lottie-player:", error);
   });
-
-// Fallback render in case lottie takes too long
-setTimeout(() => {
-  if (!document.getElementById("root")?.hasChildNodes()) {
-    console.warn("Lottie loader took too long, rendering app without waiting");
-    renderApp();
-  }
-}, 2000);

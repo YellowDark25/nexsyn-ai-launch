@@ -3,10 +3,12 @@ import React, { useEffect, useState } from "react";
 import { ArrowRight } from "lucide-react";
 import { ensureLottiePlayerLoaded } from "../utils/lottieLoader";
 import { Card, CardContent } from "./ui/card";
+import heroAnimation from "../assets/animations/hero-animation.json";
 
 const HeroSection = () => {
   const [lottieLoaded, setLottieLoaded] = useState(false);
   const [isVisible, setIsVisible] = useState(false);
+  const [lottieError, setLottieError] = useState(false);
 
   // Load lottie player
   useEffect(() => {
@@ -16,9 +18,20 @@ const HeroSection = () => {
         setLottieLoaded(true);
       } catch (error) {
         console.error("Could not load lottie:", error);
+        setLottieError(true);
       }
     };
     loadLottie();
+    
+    // Add a timeout to handle failure case
+    const timeoutId = setTimeout(() => {
+      if (!lottieLoaded) {
+        console.warn("Lottie animation taking too long to load");
+        setLottieError(true);
+      }
+    }, 3000);
+    
+    return () => clearTimeout(timeoutId);
   }, []);
 
   // Animation on load
@@ -229,9 +242,9 @@ const HeroSection = () => {
             className={`w-full md:w-1/2 flex justify-center transition-all duration-700 delay-300 transform ${isVisible ? 'translate-y-0 opacity-100' : 'translate-y-10 opacity-0'}`}
           >
             <div className="w-full max-w-md relative animate-float glass-morphism p-6 rounded-2xl">
-              {lottieLoaded ? (
+              {lottieLoaded && !lottieError ? (
                 <lottie-player 
-                  src="https://lottie.host/d30aa13c-5e48-415e-b057-f059a0a674b2/6HPj8ElGhm.json" 
+                  src={JSON.stringify(heroAnimation)}
                   background="transparent" 
                   speed="1" 
                   style={{
@@ -243,7 +256,7 @@ const HeroSection = () => {
                 ></lottie-player>
               ) : (
                 <div className="flex items-center justify-center w-full h-[400px] bg-gray-800/30 backdrop-blur-sm rounded-lg animate-pulse">
-                  <p className="text-gray-400">Carregando animação...</p>
+                  <p className="text-gray-400">{lottieError ? "Não foi possível carregar a animação" : "Carregando animação..."}</p>
                 </div>
               )}
               

@@ -33,3 +33,31 @@ export const ensureLottiePlayerLoaded = async (): Promise<void> => {
   
   return lottieLoadPromise;
 };
+
+export const createLottiePlayerElement = (
+  animationData: any, 
+  options: {
+    width?: string;
+    height?: string;
+    loop?: boolean;
+    autoplay?: boolean;
+    speed?: string;
+  } = {}
+): HTMLElement => {
+  const player = document.createElement('lottie-player');
+  
+  // Set the animation data
+  player.setAttribute('src', JSON.stringify(animationData));
+  
+  // Set default options
+  player.setAttribute('background', 'transparent');
+  player.setAttribute('speed', options.speed || '1');
+  
+  if (options.width) player.style.width = options.width;
+  if (options.height) player.style.height = options.height;
+  
+  if (options.loop !== false) player.setAttribute('loop', '');
+  if (options.autoplay !== false) player.setAttribute('autoplay', '');
+  
+  return player;
+};

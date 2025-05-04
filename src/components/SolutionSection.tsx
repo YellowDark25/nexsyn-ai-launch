@@ -2,6 +2,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import { Search, CalendarCheck, Compass, Headphones } from "lucide-react";
 import { ensureLottiePlayerLoaded } from "../utils/lottieLoader";
+import solutionAnimation from "../assets/animations/solution-animation.json";
 
 interface StepProps {
   number: number;
@@ -141,7 +142,7 @@ const SolutionSection = () => {
           >
             {lottieLoaded && !lottieError ? (
               <lottie-player 
-                src="https://lottie.host/5ec35c0e-7117-41bc-b95a-c98c2fe7e710/mT4nhbhArE.json"
+                src={JSON.stringify(solutionAnimation)}
                 background="transparent"
                 speed="1"
                 style={{ width: "100%", height: "400px" }}

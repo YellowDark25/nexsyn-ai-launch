@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { ArrowRight } from "lucide-react";
 import { ensureLottiePlayerLoaded } from "../utils/lottieLoader";
+
 const HeroSection = () => {
   const [lottieLoaded, setLottieLoaded] = useState(false);
 
@@ -89,7 +90,7 @@ const HeroSection = () => {
             </h1>
             
             <p className="text-xl md:text-2xl font-medium mb-6 md:mb-8 text-white">
-              Nós aplicamos por você. Em até <span className="text-nexorange font-bold">15 dias</span>, sua empresa já estará colhendo os resultados.
+              Consultoria estratégica para integrar procesos, eliminar retrabalho, automatizar operações e destravar o crescimento da sua empresa
             </p>
             
             <p className="text-lg md:text-xl mb-8 md:mb-10 text-gray-300">
@@ -131,4 +132,5 @@ const HeroSection = () => {
       </div>
     </section>;
 };
+
 export default HeroSection;

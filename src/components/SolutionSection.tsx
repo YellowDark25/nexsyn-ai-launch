@@ -1,216 +1,129 @@
 
-import React, { useEffect, useRef, useState } from "react";
-import { Search, CalendarCheck, Compass, Headphones } from "lucide-react";
-import { ensureLottiePlayerLoaded } from "../utils/lottieLoader";
+import React, { useEffect, useState } from "react";
+import { createLottiePlayerElement, ensureLottiePlayerLoaded } from "../utils/lottieLoader";
 import solutionAnimation from "../assets/animations/solution-animation.json";
 
-interface StepProps {
-  number: number;
-  title: string;
-  description: string;
-  icon: React.ElementType;
-  delay: number;
-}
-
-const SolutionStep = ({ number, title, description, icon: Icon, delay }: StepProps) => {
-  const stepRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            setTimeout(() => {
-              entry.target.classList.add("animate-slide-up");
-              entry.target.classList.remove("opacity-0");
-            }, delay);
-            observer.unobserve(entry.target);
-          }
-        });
-      },
-      { threshold: 0.1 }
-    );
-
-    if (stepRef.current) {
-      observer.observe(stepRef.current);
-    }
-
-    return () => {
-      if (stepRef.current) {
-        observer.unobserve(stepRef.current);
-      }
-    };
-  }, [delay]);
-
-  return (
-    <div 
-      ref={stepRef}
-      className="flex flex-col md:flex-row items-start md:items-center gap-4 opacity-0 transform"
-    >
-      <div className="flex items-center justify-center w-12 h-12 rounded-full bg-nexorange text-white font-bold text-xl shrink-0">
-        {number}
-      </div>
-      
-      <div className="bg-[#222632] p-6 rounded-xl shadow-md w-full md:flex items-center border border-gray-800">
-        <div className="flex justify-center md:justify-start mb-4 md:mb-0 md:mr-6">
-          <div className="w-14 h-14 rounded-full bg-nexblue/20 flex items-center justify-center">
-            <Icon size={24} className="text-nexblue" />
-          </div>
-        </div>
-        
-        <div>
-          <h3 className="text-xl font-bold mb-2 text-white">{title}</h3>
-          <p className="text-gray-300">{description}</p>
-        </div>
-      </div>
-    </div>
-  );
-};
-
 const SolutionSection = () => {
-  const imageRef = useRef<HTMLDivElement>(null);
   const [lottieLoaded, setLottieLoaded] = useState(false);
   const [lottieError, setLottieError] = useState(false);
+  const lottieRef = React.useRef<HTMLDivElement>(null);
 
-  // Load lottie player
   useEffect(() => {
     const loadLottie = async () => {
       try {
         await ensureLottiePlayerLoaded();
-        setLottieLoaded(true);
+        
+        if (lottieRef.current) {
+          // Clear previous content
+          lottieRef.current.innerHTML = '';
+          
+          const player = createLottiePlayerElement(solutionAnimation, {
+            width: "100%",
+            height: "100%",
+            loop: true,
+            autoplay: true,
+            speed: "1"
+          });
+          
+          lottieRef.current.appendChild(player);
+          setLottieLoaded(true);
+        }
       } catch (error) {
-        console.error("Could not load lottie:", error);
+        console.error("Could not load lottie animation:", error);
         setLottieError(true);
       }
     };
-    
+
     loadLottie();
-    
-    // Set a timeout to show placeholder if lottie takes too long
-    const timeoutId = setTimeout(() => {
-      if (!lottieLoaded) {
-        console.warn("Lottie animation taking too long to load");
-        setLottieError(true);
-      }
-    }, 5000);
-    
-    return () => clearTimeout(timeoutId);
-  }, []);
-
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            entry.target.classList.add("animate-scale-in");
-            entry.target.classList.remove("opacity-0");
-            observer.unobserve(entry.target);
-          }
-        });
-      },
-      { threshold: 0.1 }
-    );
-
-    if (imageRef.current) {
-      observer.observe(imageRef.current);
-    }
-
-    return () => {
-      if (imageRef.current) {
-        observer.unobserve(imageRef.current);
-      }
-    };
   }, []);
 
   return (
-    <section id="solucao" className="py-20 bg-[#15191F]">
-      <div className="container mx-auto px-4 md:px-8">
+    <section id="solucoes" className="relative py-24 bg-gradient-to-b from-[#222632] to-[#1A1F2C]">
+      <div className="container mx-auto px-4">
         <div className="text-center mb-16">
-          <h2 className="text-3xl md:text-4xl font-bold mb-4 text-white">
-            A <span className="text-nexorange">solução Nexsyn</span>
+          <h2 className="text-4xl md:text-5xl font-bold mb-6 text-gradient-primary">
+            <span className="bg-gradient-to-r from-nexlime to-nexlime/80 bg-clip-text text-transparent">
+              Nossas Soluções
+            </span>
           </h2>
-          <p className="text-lg md:text-xl max-w-3xl mx-auto text-gray-300">
-            Implementamos inteligência artificial de forma prática, rápida e focada em resultados.
-            Nossa metodologia simplifica o complexo e entrega valor desde o primeiro dia.
+          <p className="text-xl text-gray-300 max-w-3xl mx-auto">
+            Metodologia comprovada para aplicar Inteligência Artificial onde realmente importa para o seu negócio.
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center mb-16">
-          <div 
-            ref={imageRef} 
-            className="order-2 md:order-1 opacity-0"
-          >
-            {lottieLoaded && !lottieError ? (
-              <lottie-player 
-                src={JSON.stringify(solutionAnimation)}
-                background="transparent"
-                speed="1"
-                style={{ width: "100%", height: "400px" }}
-                loop
-                autoplay
-              ></lottie-player>
-            ) : (
-              <div className="flex items-center justify-center w-full h-[400px] bg-[#222632] rounded-lg border border-gray-800">
-                <p className="text-gray-400">
-                  {lottieError ? "Não foi possível carregar a animação" : "Carregando animação..."}
-                </p>
+        <div className="flex flex-col md:flex-row items-center gap-12">
+          {/* Animação */}
+          <div className="w-full md:w-1/2 flex justify-center">
+            <div className="w-full max-w-md h-[400px] relative glass-morphism rounded-xl p-6">
+              {/* Lottie container */}
+              <div 
+                ref={lottieRef} 
+                className="w-full h-full flex items-center justify-center"
+              >
+                {!lottieLoaded && !lottieError && (
+                  <div className="flex flex-col items-center justify-center w-full h-full">
+                    <div className="w-16 h-16 border-4 border-nexlime border-t-transparent rounded-full animate-spin"></div>
+                    <p className="mt-4 text-gray-400">Carregando animação...</p>
+                  </div>
+                )}
+                {lottieError && (
+                  <div className="flex flex-col items-center justify-center w-full h-full bg-gray-800/30 backdrop-blur-sm rounded-lg">
+                    <svg xmlns="http://www.w3.org/2000/svg" className="h-16 w-16 text-gray-500 mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                    <p className="text-gray-400">Não foi possível carregar a animação</p>
+                  </div>
+                )}
               </div>
-            )}
+            </div>
           </div>
 
-          <div className="order-1 md:order-2">
-            <h3 className="text-2xl md:text-3xl font-bold mb-6 text-white">
-              Transformamos complexidade em clareza
-            </h3>
-            
-            <p className="text-lg mb-6 text-gray-300">
-              Nossa abordagem conecta sua operação atual com as possibilidades da inteligência artificial, 
-              criando uma <span className="font-semibold text-white">ponte entre desafios reais e soluções inteligentes</span>.
-            </p>
-            
-            <p className="text-lg mb-6 text-gray-300">
-              Ao contrário de consultores que apenas indicam ferramentas ou desenvolvedores que apenas criam código, 
-              nós focamos em <span className="font-semibold text-white">resultados mensuráveis para o seu negócio</span>.
-            </p>
-            
-            <a href="#contato" className="inline-flex items-center bg-nexorange hover:bg-nexorange/90 text-white px-6 py-3 rounded-lg font-semibold transition-all duration-300 hover:shadow-lg">
-              Quero implementar na minha empresa
-            </a>
+          {/* Texto */}
+          <div className="w-full md:w-1/2">
+            <div className="neo-blur p-8 rounded-xl">
+              <h3 className="text-3xl font-bold mb-6 text-white">
+                Transformação Digital Estratégica
+              </h3>
+              
+              <ul className="space-y-6">
+                <li className="flex items-start">
+                  <div className="mr-4 p-2 bg-nexlime/20 text-nexlime rounded-lg">
+                    <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                  </div>
+                  <div>
+                    <h4 className="font-semibold text-xl mb-2 text-white">Diagnóstico Personalizado</h4>
+                    <p className="text-gray-300">Avaliação detalhada dos seus processos para identificar oportunidades de automação com IA</p>
+                  </div>
+                </li>
+                
+                <li className="flex items-start">
+                  <div className="mr-4 p-2 bg-nexorange/20 text-nexorange rounded-lg">
+                    <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4" />
+                    </svg>
+                  </div>
+                  <div>
+                    <h4 className="font-semibold text-xl mb-2 text-white">Desenvolvimento Sob Medida</h4>
+                    <p className="text-gray-300">Implementação de soluções de IA customizadas para suas necessidades específicas</p>
+                  </div>
+                </li>
+                
+                <li className="flex items-start">
+                  <div className="mr-4 p-2 bg-nexlime/20 text-nexlime rounded-lg">
+                    <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
+                    </svg>
+                  </div>
+                  <div>
+                    <h4 className="font-semibold text-xl mb-2 text-white">Integração Sem Rupturas</h4>
+                    <p className="text-gray-300">Implementação suave com seus sistemas atuais, sem interrupções no seu negócio</p>
+                  </div>
+                </li>
+              </ul>
+            </div>
           </div>
-        </div>
-
-        <div className="space-y-6">
-          <SolutionStep 
-            number={1}
-            title="Diagnóstico"
-            description="Mapeamento completo dos pontos onde a IA pode trazer maior impacto para seu negócio, com análise de custo-benefício."
-            icon={Search}
-            delay={0}
-          />
-          
-          <SolutionStep 
-            number={2}
-            title="Planejamento"
-            description="Definição clara das soluções, ferramentas e processos, com cronograma de implementação e métricas de sucesso."
-            icon={CalendarCheck}
-            delay={200}
-          />
-          
-          <SolutionStep 
-            number={3}
-            title="Execução"
-            description="Implementação rápida com equipe especializada ou orientação passo a passo para sua equipe interna."
-            icon={Compass}
-            delay={400}
-          />
-          
-          <SolutionStep 
-            number={4}
-            title="Suporte contínuo"
-            description="Acompanhamento dos resultados e ajustes necessários, garantindo que a tecnologia continue gerando valor ao longo do tempo."
-            icon={Headphones}
-            delay={600}
-          />
         </div>
       </div>
     </section>

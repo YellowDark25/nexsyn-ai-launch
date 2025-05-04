@@ -1,37 +1,45 @@
 
-import React, { useEffect, useState } from "react";
-import { ArrowRight } from "lucide-react";
-import { ensureLottiePlayerLoaded } from "../utils/lottieLoader";
-import { Card, CardContent } from "./ui/card";
+import React, { useEffect, useState, useRef } from "react";
+import { ArrowRight, Play } from "lucide-react";
+import { Button } from "./ui/button";
+import { Card } from "./ui/card";
+import { createLottiePlayerElement, ensureLottiePlayerLoaded } from "../utils/lottieLoader";
 import heroAnimation from "../assets/animations/hero-animation.json";
 
 const HeroSection = () => {
   const [lottieLoaded, setLottieLoaded] = useState(false);
   const [isVisible, setIsVisible] = useState(false);
   const [lottieError, setLottieError] = useState(false);
+  const lottieRef = useRef<HTMLDivElement>(null);
 
   // Load lottie player
   useEffect(() => {
     const loadLottie = async () => {
       try {
         await ensureLottiePlayerLoaded();
-        setLottieLoaded(true);
+        
+        if (lottieRef.current) {
+          // Clear previous content
+          lottieRef.current.innerHTML = '';
+          
+          const player = createLottiePlayerElement(heroAnimation, {
+            width: "100%",
+            height: "100%",
+            loop: true,
+            autoplay: true,
+            speed: "1"
+          });
+          
+          lottieRef.current.appendChild(player);
+          setLottieLoaded(true);
+        }
       } catch (error) {
         console.error("Could not load lottie:", error);
         setLottieError(true);
       }
     };
+    
     loadLottie();
-    
-    // Add a timeout to handle failure case
-    const timeoutId = setTimeout(() => {
-      if (!lottieLoaded) {
-        console.warn("Lottie animation taking too long to load");
-        setLottieError(true);
-      }
-    }, 3000);
-    
-    return () => clearTimeout(timeoutId);
   }, []);
 
   // Animation on load
@@ -49,7 +57,7 @@ const HeroSection = () => {
     if (!heroSection) return;
 
     // Limpar partículas existentes
-    const existingParticles = heroSection.querySelectorAll(".particle");
+    const existingParticles = heroSection.querySelectorAll(".particle, .geometric-shape");
     existingParticles.forEach(p => p.remove());
 
     // Criar partículas - alternando entre laranja e verde com melhor harmonia
@@ -175,7 +183,8 @@ const HeroSection = () => {
     };
   }, []);
   
-  return <section id="home" className="relative min-h-screen bg-gradient-to-br from-[#15191F] to-[#1A1F2C] flex items-center pt-20 overflow-hidden">
+  return (
+    <section id="home" className="relative min-h-screen bg-gradient-to-br from-[#15191F] to-[#1A1F2C] flex items-center pt-20 overflow-hidden">
       {/* Background animado com gradiente */}
       <div id="hero-background" className="absolute inset-0 particle-container z-0"></div>
       
@@ -188,40 +197,55 @@ const HeroSection = () => {
               <div className="absolute -top-28 -right-28 w-56 h-56 bg-nexorange/20 rounded-full blur-3xl"></div>
               <div className="absolute -bottom-28 -left-28 w-56 h-56 bg-nexlime/20 rounded-full blur-3xl"></div>
               
-              <h1 className="text-3xl md:text-5xl lg:text-6xl font-bold mb-6 md:mb-8 leading-tight">
-                <span className="bg-gradient-to-r from-nexlime to-nexlime/80 bg-clip-text text-transparent transition-all animate-pulse-soft">
-                  Sua empresa está perdendo tempo com tarefas manuais?
-                </span>
-                <br />
-                <span 
-                  className="bg-gradient-to-r from-nexorange to-nexorange/80 bg-clip-text text-transparent mt-4 block transition-all"
-                  style={{animationDelay: '0.2s'}}
-                >
-                  A Nexsyn aplica inteligência Artificial onde realmente importa: nos processos que te custam tempo, energia e dinheiro.
+              <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold leading-tight mb-6">
+                <span className="bg-gradient-to-r from-nexlime to-nexlime/80 bg-clip-text text-transparent block mb-2">
+                  🟢 Sua empresa está perdendo tempo com tarefas manuais?
                 </span>
               </h1>
               
-              <Card className="glass-morphism mb-6 hover:shadow-lg transition-all duration-300">
-                <CardContent className="p-4">
-                  <p className="text-xl md:text-2xl font-medium text-white">
-                    Consultoria estratégica para integrar procesos, eliminar retrabalho, automatizar operações e destravar o crescimento da sua empresa
-                  </p>
-                </CardContent>
-              </Card>
+              <h2 className="text-xl md:text-2xl font-medium mb-6">
+                <span className="flex items-start">
+                  <span className="text-3xl mr-2">🧠</span>
+                  <span>A <span className="text-nexorange font-bold">Nexsyn aplica Inteligência Artificial</span> onde realmente importa:</span>
+                </span>
+                <span className="block mt-2 text-gray-300">
+                  <span className="flex items-center">
+                    <span className="text-nexorange mr-2">➡️</span> 
+                    <span>Nos processos que te custam <br />tempo, energia e dinheiro.</span>
+                  </span>
+                </span>
+              </h2>
               
-              <div className="flex items-center gap-3 mb-8 md:mb-10">
-                <div className="w-10 h-10 rounded-full bg-nexlime/20 flex items-center justify-center text-nexlime">
-                  🎯
-                </div>
-                <p className="text-lg md:text-xl text-gray-300">
-                  Descubra como a IA pode gerar lucro na sua empresa
-                </p>
+              <div className="glass-morphism p-4 rounded-xl mb-6">
+                <h3 className="text-xl font-medium mb-3 flex items-center">
+                  <span className="mr-2">✨</span>
+                  <span>Consultoria estratégica com IA:</span>
+                </h3>
+                
+                <ul className="space-y-2 text-gray-300">
+                  <li className="flex items-start">
+                    <span className="text-nexlime mr-2">✔️</span>
+                    <span>Integra processos desconectados</span>
+                  </li>
+                  <li className="flex items-start">
+                    <span className="text-nexlime mr-2">✔️</span>
+                    <span>Elimina retrabalho e erros manuais</span>
+                  </li>
+                  <li className="flex items-start">
+                    <span className="text-nexlime mr-2">✔️</span>
+                    <span>Automatiza tarefas críticas</span>
+                  </li>
+                  <li className="flex items-start">
+                    <span className="text-nexlime mr-2">✔️</span>
+                    <span>Libera tempo e energia da sua equipe</span>
+                  </li>
+                </ul>
               </div>
               
-              <div className="flex flex-col sm:flex-row gap-4">
+              <div className="flex flex-col sm:flex-row gap-4 mt-8">
                 <a 
                   href="#contato" 
-                  className="inline-flex items-center justify-center bg-gradient-to-r from-nexorange to-nexorange/90 hover:from-nexorange/90 hover:to-nexorange text-white px-8 py-4 rounded-lg font-semibold text-lg transition-all duration-300 hover:shadow-[0_0_15px_rgba(255,111,0,0.5)] group relative overflow-hidden"
+                  className="inline-flex items-center justify-center bg-gradient-to-r from-nexorange to-nexorange/90 hover:from-nexorange/90 hover:to-nexorange text-white px-6 py-3 rounded-lg font-semibold text-lg transition-all duration-300 hover:shadow-[0_0_15px_rgba(255,111,0,0.5)] group relative overflow-hidden"
                 >
                   <span className="relative z-10">Agende agora. é GRÁTIS</span>
                   <ArrowRight className="ml-2 group-hover:translate-x-2 transition-transform duration-300 relative z-10" />
@@ -230,9 +254,10 @@ const HeroSection = () => {
                 
                 <a 
                   href="#vsl" 
-                  className="inline-flex items-center justify-center bg-transparent border-2 border-nexlime hover:bg-nexlime/10 text-white px-8 py-4 rounded-lg font-semibold text-lg transition-all duration-300 hover:shadow-[0_0_15px_rgba(201,217,33,0.3)]"
+                  className="inline-flex items-center justify-center bg-transparent border-2 border-nexlime hover:bg-nexlime/10 text-white px-6 py-3 rounded-lg font-semibold text-lg transition-all duration-300 hover:shadow-[0_0_15px_rgba(201,217,33,0.3)]"
                 >
-                  Assista o vídeo
+                  <Play className="mr-2" size={20} />
+                  <span>Assista o vídeo</span>
                 </a>
               </div>
             </div>
@@ -242,23 +267,25 @@ const HeroSection = () => {
             className={`w-full md:w-1/2 flex justify-center transition-all duration-700 delay-300 transform ${isVisible ? 'translate-y-0 opacity-100' : 'translate-y-10 opacity-0'}`}
           >
             <div className="w-full max-w-md relative animate-float glass-morphism p-6 rounded-2xl">
-              {lottieLoaded && !lottieError ? (
-                <lottie-player 
-                  src={JSON.stringify(heroAnimation)}
-                  background="transparent" 
-                  speed="1" 
-                  style={{
-                    width: "100%",
-                    height: "400px"
-                  }} 
-                  loop 
-                  autoplay
-                ></lottie-player>
-              ) : (
-                <div className="flex items-center justify-center w-full h-[400px] bg-gray-800/30 backdrop-blur-sm rounded-lg animate-pulse">
-                  <p className="text-gray-400">{lottieError ? "Não foi possível carregar a animação" : "Carregando animação..."}</p>
-                </div>
-              )}
+              <div 
+                ref={lottieRef} 
+                className="w-full h-[400px] flex items-center justify-center"
+              >
+                {!lottieLoaded && !lottieError && (
+                  <div className="flex flex-col items-center justify-center w-full h-full">
+                    <div className="w-16 h-16 border-4 border-nexlime border-t-transparent rounded-full animate-spin"></div>
+                    <p className="mt-4 text-gray-400">Carregando animação...</p>
+                  </div>
+                )}
+                {lottieError && (
+                  <div className="flex flex-col items-center justify-center w-full h-full bg-gray-800/30 backdrop-blur-sm rounded-lg">
+                    <svg xmlns="http://www.w3.org/2000/svg" className="h-16 w-16 text-gray-500 mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                    <p className="text-gray-400">Não foi possível carregar a animação</p>
+                  </div>
+                )}
+              </div>
               
               <div className="absolute -bottom-4 w-full h-10 bg-gradient-to-t from-[#15191F] to-transparent"></div>
               
@@ -280,7 +307,8 @@ const HeroSection = () => {
           <path fill="#222632" d="M0,10 C300,60 600,80 900,50 C1200,20 1440,40 1440,80 L1440,120 L0,120 Z"></path>
         </svg>
       </div>
-    </section>;
+    </section>
+  );
 };
 
 export default HeroSection;

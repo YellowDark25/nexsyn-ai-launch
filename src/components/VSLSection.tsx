@@ -2,8 +2,7 @@
 import React, { useState, useRef, useEffect } from "react";
 import { AspectRatio } from "@/components/ui/aspect-ratio";
 import { Button } from "@/components/ui/button";
-import { Play, Pause, Volume2, VolumeX } from "lucide-react";
-import { Progress } from "@/components/ui/progress";
+import { Play, Pause, Volume2, VolumeX, Fullscreen } from "lucide-react";
 import { Slider } from "@/components/ui/slider";
 
 const VSLSection = () => {
@@ -13,6 +12,7 @@ const VSLSection = () => {
   const [progress, setProgress] = useState(0);
   const [duration, setDuration] = useState(0);
   const [currentTime, setCurrentTime] = useState(0);
+  const [isFullscreen, setIsFullscreen] = useState(false);
   const videoContainerRef = useRef<HTMLDivElement>(null);
   const progressInterval = useRef<number | null>(null);
 
@@ -67,14 +67,67 @@ const VSLSection = () => {
 
     progressInterval.current = window.setInterval(() => {
       if (youtubePlayerRef.current && youtubePlayerRef.current.contentWindow) {
-        // Get current time
+        // Get current time using getVideoCurrentTime
+        youtubePlayerRef.current.contentWindow.postMessage('{"event":"listening"}', '*');
         youtubePlayerRef.current.contentWindow.postMessage('{"event":"command","func":"getCurrentTime","args":""}', '*');
         
-        // Get duration
+        // Get duration using getVideoDuration
         youtubePlayerRef.current.contentWindow.postMessage('{"event":"command","func":"getDuration","args":""}', '*');
       }
     }, 1000);
   };
+
+  // Handle fullscreen toggle
+  const toggleFullscreen = () => {
+    if (!videoContainerRef.current) return;
+
+    if (!isFullscreen) {
+      const element = videoContainerRef.current;
+      if (element.requestFullscreen) {
+        element.requestFullscreen();
+      } else if ((element as any).mozRequestFullScreen) {
+        (element as any).mozRequestFullScreen();
+      } else if ((element as any).webkitRequestFullscreen) {
+        (element as any).webkitRequestFullscreen();
+      } else if ((element as any).msRequestFullscreen) {
+        (element as any).msRequestFullscreen();
+      }
+    } else {
+      if (document.exitFullscreen) {
+        document.exitFullscreen();
+      } else if ((document as any).mozCancelFullScreen) {
+        (document as any).mozCancelFullScreen();
+      } else if ((document as any).webkitExitFullscreen) {
+        (document as any).webkitExitFullscreen();
+      } else if ((document as any).msExitFullscreen) {
+        (document as any).msExitFullscreen();
+      }
+    }
+  };
+
+  // Listen for fullscreen change events
+  useEffect(() => {
+    const handleFullscreenChange = () => {
+      setIsFullscreen(
+        document.fullscreenElement !== null || 
+        (document as any).webkitFullscreenElement !== null ||
+        (document as any).mozFullScreenElement !== null || 
+        (document as any).msFullscreenElement !== null
+      );
+    };
+
+    document.addEventListener('fullscreenchange', handleFullscreenChange);
+    document.addEventListener('webkitfullscreenchange', handleFullscreenChange);
+    document.addEventListener('mozfullscreenchange', handleFullscreenChange);
+    document.addEventListener('MSFullscreenChange', handleFullscreenChange);
+
+    return () => {
+      document.removeEventListener('fullscreenchange', handleFullscreenChange);
+      document.removeEventListener('webkitfullscreenchange', handleFullscreenChange);
+      document.removeEventListener('mozfullscreenchange', handleFullscreenChange);
+      document.removeEventListener('MSFullscreenChange', handleFullscreenChange);
+    };
+  }, []);
 
   // Handle YouTube messages
   useEffect(() => {
@@ -117,6 +170,15 @@ const VSLSection = () => {
               setProgress((data.info / duration) * 100);
             }
           }
+
+          // Handle player ready
+          if (data.event === 'onReady') {
+            setIsVideoLoaded(true);
+            // Send initial commands to hide annotations and related videos
+            if (youtubePlayerRef.current && youtubePlayerRef.current.contentWindow) {
+              youtubePlayerRef.current.contentWindow.postMessage('{"event":"command","func":"mute","args":""}', '*');
+            }
+          }
         }
       } catch (error) {
         // Ignore parsing errors for non-JSON messages
@@ -132,12 +194,22 @@ const VSLSection = () => {
     };
   }, [duration]);
 
-  // Handle video seek
+  // Handle video seek - only allow seeking to parts that have been watched
   const handleSeek = (value: number[]) => {
-    const seekTime = (value[0] / 100) * duration;
-    if (youtubePlayerRef.current && youtubePlayerRef.current.contentWindow) {
-      youtubePlayerRef.current.contentWindow.postMessage(`{"event":"command","func":"seekTo","args":[${seekTime}, true]}`, '*');
-      setProgress(value[0]);
+    // Only allow seeking to positions less than or equal to the current progress
+    const maxAllowedProgress = progress;
+    const requestedProgress = value[0];
+    
+    if (requestedProgress <= maxAllowedProgress) {
+      const seekTime = (requestedProgress / 100) * duration;
+      if (youtubePlayerRef.current && youtubePlayerRef.current.contentWindow) {
+        youtubePlayerRef.current.contentWindow.postMessage(`{"event":"command","func":"seekTo","args":[${seekTime}, true]}`, '*');
+        setProgress(requestedProgress);
+        setCurrentTime(seekTime);
+      }
+    } else {
+      // If trying to seek ahead, reset to current position
+      setProgress(progress);
     }
   };
 
@@ -186,7 +258,7 @@ const VSLSection = () => {
                 <iframe 
                   ref={youtubePlayerRef}
                   className="w-full h-full"
-                  src="https://www.youtube.com/embed/s6mtYJ-pO6o?enablejsapi=1&rel=0&modestbranding=1&autoplay=0&mute=1&controls=0"
+                  src="https://www.youtube.com/embed/s6mtYJ-pO6o?enablejsapi=1&rel=0&modestbranding=1&autoplay=0&mute=1&controls=0&showinfo=0"
                   title="Nexsyn IA - Transformando seu negócio"
                   allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                   onLoad={handleIframeLoad}
@@ -225,21 +297,33 @@ const VSLSection = () => {
               
               {/* Controls */}
               <div className="flex justify-between items-center">
-                <button 
-                  onClick={togglePlay}
-                  className="p-2 bg-nexorange/20 rounded-full hover:bg-nexorange/40 transition-colors"
-                >
-                  {isPlaying ? 
-                    <Pause size={20} className="text-white" /> : 
-                    <Play size={20} className="text-white ml-0.5" />
-                  }
-                </button>
+                <div className="flex items-center gap-2">
+                  <button 
+                    onClick={togglePlay}
+                    className="p-2 bg-nexorange/20 rounded-full hover:bg-nexorange/40 transition-colors"
+                    aria-label={isPlaying ? "Pausar" : "Reproduzir"}
+                  >
+                    {isPlaying ? 
+                      <Pause size={20} className="text-white" /> : 
+                      <Play size={20} className="text-white ml-0.5" />
+                    }
+                  </button>
+                  
+                  <button 
+                    onClick={toggleMute} 
+                    className="p-2 bg-black/70 rounded-full hover:bg-nexorange/40 transition-colors"
+                    aria-label={isMuted ? "Ativar som" : "Desativar som"}
+                  >
+                    {isMuted ? <VolumeX size={20} className="text-white" /> : <Volume2 size={20} className="text-white" />}
+                  </button>
+                </div>
                 
                 <button 
-                  onClick={toggleMute} 
+                  onClick={toggleFullscreen}
                   className="p-2 bg-black/70 rounded-full hover:bg-nexorange/40 transition-colors"
+                  aria-label="Tela cheia"
                 >
-                  {isMuted ? <VolumeX size={20} className="text-white" /> : <Volume2 size={20} className="text-white" />}
+                  <Fullscreen size={20} className="text-white" />
                 </button>
               </div>
             </div>

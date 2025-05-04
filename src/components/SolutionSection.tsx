@@ -1,12 +1,26 @@
 
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { createLottiePlayerElement, ensureLottiePlayerLoaded } from "../utils/lottieLoader";
 import solutionAnimation from "../assets/animations/solution-animation.json";
 
 const SolutionSection = () => {
   const [lottieLoaded, setLottieLoaded] = useState(false);
   const [lottieError, setLottieError] = useState(false);
-  const lottieRef = React.useRef<HTMLDivElement>(null);
+  const lottieRef = useRef<HTMLDivElement>(null);
+  const playerRef = useRef<HTMLElement | null>(null);
+
+  useEffect(() => {
+    // Cleanup function to prevent memory leaks and DOM manipulation errors
+    return () => {
+      if (playerRef.current && lottieRef.current?.contains(playerRef.current)) {
+        try {
+          lottieRef.current.removeChild(playerRef.current);
+        } catch (e) {
+          console.error("Error removing lottie player:", e);
+        }
+      }
+    };
+  }, []);
 
   useEffect(() => {
     const loadLottie = async () => {
@@ -14,8 +28,10 @@ const SolutionSection = () => {
         await ensureLottiePlayerLoaded();
         
         if (lottieRef.current) {
-          // Clear previous content
-          lottieRef.current.innerHTML = '';
+          // Clean up any previous player to avoid DOM conflicts
+          while (lottieRef.current.firstChild) {
+            lottieRef.current.removeChild(lottieRef.current.firstChild);
+          }
           
           const player = createLottiePlayerElement(solutionAnimation, {
             width: "100%",
@@ -25,16 +41,31 @@ const SolutionSection = () => {
             speed: "1"
           });
           
+          playerRef.current = player;
           lottieRef.current.appendChild(player);
           setLottieLoaded(true);
+          setLottieError(false);
         }
       } catch (error) {
         console.error("Could not load lottie animation:", error);
         setLottieError(true);
+        setLottieLoaded(false);
       }
     };
 
     loadLottie();
+
+    // Cleanup function
+    return () => {
+      if (playerRef.current && lottieRef.current?.contains(playerRef.current)) {
+        try {
+          playerRef.current.remove();
+        } catch (e) {
+          console.error("Error removing lottie player on unmount:", e);
+        }
+        playerRef.current = null;
+      }
+    };
   }, []);
 
   return (

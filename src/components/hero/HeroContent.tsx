@@ -11,11 +11,15 @@ const HeroContent = ({ isVisible }: { isVisible: boolean }) => {
         <div className="absolute -top-28 -right-28 w-56 h-56 bg-nexorange/20 rounded-full blur-3xl"></div>
         <div className="absolute -bottom-28 -left-28 w-56 h-56 bg-nexlime/20 rounded-full blur-3xl"></div>
         
-        <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold leading-tight mb-6">
+        <h1 className="text-2xl md:text-3xl lg:text-4xl font-bold leading-tight mb-4">
           <span className="bg-gradient-to-r from-nexlime to-nexlime/80 bg-clip-text text-transparent block mb-2">
-            🟢 Sua empresa está perdendo tempo com tarefas manuais?
+            Sua empresa está perdendo tempo com tarefas manuais?
           </span>
         </h1>
+        
+        <p className="text-nexwhite font-normal font-poppins text-lg mb-5">
+          👨‍💼 Para donos de pequenas e médias empresas que querem mais eficiência e menos retrabalho.
+        </p>
         
         <h2 className="text-xl md:text-2xl font-medium mb-6">
           <span className="flex items-start">

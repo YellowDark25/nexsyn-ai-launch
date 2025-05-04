@@ -4,7 +4,6 @@ import ParticleBackground from "./hero/ParticleBackground";
 import HeroContent from "./hero/HeroContent";
 import LottieContainer from "./hero/LottieContainer";
 import WaveDecoration from "./hero/WaveDecoration";
-import heroAnimation from "../assets/animations/hero-animation.json";
 
 const HeroSection = () => {
   const [isVisible, setIsVisible] = useState(false);
@@ -28,8 +27,8 @@ const HeroSection = () => {
           {/* Left side - Text content */}
           <HeroContent isVisible={isVisible} />
           
-          {/* Right side - Lottie animation */}
-          <LottieContainer isVisible={isVisible} animationData={heroAnimation} />
+          {/* Right side - GIF animation */}
+          <LottieContainer isVisible={isVisible} animationData={null} />
         </div>
       </div>
       

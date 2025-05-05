@@ -10,13 +10,13 @@ const ParticleBackground = () => {
     const existingParticles = heroSection.querySelectorAll(".particle, .geometric-shape");
     existingParticles.forEach(p => p.remove());
 
-    // Create fewer particles for better performance (reduced from 75 to 50)
-    for (let i = 0; i < 50; i++) {
+    // Create fewer particles for better focus on the main flow animation
+    for (let i = 0; i < 30; i++) {
       const particle = document.createElement("div");
       particle.classList.add("particle");
 
-      // Variable size but slightly smaller for better performance
-      const size = Math.random() * 12 + 2; 
+      // Smaller sizes for more subtle effect
+      const size = Math.random() * 8 + 2; 
       particle.style.width = `${size}px`;
       particle.style.height = `${size}px`;
 
@@ -26,8 +26,8 @@ const ParticleBackground = () => {
       particle.style.left = `${posX}%`;
       particle.style.top = `${posY}%`;
 
-      // Variable opacity
-      particle.style.opacity = (Math.random() * 0.5 + 0.15).toString();
+      // Lower opacity for subtlety
+      particle.style.opacity = (Math.random() * 0.3 + 0.1).toString();
       
       // Variable shape (circle, rounded square, or triangle)
       const shapeType = Math.floor(Math.random() * 3);
@@ -43,7 +43,7 @@ const ParticleBackground = () => {
         particle.style.borderRadius = '0';
       }
 
-      // Enhanced colors with more vibrant gradients
+      // Enhanced colors with more vibrant gradients that match the brand
       if (i % 4 === 0) {
         particle.style.background = "linear-gradient(135deg, rgba(201, 217, 33, 0.6), rgba(201, 217, 33, 0.3))";
       } else if (i % 4 === 1) {
@@ -63,14 +63,14 @@ const ParticleBackground = () => {
     }
     
     // Add fewer geometric elements
-    addGeometricElements(heroSection, 6); // Reduced from 10 to 6
+    addGeometricElements(heroSection, 4);
     
     function animateParticle(particle: HTMLElement) {
       // More subtle movement
-      const xMove = Math.random() * 10 - 5; 
-      const yMove = Math.random() * 10 - 5;
+      const xMove = Math.random() * 8 - 4; 
+      const yMove = Math.random() * 8 - 4;
       const rotation = Math.random() * 360;
-      const duration = Math.random() * 25000 + 15000; // Longer duration for smoother effect
+      const duration = Math.random() * 30000 + 20000; // Longer duration for smoother effect
       
       const animation = particle.animate([
         {
@@ -78,7 +78,7 @@ const ParticleBackground = () => {
           opacity: particle.style.opacity
         }, 
         {
-          transform: `translate(${xMove * 10}px, ${yMove * 10}px) rotate(${rotation}deg)`,
+          transform: `translate(${xMove * 8}px, ${yMove * 8}px) rotate(${rotation}deg)`,
           opacity: (parseFloat(particle.style.opacity) * 0.7).toString()
         }
       ], {
@@ -102,11 +102,10 @@ const ParticleBackground = () => {
 // Helper function to add geometric elements
 function addGeometricElements(container: HTMLElement, count: number) {
   const shapes = [
-    { type: 'triangle', color: 'rgba(201, 217, 33, 0.18)' },
-    { type: 'square', color: 'rgba(255, 111, 0, 0.18)' },
-    { type: 'circle', color: 'rgba(255, 255, 255, 0.12)' },
-    { type: 'polygon', color: 'rgba(201, 217, 33, 0.15)' },
-    { type: 'diamond', color: 'rgba(255, 111, 0, 0.15)' }
+    { type: 'triangle', color: 'rgba(201, 217, 33, 0.12)' },
+    { type: 'square', color: 'rgba(255, 111, 0, 0.12)' },
+    { type: 'circle', color: 'rgba(255, 255, 255, 0.08)' },
+    { type: 'polygon', color: 'rgba(201, 217, 33, 0.10)' }
   ];
   
   // Create geometric shapes
@@ -118,14 +117,14 @@ function addGeometricElements(container: HTMLElement, count: number) {
     shape.style.position = 'absolute';
     
     // Create larger but fewer shapes
-    const size = Math.random() * 140 + 60;
+    const size = Math.random() * 120 + 60;
     shape.style.width = `${size}px`;
     shape.style.height = `${size}px`;
     
     shape.style.left = `${Math.random() * 90 + 5}%`;
     shape.style.top = `${Math.random() * 90 + 5}%`;
     
-    shape.style.opacity = '0.15';
+    shape.style.opacity = '0.1';  // More subtle
     shape.style.background = shapeType.color;
     
     if (shapeType.type === 'triangle') {
@@ -134,8 +133,6 @@ function addGeometricElements(container: HTMLElement, count: number) {
       shape.style.borderRadius = '15%';
     } else if (shapeType.type === 'polygon') {
       shape.style.clipPath = 'polygon(50% 0%, 100% 38%, 82% 100%, 18% 100%, 0% 38%)';
-    } else if (shapeType.type === 'diamond') {
-      shape.style.clipPath = 'polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%)';
     } else {
       shape.style.borderRadius = '50%';
     }
@@ -146,9 +143,9 @@ function addGeometricElements(container: HTMLElement, count: number) {
     // Smoother, slower animation
     const animation = shape.animate([
       { transform: `rotate(0deg) translate(0, 0) scale(1)` },
-      { transform: `rotate(${Math.random() * 360}deg) translate(${Math.random() * 30 - 15}px, ${Math.random() * 30 - 15}px) scale(${0.92 + Math.random() * 0.16})` }
+      { transform: `rotate(${Math.random() * 360}deg) translate(${Math.random() * 20 - 10}px, ${Math.random() * 20 - 10}px) scale(${0.92 + Math.random() * 0.16})` }
     ], {
-      duration: 30000 + Math.random() * 20000,
+      duration: 40000 + Math.random() * 20000,
       iterations: Infinity,
       direction: 'alternate',
       easing: 'ease-in-out'

@@ -1,5 +1,5 @@
 
-import React, { useState, useEffect, lazy, Suspense } from "react";
+import React, { useState, useEffect } from "react";
 import ParticleBackground from "./ParticleBackground";
 import HeroContent from "./HeroContent";
 import WaveDecoration from "./WaveDecoration";
@@ -46,12 +46,11 @@ const HeroSection = () => {
           {/* Left side - Text content */}
           <HeroContent isVisible={isVisible} />
           
-          {/* Right side - Enhanced Flow Animation */}
+          {/* Right side - Flow Animation (removed container box for more fluid design) */}
           <div className="w-full md:w-1/2 flex justify-center">
             {isMounted && (
-              <div className="w-full max-w-md h-[450px] relative glass-morphism p-6 rounded-2xl border border-white/15 shadow-[0_10px_30px_-15px_rgba(0,0,0,0.4)]">
+              <div className="w-full max-w-md h-[450px] relative">
                 <TransformationFlow mousePosition={mousePosition} />
-                <div className="absolute -bottom-4 left-0 right-0 h-16 bg-gradient-to-t from-[#1A1F2C] to-transparent"></div>
               </div>
             )}
           </div>

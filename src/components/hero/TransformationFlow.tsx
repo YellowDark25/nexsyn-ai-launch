@@ -3,7 +3,6 @@ import React, { useRef, useEffect } from 'react';
 import { Check, Cog, Bot, Clock, MessageSquare, ChartBar, Zap } from "lucide-react";
 import { Badge } from "../ui/badge";
 
-// Enhanced SVG animation that replaces the 3D scene
 const TransformationFlow = ({ mousePosition }: { mousePosition: { x: number, y: number } }) => {
   const svgRef = useRef<SVGSVGElement>(null);
   const pathRef = useRef<SVGPathElement>(null);
@@ -39,10 +38,10 @@ const TransformationFlow = ({ mousePosition }: { mousePosition: { x: number, y: 
 
   return (
     <div className="w-full h-full flex items-center justify-center relative">
-      {/* Holographic grid background */}
+      {/* Holographic grid background - enhanced to match reference image */}
       <div className="absolute inset-0 z-0"
         style={{ 
-          transform: `translate(${mousePosition.x * -2}px, ${mousePosition.y * -2}px)`,
+          transform: `translate(${mousePosition.x * -3}px, ${mousePosition.y * -3}px)`,
           transition: 'transform 0.5s ease-out'
         }}
       >
@@ -76,18 +75,18 @@ const TransformationFlow = ({ mousePosition }: { mousePosition: { x: number, y: 
         </svg>
       </div>
 
-      {/* Main flow animation */}
+      {/* Main flow animation - improved to match reference image */}
       <svg 
         ref={svgRef}
         className="w-full h-full absolute z-10" 
         viewBox="0 0 800 400" 
         style={{ 
           filter: 'drop-shadow(0px 0px 5px rgba(201, 217, 33, 0.35))',
-          transform: `translate(${mousePosition.x * -3}px, ${mousePosition.y * -3}px)`,
+          transform: `translate(${mousePosition.x * -5}px, ${mousePosition.y * -5}px)`,
           transition: 'transform 0.3s ease-out'
         }}
       >
-        {/* Enhanced background glow filter */}
+        {/* Enhanced background glow filters */}
         <defs>
           <filter id="glow" x="-50%" y="-50%" width="200%" height="200%">
             <feGaussianBlur stdDeviation="5" result="blur" />
@@ -99,81 +98,81 @@ const TransformationFlow = ({ mousePosition }: { mousePosition: { x: number, y: 
             <feComposite in="SourceGraphic" in2="blur" operator="over" />
           </filter>
           
-          {/* Enhanced gradient definitions */}
+          {/* Enhanced gradient definitions with brighter colors */}
           <linearGradient id="flowGradient" x1="0%" y1="0%" x2="100%" y2="0%">
-            <stop offset="0%" stopColor="#C9D921" stopOpacity="0.9" />
-            <stop offset="50%" stopColor="#FFFFFF" stopOpacity="0.8" />
-            <stop offset="100%" stopColor="#FF6F00" stopOpacity="0.9" />
+            <stop offset="0%" stopColor="#C9D921" stopOpacity="1" />
+            <stop offset="50%" stopColor="#FFFFFF" stopOpacity="0.9" />
+            <stop offset="100%" stopColor="#FF6F00" stopOpacity="1" />
           </linearGradient>
           
           <linearGradient id="nodeGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-            <stop offset="0%" stopColor="#C9D921" stopOpacity="0.2" />
+            <stop offset="0%" stopColor="#C9D921" stopOpacity="0.3" />
             <stop offset="100%" stopColor="#1A1F2C" stopOpacity="0.4" />
           </linearGradient>
           
           <linearGradient id="processGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-            <stop offset="0%" stopColor="#C9D921" stopOpacity="0.3" />
-            <stop offset="100%" stopColor="#C9D921" stopOpacity="0.05" />
+            <stop offset="0%" stopColor="#C9D921" stopOpacity="0.4" />
+            <stop offset="100%" stopColor="#C9D921" stopOpacity="0.1" />
           </linearGradient>
           
           <linearGradient id="iaGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-            <stop offset="0%" stopColor="#FFFFFF" stopOpacity="0.3" />
-            <stop offset="100%" stopColor="#FFFFFF" stopOpacity="0.05" />
+            <stop offset="0%" stopColor="#FFFFFF" stopOpacity="0.4" />
+            <stop offset="100%" stopColor="#FFFFFF" stopOpacity="0.1" />
           </linearGradient>
           
           <linearGradient id="resultGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-            <stop offset="0%" stopColor="#FF6F00" stopOpacity="0.3" />
-            <stop offset="100%" stopColor="#FF6F00" stopOpacity="0.05" />
+            <stop offset="0%" stopColor="#FF6F00" stopOpacity="0.4" />
+            <stop offset="100%" stopColor="#FF6F00" stopOpacity="0.1" />
           </linearGradient>
         </defs>
         
-        {/* Enhanced flow path */}
+        {/* Enhanced flow path with brighter colors and thicker stroke */}
         <path
           ref={pathRef}
           d="M100,190 C160,120 220,280 350,200 C480,120 580,260 700,190"
           stroke="url(#flowGradient)"
-          strokeWidth="4"
+          strokeWidth="6"
           fill="none"
           filter="url(#glow)"
         />
         
-        {/* Connection paths */}
+        {/* Connection paths - enhanced visibility */}
         <path
           d="M100,190 L100,250"
           stroke="#C9D921"
-          strokeWidth="1.5"
+          strokeWidth="2"
           strokeDasharray="5,3"
-          opacity="0.6"
+          opacity="0.8"
         />
         
         <path
           d="M350,200 L350,260"
           stroke="#FFFFFF"
-          strokeWidth="1.5"
+          strokeWidth="2"
           strokeDasharray="5,3"
-          opacity="0.6"
+          opacity="0.8"
         />
         
         <path
           d="M700,190 L700,250"
           stroke="#FF6F00"
-          strokeWidth="1.5"
+          strokeWidth="2"
           strokeDasharray="5,3"
-          opacity="0.6"
+          opacity="0.8"
         />
         
-        {/* Intermediate path points */}
-        <circle cx="230" cy="210" r="5" fill="#FFFFFF" opacity="0.7" filter="url(#softGlow)" />
-        <circle cx="470" cy="180" r="5" fill="#FFFFFF" opacity="0.7" filter="url(#softGlow)" />
-        <circle cx="580" cy="195" r="5" fill="#FFFFFF" opacity="0.7" filter="url(#softGlow)" />
+        {/* Intermediate path points with enhanced glow */}
+        <circle cx="230" cy="210" r="6" fill="#FFFFFF" opacity="0.8" filter="url(#softGlow)" />
+        <circle cx="470" cy="180" r="6" fill="#FFFFFF" opacity="0.8" filter="url(#softGlow)" />
+        <circle cx="580" cy="195" r="6" fill="#FFFFFF" opacity="0.8" filter="url(#softGlow)" />
         
-        {/* Process nodes enhanced */}
-        <circle cx="100" cy="190" r="40" fill="url(#processGradient)" stroke="#C9D921" strokeWidth="1.5" />
-        <circle cx="350" cy="200" r="50" fill="url(#iaGradient)" stroke="#FFFFFF" strokeWidth="2" />
-        <circle cx="700" cy="190" r="40" fill="url(#resultGradient)" stroke="#FF6F00" strokeWidth="1.5" />
+        {/* Process nodes with enhanced visibility */}
+        <circle cx="100" cy="190" r="45" fill="url(#processGradient)" stroke="#C9D921" strokeWidth="2" />
+        <circle cx="350" cy="200" r="55" fill="url(#iaGradient)" stroke="#FFFFFF" strokeWidth="2.5" />
+        <circle cx="700" cy="190" r="45" fill="url(#resultGradient)" stroke="#FF6F00" strokeWidth="2" />
         
-        {/* Data particles flowing along the path - more particles and varied sizes */}
-        <circle className="animate-flow-1" cx="0" cy="0" r="6" fill="#C9D921" filter="url(#glow)">
+        {/* Data particles flowing along the path - more particles with enhanced visibility */}
+        <circle className="animate-flow-1" cx="0" cy="0" r="7" fill="#C9D921" filter="url(#glow)">
           <animateMotion
             path="M100,190 C160,120 220,280 350,200 C480,120 580,260 700,190"
             dur="5s"
@@ -181,7 +180,7 @@ const TransformationFlow = ({ mousePosition }: { mousePosition: { x: number, y: 
           />
         </circle>
         
-        <circle className="animate-flow-2" cx="0" cy="0" r="4" fill="#FFFFFF" filter="url(#glow)">
+        <circle className="animate-flow-2" cx="0" cy="0" r="5" fill="#FFFFFF" filter="url(#glow)">
           <animateMotion
             path="M100,190 C160,120 220,280 350,200 C480,120 580,260 700,190"
             dur="4s"
@@ -190,7 +189,7 @@ const TransformationFlow = ({ mousePosition }: { mousePosition: { x: number, y: 
           />
         </circle>
         
-        <circle className="animate-flow-3" cx="0" cy="0" r="5" fill="#FF6F00" filter="url(#glow)">
+        <circle className="animate-flow-3" cx="0" cy="0" r="7" fill="#FF6F00" filter="url(#glow)">
           <animateMotion
             path="M100,190 C160,120 220,280 350,200 C480,120 580,260 700,190"
             dur="6s"
@@ -199,7 +198,7 @@ const TransformationFlow = ({ mousePosition }: { mousePosition: { x: number, y: 
           />
         </circle>
         
-        <circle className="animate-flow-1" cx="0" cy="0" r="3" fill="#C9D921" filter="url(#glow)">
+        <circle className="animate-flow-1" cx="0" cy="0" r="5" fill="#C9D921" filter="url(#glow)">
           <animateMotion
             path="M100,190 C160,120 220,280 350,200 C480,120 580,260 700,190"
             dur="7s"
@@ -208,7 +207,7 @@ const TransformationFlow = ({ mousePosition }: { mousePosition: { x: number, y: 
           />
         </circle>
         
-        <circle className="animate-flow-2" cx="0" cy="0" r="5" fill="#FFFFFF" filter="url(#glow)">
+        <circle className="animate-flow-2" cx="0" cy="0" r="6" fill="#FFFFFF" filter="url(#glow)">
           <animateMotion
             path="M100,190 C160,120 220,280 350,200 C480,120 580,260 700,190"
             dur="5.5s"
@@ -218,24 +217,24 @@ const TransformationFlow = ({ mousePosition }: { mousePosition: { x: number, y: 
         </circle>
       </svg>
 
-      {/* Enhanced floating icons with improved parallax effect */}
+      {/* Enhanced floating icons with improved parallax effect and better visibility */}
       <div 
         className="absolute left-[12%] top-[40%] transform -translate-x-1/2 -translate-y-1/2 animate-float z-20"
         style={{ 
           animationDelay: '0.2s',
-          transform: `translate(calc(-50% + ${mousePosition.x * 15}px), calc(-50% + ${mousePosition.y * 15}px))`,
+          transform: `translate(calc(-50% + ${mousePosition.x * 20}px), calc(-50% + ${mousePosition.y * 20}px))`,
           transition: 'transform 0.4s ease-out'
         }}
       >
-        <div className="rounded-full p-5 backdrop-blur-md bg-nexlime/5 border border-nexlime/50 shadow-[0_0_15px_rgba(201,217,33,0.3)]">
-          <Cog size={36} className="text-nexlime animate-spin-slow" />
+        <div className="rounded-full p-5 backdrop-blur-md bg-nexlime/10 border border-nexlime/60 shadow-[0_0_20px_rgba(201,217,33,0.4)]">
+          <Cog size={38} className="text-nexlime animate-spin-slow" />
         </div>
         <div className="mt-3 text-sm font-medium text-nexlime text-center">Processos</div>
         
-        {/* Connected metrics */}
+        {/* Connected metrics with enhanced visibility */}
         <div className="absolute left-[120%] top-[50%] transform translate-y-[-50%]">
-          <Badge variant="outline" className="bg-nexlime/20 border-nexlime/30 text-nexlime shadow-[0_0_10px_rgba(201,217,33,0.2)] px-3 py-1">
-            <Zap size={14} className="mr-1" />
+          <Badge variant="outline" className="bg-nexlime/20 border-nexlime/40 text-nexlime shadow-[0_0_15px_rgba(201,217,33,0.3)] px-3 py-1.5 text-sm">
+            <Zap size={16} className="mr-1" />
             <span>+200% produtividade</span>
           </Badge>
         </div>
@@ -245,19 +244,19 @@ const TransformationFlow = ({ mousePosition }: { mousePosition: { x: number, y: 
         className="absolute left-1/2 top-[25%] transform -translate-x-1/2 -translate-y-1/2 animate-float z-20"
         style={{ 
           animationDelay: '0.8s',
-          transform: `translate(calc(-50% + ${mousePosition.x * -12}px), calc(-50% + ${mousePosition.y * -12}px))`,
+          transform: `translate(calc(-50% + ${mousePosition.x * -15}px), calc(-50% + ${mousePosition.y * -15}px))`,
           transition: 'transform 0.4s ease-out'
         }}
       >
-        <div className="rounded-full p-6 backdrop-blur-md bg-white/10 border border-white/40 shadow-[0_0_20px_rgba(255,255,255,0.2)]">
-          <Bot size={44} className="text-white animate-pulse-soft" />
+        <div className="rounded-full p-6 backdrop-blur-md bg-white/15 border border-white/50 shadow-[0_0_25px_rgba(255,255,255,0.3)]">
+          <Bot size={46} className="text-white animate-pulse-soft" />
         </div>
         <div className="mt-3 text-sm font-medium text-white text-center">IA</div>
         
-        {/* Connected metrics */}
+        {/* Connected metrics with enhanced visibility */}
         <div className="absolute left-[110%] top-[0%]">
-          <Badge variant="outline" className="bg-white/20 border-white/30 text-white shadow-[0_0_10px_rgba(255,255,255,0.15)] px-3 py-1">
-            <ChartBar size={14} className="mr-1" />
+          <Badge variant="outline" className="bg-white/25 border-white/40 text-white shadow-[0_0_15px_rgba(255,255,255,0.2)] px-3 py-1.5 text-sm">
+            <ChartBar size={16} className="mr-1" />
             <span>Análise avançada</span>
           </Badge>
         </div>
@@ -267,19 +266,19 @@ const TransformationFlow = ({ mousePosition }: { mousePosition: { x: number, y: 
         className="absolute right-[15%] top-[45%] transform -translate-x-1/2 -translate-y-1/2 animate-float z-20"
         style={{ 
           animationDelay: '1.2s',
-          transform: `translate(calc(-50% + ${mousePosition.x * 20}px), calc(-50% + ${mousePosition.y * 20}px))`,
+          transform: `translate(calc(-50% + ${mousePosition.x * 25}px), calc(-50% + ${mousePosition.y * 25}px))`,
           transition: 'transform 0.4s ease-out'
         }}
       >
-        <div className="rounded-full p-5 backdrop-blur-md bg-nexorange/5 border border-nexorange/50 shadow-[0_0_15px_rgba(255,111,0,0.3)]">
-          <Check size={36} className="text-nexorange" />
+        <div className="rounded-full p-5 backdrop-blur-md bg-nexorange/10 border border-nexorange/60 shadow-[0_0_20px_rgba(255,111,0,0.4)]">
+          <Check size={38} className="text-nexorange" />
         </div>
         <div className="mt-3 text-sm font-medium text-nexorange text-center">Resultado</div>
         
-        {/* Connected metrics */}
+        {/* Connected metrics with enhanced visibility */}
         <div className="absolute right-[110%] top-[30%]">
-          <Badge variant="outline" className="bg-nexorange/20 border-nexorange/30 text-nexorange shadow-[0_0_10px_rgba(255,111,0,0.2)] px-3 py-1">
-            <Zap size={14} className="mr-1" />
+          <Badge variant="outline" className="bg-nexorange/20 border-nexorange/40 text-nexorange shadow-[0_0_15px_rgba(255,111,0,0.3)] px-3 py-1.5 text-sm">
+            <Zap size={16} className="mr-1" />
             <span>+150% eficiência</span>
           </Badge>
         </div>
@@ -290,12 +289,12 @@ const TransformationFlow = ({ mousePosition }: { mousePosition: { x: number, y: 
         className="absolute left-[35%] bottom-[20%] transform -translate-x-1/2 -translate-y-1/2 animate-float z-20"
         style={{ 
           animationDelay: '1.5s',
-          transform: `translate(calc(-50% + ${mousePosition.x * -10}px), calc(-50% + ${mousePosition.y * -10}px))`,
+          transform: `translate(calc(-50% + ${mousePosition.x * -12}px), calc(-50% + ${mousePosition.y * -12}px))`,
           transition: 'transform 0.4s ease-out'
         }}
       >
-        <div className="rounded-full p-4 backdrop-blur-md bg-white/8 border border-white/20 shadow-[0_0_10px_rgba(255,255,255,0.1)]">
-          <Clock size={28} className="text-nexlime" />
+        <div className="rounded-full p-4 backdrop-blur-md bg-white/10 border border-white/30 shadow-[0_0_15px_rgba(255,255,255,0.15)]">
+          <Clock size={30} className="text-nexlime" />
         </div>
       </div>
       
@@ -303,29 +302,29 @@ const TransformationFlow = ({ mousePosition }: { mousePosition: { x: number, y: 
         className="absolute right-[30%] bottom-[30%] transform -translate-x-1/2 -translate-y-1/2 animate-float z-20"
         style={{ 
           animationDelay: '0.5s',
-          transform: `translate(calc(-50% + ${mousePosition.x * 18}px), calc(-50% + ${mousePosition.y * 18}px))`,
+          transform: `translate(calc(-50% + ${mousePosition.x * 22}px), calc(-50% + ${mousePosition.y * 22}px))`,
           transition: 'transform 0.4s ease-out'
         }}
       >
-        <div className="rounded-full p-4 backdrop-blur-md bg-white/8 border border-white/20 shadow-[0_0_10px_rgba(255,255,255,0.1)]">
-          <MessageSquare size={28} className="text-nexorange" />
+        <div className="rounded-full p-4 backdrop-blur-md bg-white/10 border border-white/30 shadow-[0_0_15px_rgba(255,255,255,0.15)]">
+          <MessageSquare size={30} className="text-nexorange" />
         </div>
       </div>
       
-      {/* Enhanced central message */}
+      {/* Enhanced central message with better visibility */}
       <div 
         className="absolute bottom-6 w-full flex justify-center z-30"
-        style={{ transform: `translateY(${mousePosition.y * 3}px)` }}
+        style={{ transform: `translateY(${mousePosition.y * 5}px)` }}
       >
-        <div className="px-8 py-3 bg-white/8 backdrop-blur-md rounded-full border border-white/15 shadow-[0_0_15px_rgba(255,255,255,0.05)]">
+        <div className="px-8 py-3 bg-white/10 backdrop-blur-md rounded-full border border-white/20 shadow-[0_0_15px_rgba(255,255,255,0.1)]">
           <span className="text-white font-medium">IA integrada ao seu <span className="text-nexlime font-semibold">processo</span></span>
         </div>
       </div>
       
-      {/* Ambient glow effects */}
-      <div className="absolute left-[15%] top-[40%] w-40 h-40 rounded-full bg-nexlime/5 filter blur-[80px] z-0"></div>
-      <div className="absolute right-[15%] top-[45%] w-40 h-40 rounded-full bg-nexorange/5 filter blur-[80px] z-0"></div>
-      <div className="absolute left-[50%] top-[25%] w-60 h-60 rounded-full bg-white/5 filter blur-[100px] z-0"></div>
+      {/* Enhanced ambient glow effects */}
+      <div className="absolute left-[15%] top-[40%] w-48 h-48 rounded-full bg-nexlime/10 filter blur-[80px] z-0"></div>
+      <div className="absolute right-[15%] top-[45%] w-48 h-48 rounded-full bg-nexorange/10 filter blur-[80px] z-0"></div>
+      <div className="absolute left-[50%] top-[25%] w-64 h-64 rounded-full bg-white/10 filter blur-[100px] z-0"></div>
     </div>
   );
 };

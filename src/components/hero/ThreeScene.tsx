@@ -4,7 +4,8 @@ import { Canvas, useFrame } from "@react-three/fiber";
 import { OrbitControls } from "@react-three/drei";
 import { EffectComposer, Bloom } from "@react-three/postprocessing";
 import * as THREE from "three";
-import { BufferGeometryUtils } from "three/examples/jsm/utils/BufferGeometryUtils.js";
+// Fix the BufferGeometryUtils import
+import * as BufferGeometryUtils from "three/examples/jsm/utils/BufferGeometryUtils";
 
 // Component for creating a gear with specified properties
 const Gear = ({ position, rotation, scale, speed, color = "#888888", delay = 0 }) => {
@@ -42,7 +43,7 @@ const Gear = ({ position, rotation, scale, speed, color = "#888888", delay = 0 }
       geometries.push(transformedGeometry);
     }
     
-    // Merge all geometries
+    // Merge all geometries with the correct BufferGeometryUtils method
     return BufferGeometryUtils.mergeGeometries(geometries);
   }, [teethCount]);
 
@@ -268,4 +269,3 @@ const ThreeScene = ({ isVisible }: { isVisible: boolean }) => {
 };
 
 export default ThreeScene;
-

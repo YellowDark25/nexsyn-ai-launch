@@ -20,7 +20,7 @@ const Gear = ({ position, rotation, scale, speed, color = "#888888", delay = 0 }
     const baseGeometry = new THREE.CylinderGeometry(innerRadius, innerRadius, thickness, 32);
     
     // Create geometries array for merging
-    const geometries = [baseGeometry];
+    const geometries: THREE.BufferGeometry[] = [baseGeometry];
     
     // Add teeth
     for (let i = 0; i < teethCount; i++) {
@@ -44,10 +44,7 @@ const Gear = ({ position, rotation, scale, speed, color = "#888888", delay = 0 }
     }
     
     // Use the properly imported mergeGeometries function
-    // Cast all geometries to BufferGeometry to satisfy TypeScript
-    return mergeGeometries(
-      geometries.map(geo => geo instanceof THREE.BufferGeometry ? geo : geo.clone())
-    );
+    return mergeGeometries(geometries);
   }, [teethCount]);
 
   // Define material properties

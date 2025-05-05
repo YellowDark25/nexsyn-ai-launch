@@ -10,13 +10,13 @@ const ParticleBackground = () => {
     const existingParticles = heroSection.querySelectorAll(".particle, .geometric-shape");
     existingParticles.forEach(p => p.remove());
 
-    // Create particles
-    for (let i = 0; i < 40; i++) {
+    // Create more particles (increased from 40 to 60)
+    for (let i = 0; i < 60; i++) {
       const particle = document.createElement("div");
       particle.classList.add("particle");
 
       // Variable size for more dynamism
-      const size = Math.random() * 12 + 2;
+      const size = Math.random() * 15 + 2; // Increased max size
       particle.style.width = `${size}px`;
       particle.style.height = `${size}px`;
 
@@ -27,19 +27,19 @@ const ParticleBackground = () => {
       particle.style.top = `${posY}%`;
 
       // Variable opacity
-      particle.style.opacity = (Math.random() * 0.6 + 0.1).toString();
+      particle.style.opacity = (Math.random() * 0.7 + 0.15).toString();
       
       // Variable shape (circle or rounded square)
-      const borderRadius = Math.random() > 0.5 ? '50%' : '30%';
+      const borderRadius = Math.random() > 0.6 ? '50%' : '30%';
       particle.style.borderRadius = borderRadius;
 
       // Enhanced colors with subtle gradients
       if (i % 3 === 0) {
-        particle.style.background = "linear-gradient(135deg, rgba(201, 217, 33, 0.4), rgba(201, 217, 33, 0.2))";
+        particle.style.background = "linear-gradient(135deg, rgba(201, 217, 33, 0.6), rgba(201, 217, 33, 0.3))";
       } else if (i % 3 === 1) {
-        particle.style.background = "linear-gradient(135deg, rgba(255, 111, 0, 0.4), rgba(255, 111, 0, 0.2))";
+        particle.style.background = "linear-gradient(135deg, rgba(255, 111, 0, 0.6), rgba(255, 111, 0, 0.3))";
       } else {
-        particle.style.background = "linear-gradient(135deg, rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0.05))";
+        particle.style.background = "linear-gradient(135deg, rgba(255, 255, 255, 0.3), rgba(255, 255, 255, 0.05))";
       }
 
       // Add to container
@@ -49,15 +49,15 @@ const ParticleBackground = () => {
       animateParticle(particle);
     }
     
-    // Add floating geometric elements
+    // Add larger floating geometric elements
     addGeometricElements(heroSection);
     
     function animateParticle(particle: HTMLElement) {
       // More organic and fluid movement
-      const xMove = Math.random() * 8 - 4;
-      const yMove = Math.random() * 8 - 4;
-      const rotation = Math.random() * 180;
-      const duration = Math.random() * 15000 + 10000;
+      const xMove = Math.random() * 10 - 5; // Increased movement range
+      const yMove = Math.random() * 10 - 5;
+      const rotation = Math.random() * 360;
+      const duration = Math.random() * 18000 + 10000; // Longer animation duration
       
       const animation = particle.animate([
         {
@@ -89,32 +89,37 @@ const ParticleBackground = () => {
 // Helper function to add geometric elements
 function addGeometricElements(container: HTMLElement) {
   const shapes = [
-    { type: 'triangle', color: 'rgba(201, 217, 33, 0.15)' },
-    { type: 'square', color: 'rgba(255, 111, 0, 0.15)' },
-    { type: 'circle', color: 'rgba(255, 255, 255, 0.1)' }
+    { type: 'triangle', color: 'rgba(201, 217, 33, 0.2)' },
+    { type: 'square', color: 'rgba(255, 111, 0, 0.2)' },
+    { type: 'circle', color: 'rgba(255, 255, 255, 0.15)' },
+    { type: 'polygon', color: 'rgba(201, 217, 33, 0.18)' }
   ];
   
-  for (let i = 0; i < 6; i++) {
+  // Create more geometric shapes (increased from 6 to 8)
+  for (let i = 0; i < 8; i++) {
     const shape = document.createElement('div');
     const shapeType = shapes[i % shapes.length];
     
     shape.classList.add('geometric-shape');
     shape.style.position = 'absolute';
     
-    const size = Math.random() * 80 + 40;
+    // Create larger shapes
+    const size = Math.random() * 100 + 40; // Increased size
     shape.style.width = `${size}px`;
     shape.style.height = `${size}px`;
     
-    shape.style.left = `${Math.random() * 80 + 10}%`;
-    shape.style.top = `${Math.random() * 80 + 10}%`;
+    shape.style.left = `${Math.random() * 90 + 5}%`;
+    shape.style.top = `${Math.random() * 90 + 5}%`;
     
-    shape.style.opacity = '0.15';
+    shape.style.opacity = '0.18';
     shape.style.background = shapeType.color;
     
     if (shapeType.type === 'triangle') {
       shape.style.clipPath = 'polygon(50% 0%, 0% 100%, 100% 100%)';
     } else if (shapeType.type === 'square') {
       shape.style.borderRadius = '15%';
+    } else if (shapeType.type === 'polygon') {
+      shape.style.clipPath = 'polygon(50% 0%, 100% 38%, 82% 100%, 18% 100%, 0% 38%)';
     } else {
       shape.style.borderRadius = '50%';
     }
@@ -124,10 +129,10 @@ function addGeometricElements(container: HTMLElement) {
     
     // Add animation
     const animation = shape.animate([
-      { transform: `rotate(0deg) translate(0, 0)` },
-      { transform: `rotate(${Math.random() * 360}deg) translate(${Math.random() * 30 - 15}px, ${Math.random() * 30 - 15}px)` }
+      { transform: `rotate(0deg) translate(0, 0) scale(1)` },
+      { transform: `rotate(${Math.random() * 360}deg) translate(${Math.random() * 40 - 20}px, ${Math.random() * 40 - 20}px) scale(${0.9 + Math.random() * 0.2})` }
     ], {
-      duration: 15000 + Math.random() * 10000,
+      duration: 20000 + Math.random() * 15000,
       iterations: Infinity,
       direction: 'alternate',
       easing: 'ease-in-out'

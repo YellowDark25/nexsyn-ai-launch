@@ -26,7 +26,7 @@ const HeroSection = () => {
 
   return (
     <section id="home" className="relative min-h-screen bg-gradient-to-br from-[#15191F] to-[#1A1F2C] flex items-center pt-20 overflow-hidden">
-      {/* Background with particles */}
+      {/* Background with enhanced particles */}
       <ParticleBackground />
       
       <div className="container mx-auto px-4 md:px-8 py-16 z-10 relative">
@@ -37,15 +37,25 @@ const HeroSection = () => {
           {/* Right side - 3D Scene */}
           <div className="w-full md:w-1/2 flex justify-center">
             {isMounted && (
-              <Suspense fallback={<div className="h-[400px] w-full flex items-center justify-center text-nexlime/50">Carregando visualização 3D...</div>}>
-                <ThreeScene isVisible={isVisible} />
+              <Suspense fallback={
+                <div className="h-[450px] w-full flex items-center justify-center glass-morphism rounded-xl p-6">
+                  <div className="flex flex-col items-center">
+                    <div className="w-12 h-12 border-4 border-t-transparent border-nexlime rounded-full animate-spin mb-4"></div>
+                    <p className="text-nexlime/70">Carregando visualização 3D...</p>
+                  </div>
+                </div>
+              }>
+                <div className="w-full max-w-md relative animate-float glass-morphism p-6 rounded-2xl">
+                  <ThreeScene isVisible={isVisible} />
+                  <div className="absolute -bottom-4 w-full h-10 bg-gradient-to-t from-[#15191F] to-transparent"></div>
+                </div>
               </Suspense>
             )}
           </div>
         </div>
       </div>
       
-      {/* Bottom wave decoration */}
+      {/* Enhanced bottom wave decoration */}
       <WaveDecoration />
     </section>
   );

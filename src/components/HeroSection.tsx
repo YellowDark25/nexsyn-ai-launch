@@ -27,7 +27,7 @@ const HeroSection = () => {
           {/* Left side - Text content */}
           <HeroContent isVisible={isVisible} />
           
-          {/* Right side - GIF animation */}
+          {/* Right side - 3D Scene (replaced GIF animation) */}
           <LottieContainer isVisible={isVisible} animationData={null} />
         </div>
       </div>

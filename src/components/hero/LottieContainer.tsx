@@ -1,5 +1,6 @@
 
 import React from "react";
+import ThreeScene from "./ThreeScene";
 
 interface LottieContainerProps {
   isVisible: boolean;
@@ -13,11 +14,8 @@ const LottieContainer = ({ isVisible }: LottieContainerProps) => {
     >
       <div className="w-full max-w-md relative animate-float glass-morphism p-6 rounded-2xl">
         <div className="w-full h-[400px] flex items-center justify-center">
-          <img 
-            src="/lovable-uploads/cerebro.gif" 
-            alt="IA para processos empresariais" 
-            className="w-full h-full object-contain rounded-lg"
-          />
+          {/* Replace GIF with ThreeScene */}
+          <ThreeScene isVisible={isVisible} />
         </div>
         
         <div className="absolute -bottom-4 w-full h-10 bg-gradient-to-t from-[#15191F] to-transparent"></div>

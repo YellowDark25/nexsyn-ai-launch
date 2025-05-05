@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from "react";
 import ParticleBackground from "./hero/ParticleBackground";
 import HeroContent from "./hero/HeroContent";
-import LottieContainer from "./hero/LottieContainer";
+import ThreeScene from "./hero/ThreeScene";
 import WaveDecoration from "./hero/WaveDecoration";
 
 const HeroSection = () => {
@@ -27,8 +27,10 @@ const HeroSection = () => {
           {/* Left side - Text content */}
           <HeroContent isVisible={isVisible} />
           
-          {/* Right side - 3D Scene (replaced GIF animation) */}
-          <LottieContainer isVisible={isVisible} animationData={null} />
+          {/* Right side - 3D Scene */}
+          <div className="w-full md:w-1/2 flex justify-center">
+            <ThreeScene isVisible={isVisible} />
+          </div>
         </div>
       </div>
       

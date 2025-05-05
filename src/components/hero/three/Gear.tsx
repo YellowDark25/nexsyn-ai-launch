@@ -54,8 +54,8 @@ const Gear = ({
       geometries.push(transformedGeometry);
     }
     
-    // Use the properly imported mergeGeometries function
-    return BufferGeometryUtils.mergeBufferGeometries(geometries);
+    // Use the correct mergeGeometries function
+    return BufferGeometryUtils.mergeGeometries(geometries);
   }, [teethCount]);
 
   // Define material properties

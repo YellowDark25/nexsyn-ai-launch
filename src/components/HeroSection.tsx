@@ -3,7 +3,7 @@ import React, { useState, useEffect } from "react";
 import ParticleBackground from "./hero/ParticleBackground";
 import HeroContent from "./hero/HeroContent";
 import WaveDecoration from "./hero/WaveDecoration";
-import TransformationFlow from "./hero/TransformationFlow";
+import SplineScene from "./hero/SplineScene";
 
 const HeroSection = () => {
   const [isVisible, setIsVisible] = useState(false);
@@ -46,11 +46,11 @@ const HeroSection = () => {
           {/* Left side - Text content */}
           <HeroContent isVisible={isVisible} />
           
-          {/* Right side - Flow Animation (removed container for more fluid design) */}
+          {/* Right side - Spline 3D Scene */}
           <div className="w-full md:w-1/2 flex justify-center">
             {isMounted && (
               <div className="w-full max-w-md h-[450px] relative">
-                <TransformationFlow mousePosition={mousePosition} />
+                <SplineScene mousePosition={mousePosition} />
               </div>
             )}
           </div>

@@ -1,5 +1,5 @@
 
-import React from "react";
+import React, { Suspense } from "react";
 import { Canvas } from "@react-three/fiber";
 import ProcessScene from "./three/ProcessScene";
 
@@ -7,13 +7,19 @@ import ProcessScene from "./three/ProcessScene";
 const ThreeScene = ({ isVisible }: { isVisible: boolean }) => {
   return (
     <div 
-      className={`w-full h-full transition-opacity duration-700 ${
+      className={`w-full transition-opacity duration-700 ${
         isVisible ? "opacity-100" : "opacity-0"
       }`}
       style={{ height: "400px" }}
     >
-      <Canvas camera={{ position: [0, 0, 3.5], fov: 60 }}>
-        <ProcessScene />
+      <Canvas
+        camera={{ position: [0, 0, 3.5], fov: 60 }}
+        dpr={[1, 2]}
+        gl={{ antialias: true }}
+      >
+        <Suspense fallback={null}>
+          <ProcessScene />
+        </Suspense>
       </Canvas>
     </div>
   );

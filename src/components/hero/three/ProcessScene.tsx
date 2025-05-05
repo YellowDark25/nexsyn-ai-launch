@@ -1,7 +1,6 @@
 
 import React from "react";
 import { OrbitControls } from "@react-three/drei";
-import { EffectComposer, Bloom } from "@react-three/postprocessing";
 import Gear from "./Gear";
 import FlowLine from "./FlowLine";
 
@@ -12,17 +11,12 @@ const ProcessScene = () => {
     { position: [-1.5, 0, 0], rotation: [0, 0, 0], scale: 1, speed: 0.8, color: "#888888", delay: 0 },
     { position: [0, 0, 0], rotation: [0, 0, 0], scale: 0.8, speed: 0.5, color: "#999999", delay: 2 },
     { position: [1.5, 0, 0], rotation: [0, 0, 0], scale: 1.2, speed: 0.2, color: "#777777", delay: 1 },
-    { position: [-1, 1.2, 0.5], rotation: [Math.PI/2, 0, 0], scale: 0.7, speed: 0.9, color: "#888888", delay: 3 },
-    { position: [0.8, -1, -0.3], rotation: [Math.PI/4, 0, Math.PI/4], scale: 0.9, speed: 0.1, color: "#999999", delay: 2 },
   ];
   
   // Define flow connections
   const flows = [
     { start: [-1.5, 0, 0], end: [0, 0, 0], color: "#FF6F00", pulseSpeed: 1.5, hasBottleneck: false },
     { start: [0, 0, 0], end: [1.5, 0, 0], color: "#C9D921", pulseSpeed: 0.8, hasBottleneck: true },
-    { start: [-1.5, 0, 0], end: [-1, 1.2, 0.5], color: "#FF6F00", pulseSpeed: 2, hasBottleneck: false },
-    { start: [-1, 1.2, 0.5], end: [0.8, -1, -0.3], color: "#C9D921", pulseSpeed: 1.2, hasBottleneck: true },
-    { start: [0.8, -1, -0.3], end: [1.5, 0, 0], color: "#FF6F00", pulseSpeed: 0.7, hasBottleneck: false },
   ];
 
   return (
@@ -66,15 +60,6 @@ const ProcessScene = () => {
         minAzimuthAngle={-Math.PI / 4}
         maxAzimuthAngle={Math.PI / 4}
       />
-      
-      {/* Post processing effects */}
-      <EffectComposer>
-        <Bloom 
-          luminanceThreshold={0.2}
-          luminanceSmoothing={0.9}
-          intensity={1.5}
-        />
-      </EffectComposer>
     </>
   );
 };

@@ -2,8 +2,11 @@
 import React, { useState, useEffect } from "react";
 import ParticleBackground from "./hero/ParticleBackground";
 import HeroContent from "./hero/HeroContent";
-import ThreeScene from "./hero/ThreeScene";
 import WaveDecoration from "./hero/WaveDecoration";
+import dynamic from 'next/dynamic';
+
+// Dynamically import ThreeScene with no SSR to avoid hydration issues
+const ThreeScene = dynamic(() => import('./hero/ThreeScene'), { ssr: false });
 
 const HeroSection = () => {
   const [isVisible, setIsVisible] = useState(false);
@@ -29,7 +32,7 @@ const HeroSection = () => {
           
           {/* Right side - 3D Scene */}
           <div className="w-full md:w-1/2 flex justify-center">
-            <ThreeScene isVisible={isVisible} />
+            {typeof window !== 'undefined' && <ThreeScene isVisible={isVisible} />}
           </div>
         </div>
       </div>

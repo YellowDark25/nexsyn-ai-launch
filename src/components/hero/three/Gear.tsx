@@ -2,7 +2,6 @@
 import React, { useRef, useMemo } from "react";
 import { useFrame } from "@react-three/fiber";
 import * as THREE from "three";
-import * as BufferGeometryUtils from "three/examples/jsm/utils/BufferGeometryUtils.js";
 
 // Component for creating a gear with specified properties
 const Gear = ({ 
@@ -30,18 +29,20 @@ const Gear = ({
   const gearGeometry = useMemo(() => {
     const baseGeometry = new THREE.CylinderGeometry(innerRadius, innerRadius, thickness, 32);
     
-    // Create geometries array for merging
-    const geometries: THREE.BufferGeometry[] = [baseGeometry];
+    // Create arrays to store vertex data
+    const positions: number[] = [...baseGeometry.attributes.position.array];
+    const normals: number[] = [...baseGeometry.attributes.normal.array];
+    const indices: number[] = [...baseGeometry.index!.array];
+    
+    let vertexOffset = positions.length / 3;
     
     // Add teeth
     for (let i = 0; i < teethCount; i++) {
       const angle = (i / teethCount) * Math.PI * 2;
       const toothGeometry = new THREE.BoxGeometry(0.2, thickness + 0.05, 0.3);
       
-      // Create matrix to transform the tooth geometry
-      const matrix = new THREE.Matrix4();
-      
       // Position and rotate the tooth
+      const matrix = new THREE.Matrix4();
       matrix.makeRotationY(angle);
       matrix.setPosition(
         Math.cos(angle) * outerRadius,
@@ -49,13 +50,27 @@ const Gear = ({
         Math.sin(angle) * outerRadius
       );
       
-      // Apply the transform matrix
-      const transformedGeometry = toothGeometry.clone().applyMatrix4(matrix);
-      geometries.push(transformedGeometry);
+      // Apply transform to tooth geometry
+      toothGeometry.applyMatrix4(matrix);
+      
+      // Add tooth vertices
+      positions.push(...Array.from(toothGeometry.attributes.position.array));
+      normals.push(...Array.from(toothGeometry.attributes.normal.array));
+      
+      // Add tooth indices (adjusted for offset)
+      const toothIndices = Array.from(toothGeometry.index!.array).map(idx => idx + vertexOffset);
+      indices.push(...toothIndices);
+      
+      vertexOffset += toothGeometry.attributes.position.count;
     }
     
-    // Use the correct mergeGeometries function
-    return BufferGeometryUtils.mergeGeometries(geometries);
+    // Create new geometry from merged data
+    const mergedGeometry = new THREE.BufferGeometry();
+    mergedGeometry.setAttribute('position', new THREE.Float32BufferAttribute(positions, 3));
+    mergedGeometry.setAttribute('normal', new THREE.Float32BufferAttribute(normals, 3));
+    mergedGeometry.setIndex(indices);
+    
+    return mergedGeometry;
   }, [teethCount]);
 
   // Define material properties
@@ -89,14 +104,15 @@ const Gear = ({
   return (
     <mesh 
       ref={meshRef} 
-      geometry={gearGeometry} 
-      material={material}
       position={position}
       rotation={rotation}
       scale={typeof scale === 'number' ? [scale, scale, scale] : scale}
       castShadow
       receiveShadow
-    />
+    >
+      <primitive object={gearGeometry} attach="geometry" />
+      <primitive object={material} attach="material" />
+    </mesh>
   );
 };
 

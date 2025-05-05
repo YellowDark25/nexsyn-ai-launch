@@ -17,7 +17,7 @@ const FlowLine = ({
   pulseSpeed?: number;
   hasBottleneck?: boolean;
 }) => {
-  const curveRef = useRef<THREE.Mesh>(null);
+  const tubeRef = useRef<THREE.Mesh>(null);
   const bottleneckRef = useRef<THREE.Mesh>(null);
   
   // Create curve between points
@@ -33,13 +33,11 @@ const FlowLine = ({
     // Add some random offset to make it more organic
     midPoint.y += (Math.random() - 0.5) * 0.5;
     
-    const curvePoints = new THREE.CatmullRomCurve3([
+    return new THREE.CatmullRomCurve3([
       startVector,
       midPoint,
       endVector
     ]);
-    
-    return curvePoints;
   }, [start, end]);
   
   // Create geometry for the curve
@@ -47,62 +45,62 @@ const FlowLine = ({
     return new THREE.TubeGeometry(curve, 20, 0.02, 8, false);
   }, [curve]);
 
+  // Calculate bottleneck position
+  const bottleneckPosition = useMemo(() => {
+    if (hasBottleneck && curve) {
+      return curve.getPoint(0.6);
+    }
+    return new THREE.Vector3(0, 0, 0);
+  }, [curve, hasBottleneck]);
+
+  // Material for tube
+  const tubeMaterial = useMemo(() => new THREE.MeshStandardMaterial({
+    color: color,
+    transparent: true,
+    opacity: 0.8,
+    emissive: color,
+    emissiveIntensity: 2,
+  }), [color]);
+
+  // Material for bottleneck
+  const bottleneckMaterial = useMemo(() => new THREE.MeshStandardMaterial({ 
+    color: "#ff3333",
+    emissive: "#ff0000",
+    emissiveIntensity: 2,
+    transparent: true,
+    opacity: 0.8,
+  }), []);
+
   // Animation for the flow and bottleneck
   useFrame((state) => {
-    if (!curveRef.current?.material) return;
-    
-    const time = state.clock.getElapsedTime();
-    
-    // Ensure material is of correct type for TypeScript
-    const material = curveRef.current.material as THREE.MeshStandardMaterial;
-    // Pulse effect on the tube
-    material.opacity = 0.6 + Math.sin(time * pulseSpeed) * 0.2;
+    if (tubeRef.current && tubeMaterial) {
+      const time = state.clock.getElapsedTime();
+      // Pulse effect on the tube
+      tubeMaterial.opacity = 0.6 + Math.sin(time * pulseSpeed) * 0.2;
+    }
     
     // Animate bottleneck if it exists
-    if (hasBottleneck && bottleneckRef.current) {
+    if (hasBottleneck && bottleneckRef.current && bottleneckMaterial) {
+      const time = state.clock.getElapsedTime();
       bottleneckRef.current.scale.setScalar(0.8 + Math.sin(time * 3) * 0.2);
-      
-      // Ensure material is of correct type for TypeScript
-      const bottleneckMaterial = bottleneckRef.current.material as THREE.MeshStandardMaterial;
       bottleneckMaterial.opacity = 0.7 + Math.sin(time * 4) * 0.3;
     }
   });
 
-  // Calculate bottleneck position
-  const bottleneckPosition = useMemo(() => {
-    if (curve) {
-      const point = curve.getPoint(0.6);
-      return new THREE.Vector3(point.x, point.y, point.z);
-    }
-    return new THREE.Vector3(0, 0, 0);
-  }, [curve]);
-
   return (
     <>
-      <mesh ref={curveRef}>
+      <mesh ref={tubeRef}>
         <primitive object={tubeGeometry} attach="geometry" />
-        <meshStandardMaterial 
-          color={color}
-          transparent
-          opacity={0.8}
-          emissive={color}
-          emissiveIntensity={2}
-        />
+        <primitive object={tubeMaterial} attach="material" />
       </mesh>
       
       {hasBottleneck && (
         <mesh 
           ref={bottleneckRef} 
-          position={bottleneckPosition}
+          position={[bottleneckPosition.x, bottleneckPosition.y, bottleneckPosition.z]}
         >
           <sphereGeometry args={[0.1, 16, 16]} />
-          <meshStandardMaterial 
-            color="#ff3333"
-            emissive="#ff0000"
-            emissiveIntensity={2}
-            transparent
-            opacity={0.8}
-          />
+          <primitive object={bottleneckMaterial} attach="material" />
         </mesh>
       )}
     </>

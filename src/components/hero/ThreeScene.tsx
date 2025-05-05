@@ -4,8 +4,8 @@ import { Canvas, useFrame } from "@react-three/fiber";
 import { OrbitControls } from "@react-three/drei";
 import { EffectComposer, Bloom } from "@react-three/postprocessing";
 import * as THREE from "three";
-// Fix the BufferGeometryUtils import
-import * as BufferGeometryUtils from "three/examples/jsm/utils/BufferGeometryUtils";
+// Import BufferGeometryUtils correctly
+import { mergeGeometries } from "three/examples/jsm/utils/BufferGeometryUtils.js";
 
 // Component for creating a gear with specified properties
 const Gear = ({ position, rotation, scale, speed, color = "#888888", delay = 0 }) => {
@@ -43,8 +43,11 @@ const Gear = ({ position, rotation, scale, speed, color = "#888888", delay = 0 }
       geometries.push(transformedGeometry);
     }
     
-    // Merge all geometries with the correct BufferGeometryUtils method
-    return BufferGeometryUtils.mergeGeometries(geometries);
+    // Use the properly imported mergeGeometries function
+    // Cast all geometries to BufferGeometry to satisfy TypeScript
+    return mergeGeometries(
+      geometries.map(geo => geo instanceof THREE.BufferGeometry ? geo : geo.clone())
+    );
   }, [teethCount]);
 
   // Define material properties

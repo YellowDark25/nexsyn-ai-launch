@@ -1,13 +1,14 @@
 
 import React, { useRef, useMemo } from "react";
 import { Canvas, useFrame } from "@react-three/fiber";
-import { OrbitControls, useGLTF, Environment } from "@react-three/drei";
+import { OrbitControls } from "@react-three/drei";
 import { EffectComposer, Bloom } from "@react-three/postprocessing";
 import * as THREE from "three";
+import { BufferGeometryUtils } from "three/examples/jsm/utils/BufferGeometryUtils.js";
 
 // Component for creating a gear with specified properties
 const Gear = ({ position, rotation, scale, speed, color = "#888888", delay = 0 }) => {
-  const meshRef = useRef();
+  const meshRef = useRef<THREE.Mesh>(null);
   const teethCount = Math.floor(Math.random() * 8) + 8; // 8 to 16 teeth
   const innerRadius = 0.5;
   const outerRadius = 1;
@@ -15,28 +16,34 @@ const Gear = ({ position, rotation, scale, speed, color = "#888888", delay = 0 }
   
   // Create gear geometry
   const gearGeometry = useMemo(() => {
-    const geometry = new THREE.CylinderGeometry(innerRadius, innerRadius, thickness, 32);
+    const baseGeometry = new THREE.CylinderGeometry(innerRadius, innerRadius, thickness, 32);
+    
+    // Create geometries array for merging
+    const geometries = [baseGeometry];
     
     // Add teeth
     for (let i = 0; i < teethCount; i++) {
       const angle = (i / teethCount) * Math.PI * 2;
       const toothGeometry = new THREE.BoxGeometry(0.2, thickness + 0.05, 0.3);
-      const toothMesh = new THREE.Mesh(toothGeometry);
-      toothMesh.position.set(
+      
+      // Create matrix to transform the tooth geometry
+      const matrix = new THREE.Matrix4();
+      
+      // Position and rotate the tooth
+      matrix.makeRotationY(angle);
+      matrix.setPosition(
         Math.cos(angle) * outerRadius,
         0,
         Math.sin(angle) * outerRadius
       );
-      toothMesh.rotation.y = angle;
       
-      // Merge geometries
-      const toothGeo = toothMesh.geometry.clone().applyMatrix4(
-        toothMesh.matrix.clone()
-      );
-      geometry.merge(toothGeo);
+      // Apply the transform matrix
+      const transformedGeometry = toothGeometry.clone().applyMatrix4(matrix);
+      geometries.push(transformedGeometry);
     }
     
-    return geometry;
+    // Merge all geometries
+    return BufferGeometryUtils.mergeGeometries(geometries);
   }, [teethCount]);
 
   // Define material properties
@@ -57,7 +64,7 @@ const Gear = ({ position, rotation, scale, speed, color = "#888888", delay = 0 }
     // Simulate jamming or slipping gears
     if (speed < 0.2 && Math.sin(time * 2 + delay) > 0.7) {
       // Gear temporarily stops
-      meshRef.current.rotation.y += 0;
+      // No rotation update needed
     } else if (speed > 0.7 && Math.sin(time * 3 + delay) > 0.9) {
       // Gear occasionally jumps ahead
       meshRef.current.rotation.y += speed * 0.1;
@@ -72,9 +79,9 @@ const Gear = ({ position, rotation, scale, speed, color = "#888888", delay = 0 }
       ref={meshRef} 
       geometry={gearGeometry} 
       material={material}
-      position={position}
-      rotation={rotation}
-      scale={scale}
+      position={new THREE.Vector3(...position)}
+      rotation={new THREE.Euler(...rotation)}
+      scale={typeof scale === 'number' ? new THREE.Vector3(scale, scale, scale) : new THREE.Vector3(...scale)}
       castShadow
       receiveShadow
     />
@@ -83,8 +90,8 @@ const Gear = ({ position, rotation, scale, speed, color = "#888888", delay = 0 }
 
 // Component for flow lines between gears
 const FlowLine = ({ start, end, color, pulseSpeed = 1, hasBottleneck = false }) => {
-  const curveRef = useRef();
-  const bottleneckRef = useRef();
+  const curveRef = useRef<THREE.Mesh>(null);
+  const bottleneckRef = useRef<THREE.Mesh>(null);
   
   // Create curve between points
   const curve = useMemo(() => {
@@ -99,13 +106,13 @@ const FlowLine = ({ start, end, color, pulseSpeed = 1, hasBottleneck = false }) 
     // Add some random offset to make it more organic
     midPoint.y += (Math.random() - 0.5) * 0.5;
     
-    const curve = new THREE.CatmullRomCurve3([
+    const curvePoints = new THREE.CatmullRomCurve3([
       startVector,
       midPoint,
       endVector
     ]);
     
-    return curve;
+    return curvePoints;
   }, [start, end]);
   
   // Create geometry for the curve
@@ -115,16 +122,22 @@ const FlowLine = ({ start, end, color, pulseSpeed = 1, hasBottleneck = false }) 
 
   // Animation for the flow and bottleneck
   useFrame((state) => {
-    if (!curveRef.current) return;
+    if (!curveRef.current?.material) return;
     
     const time = state.clock.getElapsedTime();
+    
+    // Ensure material is of correct type for TypeScript
+    const material = curveRef.current.material as THREE.MeshStandardMaterial;
     // Pulse effect on the tube
-    curveRef.current.material.opacity = 0.6 + Math.sin(time * pulseSpeed) * 0.2;
+    material.opacity = 0.6 + Math.sin(time * pulseSpeed) * 0.2;
     
     // Animate bottleneck if it exists
     if (hasBottleneck && bottleneckRef.current) {
       bottleneckRef.current.scale.setScalar(0.8 + Math.sin(time * 3) * 0.2);
-      bottleneckRef.current.material.opacity = 0.7 + Math.sin(time * 4) * 0.3;
+      
+      // Ensure material is of correct type for TypeScript
+      const bottleneckMaterial = bottleneckRef.current.material as THREE.MeshStandardMaterial;
+      bottleneckMaterial.opacity = 0.7 + Math.sin(time * 4) * 0.3;
     }
   });
 
@@ -255,3 +268,4 @@ const ThreeScene = ({ isVisible }: { isVisible: boolean }) => {
 };
 
 export default ThreeScene;
+

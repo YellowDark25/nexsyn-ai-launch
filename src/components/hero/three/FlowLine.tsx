@@ -1,5 +1,5 @@
 
-import React, { useRef, useMemo } from "react";
+import React, { useRef } from "react";
 import { useFrame } from "@react-three/fiber";
 import * as THREE from "three";
 
@@ -17,90 +17,83 @@ const FlowLine = ({
   pulseSpeed?: number;
   hasBottleneck?: boolean;
 }) => {
-  const tubeRef = useRef<THREE.Mesh>(null);
+  const materialRef = useRef<THREE.MeshStandardMaterial>(null);
   const bottleneckRef = useRef<THREE.Mesh>(null);
+  const bottleneckMatRef = useRef<THREE.MeshStandardMaterial>(null);
   
-  // Create curve between points
-  const curve = useMemo(() => {
-    const startVector = new THREE.Vector3(start[0], start[1], start[2]);
-    const endVector = new THREE.Vector3(end[0], end[1], end[2]);
-    
-    // Calculate midpoint with some offset for curve
-    const midPoint = new THREE.Vector3()
-      .addVectors(startVector, endVector)
-      .multiplyScalar(0.5);
-    
-    // Add some random offset to make it more organic
-    midPoint.y += (Math.random() - 0.5) * 0.5;
-    
-    return new THREE.CatmullRomCurve3([
-      startVector,
-      midPoint,
-      endVector
-    ]);
-  }, [start, end]);
+  // Create points for the curve
+  const startPoint = new THREE.Vector3(start[0], start[1], start[2]);
+  const endPoint = new THREE.Vector3(end[0], end[1], end[2]);
   
-  // Create geometry for the curve
-  const tubeGeometry = useMemo(() => {
-    return new THREE.TubeGeometry(curve, 20, 0.02, 8, false);
-  }, [curve]);
-
-  // Calculate bottleneck position
-  const bottleneckPosition = useMemo(() => {
-    if (hasBottleneck && curve) {
-      return curve.getPoint(0.6);
-    }
-    return new THREE.Vector3(0, 0, 0);
-  }, [curve, hasBottleneck]);
-
-  // Material for tube
-  const tubeMaterial = useMemo(() => new THREE.MeshStandardMaterial({
-    color: color,
-    transparent: true,
-    opacity: 0.8,
-    emissive: color,
-    emissiveIntensity: 2,
-  }), [color]);
-
-  // Material for bottleneck
-  const bottleneckMaterial = useMemo(() => new THREE.MeshStandardMaterial({ 
-    color: "#ff3333",
-    emissive: "#ff0000",
-    emissiveIntensity: 2,
-    transparent: true,
-    opacity: 0.8,
-  }), []);
-
-  // Animation for the flow and bottleneck
+  // Calculate midpoint
+  const midPoint = new THREE.Vector3().addVectors(startPoint, endPoint).multiplyScalar(0.5);
+  midPoint.y += (Math.random() - 0.5) * 0.5; // Add some random offset
+  
+  // Create the curve
+  const curvePoints = [startPoint, midPoint, endPoint];
+  
+  // Calculate bottleneck position (60% along the curve)
+  const bottleneckPosition = new THREE.Vector3().lerpVectors(
+    startPoint, 
+    endPoint, 
+    0.6
+  );
+  
+  // Animation
   useFrame((state) => {
-    if (tubeRef.current && tubeMaterial) {
-      const time = state.clock.getElapsedTime();
-      // Pulse effect on the tube
-      tubeMaterial.opacity = 0.6 + Math.sin(time * pulseSpeed) * 0.2;
+    const time = state.clock.getElapsedTime();
+    
+    // Animate the tube material
+    if (materialRef.current) {
+      materialRef.current.opacity = 0.6 + Math.sin(time * pulseSpeed) * 0.2;
     }
     
-    // Animate bottleneck if it exists
-    if (hasBottleneck && bottleneckRef.current && bottleneckMaterial) {
-      const time = state.clock.getElapsedTime();
-      bottleneckRef.current.scale.setScalar(0.8 + Math.sin(time * 3) * 0.2);
-      bottleneckMaterial.opacity = 0.7 + Math.sin(time * 4) * 0.3;
+    // Animate bottleneck
+    if (hasBottleneck && bottleneckRef.current && bottleneckMatRef.current) {
+      bottleneckRef.current.scale.setScalar(0.08 + Math.sin(time * 3) * 0.02);
+      bottleneckMatRef.current.opacity = 0.7 + Math.sin(time * 4) * 0.3;
+      bottleneckMatRef.current.emissiveIntensity = 0.5 + Math.sin(time * 4) * 0.5;
     }
   });
 
   return (
     <>
-      <mesh ref={tubeRef}>
-        <primitive object={tubeGeometry} attach="geometry" />
-        <primitive object={tubeMaterial} attach="material" />
+      {/* The flow tube */}
+      <mesh>
+        <tubeGeometry 
+          args={[
+            new THREE.CatmullRomCurve3(curvePoints),
+            20, // tubular segments
+            0.02, // radius
+            8, // radial segments
+            false // closed
+          ]} 
+        />
+        <meshStandardMaterial
+          ref={materialRef}
+          color={color}
+          transparent={true}
+          opacity={0.8}
+          emissive={color}
+          emissiveIntensity={0.5}
+        />
       </mesh>
       
+      {/* Optional bottleneck indicator */}
       {hasBottleneck && (
-        <mesh 
-          ref={bottleneckRef} 
+        <mesh
+          ref={bottleneckRef}
           position={[bottleneckPosition.x, bottleneckPosition.y, bottleneckPosition.z]}
         >
           <sphereGeometry args={[0.1, 16, 16]} />
-          <primitive object={bottleneckMaterial} attach="material" />
+          <meshStandardMaterial
+            ref={bottleneckMatRef}
+            color="#ff3333"
+            emissive="#ff0000"
+            emissiveIntensity={1}
+            transparent={true}
+            opacity={0.8}
+          />
         </mesh>
       )}
     </>

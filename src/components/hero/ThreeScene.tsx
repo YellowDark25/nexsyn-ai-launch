@@ -2,6 +2,7 @@
 import React, { Suspense } from "react";
 import { Canvas } from "@react-three/fiber";
 import ProcessScene from "./three/ProcessScene";
+import { OrthographicCamera } from "@react-three/drei";
 
 // Main component to be exported
 const ThreeScene = ({ isVisible }: { isVisible: boolean }) => {
@@ -12,10 +13,15 @@ const ThreeScene = ({ isVisible }: { isVisible: boolean }) => {
       }`}
       style={{ height: "400px" }}
     >
-      <Canvas
-        camera={{ position: [0, 0, 3.5], fov: 60 }}
-        dpr={[1, 2]}
-        gl={{ antialias: true }}
+      <Canvas 
+        shadows
+        dpr={[1, 2]} 
+        gl={{ 
+          antialias: true,
+          alpha: true,
+          logarithmicDepthBuffer: true
+        }}
+        className="bg-nexbg rounded-xl shadow-xl"
       >
         <Suspense fallback={null}>
           <ProcessScene />

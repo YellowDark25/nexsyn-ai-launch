@@ -37,7 +37,7 @@ const HeroSection = () => {
           {/* Right side - 3D Scene */}
           <div className="w-full md:w-1/2 flex justify-center">
             {isMounted && (
-              <Suspense fallback={<div className="h-[400px] w-full flex items-center justify-center text-nexlime/50">Carregando...</div>}>
+              <Suspense fallback={<div className="h-[400px] w-full flex items-center justify-center text-nexlime/50">Carregando visualização 3D...</div>}>
                 <ThreeScene isVisible={isVisible} />
               </Suspense>
             )}

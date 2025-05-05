@@ -50,7 +50,7 @@ const SplineScene = ({ mousePosition = { x: 0, y: 0 } }: SplineSceneProps) => {
         }}
       >
         <Spline
-          scene="https://prod.spline.design/X-N7E0biv1z0w431/scene.splinecode"
+          scene="https://prod.spline.design/vP-M7jqSOZxPcdvj/scene.splinecode"
           onLoad={handleOnLoad}
         />
       </div>

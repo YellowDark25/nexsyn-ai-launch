@@ -3,13 +3,12 @@ import React, { useState, useEffect, lazy, Suspense } from "react";
 import ParticleBackground from "./hero/ParticleBackground";
 import HeroContent from "./hero/HeroContent";
 import WaveDecoration from "./hero/WaveDecoration";
-
-// Lazy load the ThreeScene component for better performance
-const ThreeScene = lazy(() => import('./hero/ThreeScene'));
+import TransformationFlow from "./hero/TransformationFlow";
 
 const HeroSection = () => {
   const [isVisible, setIsVisible] = useState(false);
   const [isMounted, setIsMounted] = useState(false);
+  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
 
   // Animation on load and client-side rendering check
   useEffect(() => {
@@ -21,7 +20,20 @@ const HeroSection = () => {
       setIsVisible(true);
     }, 300);
     
-    return () => clearTimeout(timer);
+    // Mouse movement handler for parallax effect
+    const handleMouseMove = (e: MouseEvent) => {
+      // Calculate normalized position (from -1 to 1)
+      const x = (e.clientX / window.innerWidth) * 2 - 1;
+      const y = (e.clientY / window.innerHeight) * 2 - 1;
+      setMousePosition({ x, y });
+    };
+    
+    window.addEventListener('mousemove', handleMouseMove);
+    
+    return () => {
+      clearTimeout(timer);
+      window.removeEventListener('mousemove', handleMouseMove);
+    };
   }, []);
 
   return (
@@ -34,22 +46,13 @@ const HeroSection = () => {
           {/* Left side - Text content */}
           <HeroContent isVisible={isVisible} />
           
-          {/* Right side - 3D Scene */}
+          {/* Right side - Enhanced Flow Animation */}
           <div className="w-full md:w-1/2 flex justify-center">
             {isMounted && (
-              <Suspense fallback={
-                <div className="h-[450px] w-full flex items-center justify-center glass-morphism rounded-xl p-6">
-                  <div className="flex flex-col items-center">
-                    <div className="w-12 h-12 border-4 border-t-transparent border-nexlime rounded-full animate-spin mb-4"></div>
-                    <p className="text-nexlime/70">Carregando visualização 3D...</p>
-                  </div>
-                </div>
-              }>
-                <div className="w-full max-w-md relative animate-float glass-morphism p-6 rounded-2xl">
-                  <ThreeScene isVisible={isVisible} />
-                  <div className="absolute -bottom-4 w-full h-10 bg-gradient-to-t from-[#15191F] to-transparent"></div>
-                </div>
-              </Suspense>
+              <div className="w-full max-w-md h-[450px] relative glass-morphism rounded-2xl border border-white/15 shadow-[0_10px_30px_-15px_rgba(0,0,0,0.4)]">
+                <TransformationFlow mousePosition={mousePosition} />
+                <div className="absolute -bottom-4 left-0 right-0 h-16 bg-gradient-to-t from-[#1A1F2C] to-transparent"></div>
+              </div>
             )}
           </div>
         </div>

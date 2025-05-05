@@ -1,92 +1,93 @@
 
-import React from "react";
-import { OrbitControls, Grid, PerspectiveCamera } from "@react-three/drei";
-import Gear from "./Gear";
-import FlowLine from "./FlowLine";
+import React, { useRef } from "react";
+import { Grid, PerspectiveCamera, useFrame } from "@react-three/drei";
+import * as THREE from "three";
+import ProcessIcon from "./ProcessIcon";
+import TransformationPipeline from "./TransformationPipeline";
 
 // Main scene component
 const ProcessScene = () => {
-  // Define gear positions and properties
-  const gears = [
-    { position: [-1.8, 0, 0], rotation: [Math.PI / 2, 0, 0], scale: 1, speed: 0.8, color: "#C9D921", delay: 0 },
-    { position: [0, 0, 0], rotation: [Math.PI / 2, 0, 0], scale: 0.8, speed: -0.6, color: "#FF6F00", delay: 2 },
-    { position: [1.8, 0, 0], rotation: [Math.PI / 2, 0, 0], scale: 1.2, speed: 0.3, color: "#C9D921", delay: 1 },
-    { position: [0, -1.5, 0], rotation: [Math.PI / 2, 0, 0], scale: 0.7, speed: 0.5, color: "#FF6F00", delay: 3 },
-  ];
+  const sceneRef = useRef<THREE.Group>(null);
   
-  // Define flow connections
-  const flows = [
-    { start: [-1.8, 0, 0], end: [0, 0, 0], color: "#FF6F00", pulseSpeed: 1.5, hasBottleneck: false },
-    { start: [0, 0, 0], end: [1.8, 0, 0], color: "#C9D921", pulseSpeed: 0.8, hasBottleneck: true },
-    { start: [0, 0, 0], end: [0, -1.5, 0], color: "#FF6F00", pulseSpeed: 1.2, hasBottleneck: false },
-  ];
+  // Apply subtle scene movement for parallax effect
+  useFrame(({ clock, mouse }) => {
+    if (!sceneRef.current) return;
+    
+    // Subtle rotation based on mouse position for parallax effect
+    sceneRef.current.rotation.y = THREE.MathUtils.lerp(
+      sceneRef.current.rotation.y,
+      (mouse.x * 0.1),
+      0.05
+    );
+    sceneRef.current.rotation.x = THREE.MathUtils.lerp(
+      sceneRef.current.rotation.x,
+      (mouse.y * 0.05),
+      0.05
+    );
+    
+    // Subtle floating animation
+    sceneRef.current.position.y = Math.sin(clock.getElapsedTime() * 0.5) * 0.05;
+  });
 
   return (
     <>
       {/* Scene background */}
       <color attach="background" args={["#1A1F2C"]} />
       
-      {/* Camera setup with better positioning */}
-      <PerspectiveCamera makeDefault position={[0, 2, 4.5]} fov={45} />
+      {/* Camera setup */}
+      <PerspectiveCamera makeDefault position={[0, 1.8, 4.5]} fov={45} />
       
       {/* Lighting setup */}
-      <ambientLight intensity={0.5} />
-      <directionalLight position={[5, 5, 5]} intensity={1} castShadow />
-      <pointLight position={[-5, 5, -5]} intensity={0.5} />
+      <ambientLight intensity={0.4} />
+      <directionalLight position={[5, 5, 5]} intensity={0.8} castShadow />
+      <pointLight position={[-5, 5, -5]} intensity={0.3} />
       <pointLight position={[0, -3, 0]} intensity={0.2} color="#C9D921" />
       <pointLight position={[2, 1, 1]} intensity={0.3} color="#FF6F00" />
       
-      {/* Helper grid for visual reference */}
+      {/* Holographic grid for futuristic backdrop */}
       <Grid 
         infiniteGrid 
-        cellSize={0.5} 
-        cellThickness={0.5} 
-        sectionSize={2} 
-        sectionThickness={1} 
-        fadeDistance={12}
-        fadeStrength={1.5}
-        cellColor="#C9D92130"
-        sectionColor="#FF6F0030"
+        cellSize={0.6}
+        cellThickness={0.3}
+        sectionSize={2.5}
+        sectionThickness={0.5}
+        fadeDistance={15}
+        fadeStrength={2}
+        cellColor="#C9D92120"
+        sectionColor="#FF6F0015"
       />
       
-      {/* Render all gears */}
-      {gears.map((gear, index) => (
-        <Gear 
-          key={index}
-          position={gear.position as [number, number, number]}
-          rotation={gear.rotation as [number, number, number]}
-          scale={gear.scale}
-          speed={gear.speed}
-          color={gear.color}
-          delay={gear.delay}
-        />
-      ))}
-      
-      {/* Render all flow lines */}
-      {flows.map((flow, index) => (
-        <FlowLine 
-          key={index}
-          start={flow.start as [number, number, number]}
-          end={flow.end as [number, number, number]}
-          color={flow.color}
-          pulseSpeed={flow.pulseSpeed}
-          hasBottleneck={flow.hasBottleneck}
-        />
-      ))}
-      
-      {/* Add orbit controls with limitations */}
-      <OrbitControls 
-        enableZoom={true}
-        minDistance={3}
-        maxDistance={10}
-        minPolarAngle={Math.PI / 4}
-        maxPolarAngle={Math.PI / 1.5}
-        minAzimuthAngle={-Math.PI / 3}
-        maxAzimuthAngle={Math.PI / 3}
-        enablePan={false}
-        autoRotate
-        autoRotateSpeed={0.5}
-      />
+      {/* Main scene group with parallax effect */}
+      <group ref={sceneRef}>
+        {/* Transformation pipeline from left to right */}
+        <TransformationPipeline />
+        
+        {/* Floating icons */}
+        <ProcessIcon type="gear" position={[-2.5, 1.2, -0.5]} scale={0.25} color="#C9D921" rotationSpeed={0.8} />
+        <ProcessIcon type="check" position={[0, 1.4, -0.3]} scale={0.2} color="#FFFFFF" rotationSpeed={0.3} />
+        <ProcessIcon type="robot" position={[1.8, 1.5, -0.4]} scale={0.22} color="#FF6F00" rotationSpeed={0.5} />
+        <ProcessIcon type="time" position={[2.5, 0.8, -0.2]} scale={0.18} color="#C9D921" rotationSpeed={0.6} />
+        <ProcessIcon type="chat" position={[-1.2, 0.7, -0.3]} scale={0.2} color="#FFFFFF" rotationSpeed={0.4} />
+        
+        {/* Final message glow */}
+        <mesh position={[0, -1.5, -1]} rotation={[0, 0, 0]}>
+          <planeGeometry args={[4, 0.6]} />
+          <meshBasicMaterial 
+            color="#FFFFFF"
+            transparent
+            opacity={0.1}
+            side={THREE.DoubleSide}
+          />
+          <mesh position={[0, 0, 0.01]}>
+            <textGeometry args={["IA integrada ao seu processo", { size: 0.2, height: 0.01 }]} />
+            <meshStandardMaterial 
+              color="#FFFFFF"
+              emissive="#C9D921"
+              emissiveIntensity={0.5}
+            />
+          </mesh>
+        </mesh>
+      </group>
     </>
   );
 };

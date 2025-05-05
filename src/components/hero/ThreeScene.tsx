@@ -1,8 +1,39 @@
 
-import React, { Suspense } from "react";
+import React, { Suspense, useEffect, useState } from "react";
 import { Canvas } from "@react-three/fiber";
 import ProcessScene from "./three/ProcessScene";
-import { OrthographicCamera } from "@react-three/drei";
+import { Html } from "@react-three/drei";
+
+// Loading component for 3D scene
+const ThreeSceneLoader = () => {
+  const [progress, setProgress] = useState(0);
+  
+  useEffect(() => {
+    // Simulate loading progress
+    const interval = setInterval(() => {
+      setProgress(prev => {
+        const nextProgress = prev + Math.random() * 10;
+        return nextProgress >= 100 ? 100 : nextProgress;
+      });
+    }, 200);
+    
+    return () => clearInterval(interval);
+  }, []);
+  
+  return (
+    <Html center>
+      <div className="flex flex-col items-center text-nexwhite">
+        <div className="w-32 h-1 bg-gray-800 rounded-full overflow-hidden mb-2">
+          <div 
+            className="h-full bg-gradient-to-r from-nexlime to-nexorange rounded-full transition-all duration-300"
+            style={{ width: `${progress}%` }}
+          ></div>
+        </div>
+        <p className="text-xs font-medium">Carregando visualização 3D...</p>
+      </div>
+    </Html>
+  );
+};
 
 // Main component to be exported
 const ThreeScene = ({ isVisible }: { isVisible: boolean }) => {
@@ -23,7 +54,7 @@ const ThreeScene = ({ isVisible }: { isVisible: boolean }) => {
         }}
         className="bg-nexbg rounded-xl shadow-xl glass-morphism"
       >
-        <Suspense fallback={null}>
+        <Suspense fallback={<ThreeSceneLoader />}>
           <ProcessScene />
         </Suspense>
       </Canvas>
@@ -34,11 +65,11 @@ const ThreeScene = ({ isVisible }: { isVisible: boolean }) => {
       </div>
       
       <div className="absolute -bottom-4 -left-4 bg-nexorange/90 text-white px-4 py-2 rounded-full text-sm font-bold shadow-lg animate-pulse-soft transform hover:scale-105 transition-all cursor-default" style={{animationDelay: '1s'}}>
-        -40% custos
+        -40% retrabalho
       </div>
       
       <div className="absolute top-1/4 -left-4 bg-white/90 text-nexblack px-4 py-2 rounded-full text-sm font-bold shadow-lg animate-pulse-soft transform hover:scale-105 transition-all cursor-default" style={{animationDelay: '2s'}}>
-        +80% eficiência
+        +80% agilidade
       </div>
     </div>
   );

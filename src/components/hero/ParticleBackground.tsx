@@ -10,13 +10,13 @@ const ParticleBackground = () => {
     const existingParticles = heroSection.querySelectorAll(".particle, .geometric-shape");
     existingParticles.forEach(p => p.remove());
 
-    // Create more particles (increased from 40 to 60)
-    for (let i = 0; i < 60; i++) {
+    // Create more particles (increased from 60 to 75)
+    for (let i = 0; i < 75; i++) {
       const particle = document.createElement("div");
       particle.classList.add("particle");
 
       // Variable size for more dynamism
-      const size = Math.random() * 15 + 2; // Increased max size
+      const size = Math.random() * 18 + 2; // Further increased max size
       particle.style.width = `${size}px`;
       particle.style.height = `${size}px`;
 
@@ -29,17 +29,30 @@ const ParticleBackground = () => {
       // Variable opacity
       particle.style.opacity = (Math.random() * 0.7 + 0.15).toString();
       
-      // Variable shape (circle or rounded square)
-      const borderRadius = Math.random() > 0.6 ? '50%' : '30%';
-      particle.style.borderRadius = borderRadius;
-
-      // Enhanced colors with subtle gradients
-      if (i % 3 === 0) {
-        particle.style.background = "linear-gradient(135deg, rgba(201, 217, 33, 0.6), rgba(201, 217, 33, 0.3))";
-      } else if (i % 3 === 1) {
-        particle.style.background = "linear-gradient(135deg, rgba(255, 111, 0, 0.6), rgba(255, 111, 0, 0.3))";
+      // Variable shape (circle, rounded square, or triangle)
+      const shapeType = Math.floor(Math.random() * 3);
+      if (shapeType === 0) {
+        // Circle
+        particle.style.borderRadius = '50%';
+      } else if (shapeType === 1) {
+        // Rounded square
+        particle.style.borderRadius = '30%';
       } else {
-        particle.style.background = "linear-gradient(135deg, rgba(255, 255, 255, 0.3), rgba(255, 255, 255, 0.05))";
+        // Triangle (using clip-path)
+        particle.style.clipPath = 'polygon(50% 0%, 0% 100%, 100% 100%)';
+        particle.style.borderRadius = '0';
+      }
+
+      // Enhanced colors with more vibrant gradients
+      if (i % 4 === 0) {
+        particle.style.background = "linear-gradient(135deg, rgba(201, 217, 33, 0.8), rgba(201, 217, 33, 0.4))";
+      } else if (i % 4 === 1) {
+        particle.style.background = "linear-gradient(135deg, rgba(255, 111, 0, 0.8), rgba(255, 111, 0, 0.4))";
+      } else if (i % 4 === 2) {
+        particle.style.background = "linear-gradient(135deg, rgba(255, 255, 255, 0.4), rgba(255, 255, 255, 0.1))";
+      } else {
+        // New gradient for more variety
+        particle.style.background = "linear-gradient(135deg, rgba(201, 217, 33, 0.3), rgba(255, 111, 0, 0.3))";
       }
 
       // Add to container
@@ -54,10 +67,10 @@ const ParticleBackground = () => {
     
     function animateParticle(particle: HTMLElement) {
       // More organic and fluid movement
-      const xMove = Math.random() * 10 - 5; // Increased movement range
-      const yMove = Math.random() * 10 - 5;
+      const xMove = Math.random() * 15 - 7.5; // Increased movement range
+      const yMove = Math.random() * 15 - 7.5;
       const rotation = Math.random() * 360;
-      const duration = Math.random() * 18000 + 10000; // Longer animation duration
+      const duration = Math.random() * 20000 + 10000; // Longer animation duration
       
       const animation = particle.animate([
         {
@@ -89,14 +102,15 @@ const ParticleBackground = () => {
 // Helper function to add geometric elements
 function addGeometricElements(container: HTMLElement) {
   const shapes = [
-    { type: 'triangle', color: 'rgba(201, 217, 33, 0.2)' },
-    { type: 'square', color: 'rgba(255, 111, 0, 0.2)' },
-    { type: 'circle', color: 'rgba(255, 255, 255, 0.15)' },
-    { type: 'polygon', color: 'rgba(201, 217, 33, 0.18)' }
+    { type: 'triangle', color: 'rgba(201, 217, 33, 0.25)' },
+    { type: 'square', color: 'rgba(255, 111, 0, 0.25)' },
+    { type: 'circle', color: 'rgba(255, 255, 255, 0.18)' },
+    { type: 'polygon', color: 'rgba(201, 217, 33, 0.2)' },
+    { type: 'diamond', color: 'rgba(255, 111, 0, 0.2)' } // New shape
   ];
   
-  // Create more geometric shapes (increased from 6 to 8)
-  for (let i = 0; i < 8; i++) {
+  // Create more geometric shapes (increased from 8 to 10)
+  for (let i = 0; i < 10; i++) {
     const shape = document.createElement('div');
     const shapeType = shapes[i % shapes.length];
     
@@ -104,14 +118,14 @@ function addGeometricElements(container: HTMLElement) {
     shape.style.position = 'absolute';
     
     // Create larger shapes
-    const size = Math.random() * 100 + 40; // Increased size
+    const size = Math.random() * 120 + 40; // Increased size
     shape.style.width = `${size}px`;
     shape.style.height = `${size}px`;
     
     shape.style.left = `${Math.random() * 90 + 5}%`;
     shape.style.top = `${Math.random() * 90 + 5}%`;
     
-    shape.style.opacity = '0.18';
+    shape.style.opacity = '0.2';
     shape.style.background = shapeType.color;
     
     if (shapeType.type === 'triangle') {
@@ -120,6 +134,8 @@ function addGeometricElements(container: HTMLElement) {
       shape.style.borderRadius = '15%';
     } else if (shapeType.type === 'polygon') {
       shape.style.clipPath = 'polygon(50% 0%, 100% 38%, 82% 100%, 18% 100%, 0% 38%)';
+    } else if (shapeType.type === 'diamond') {
+      shape.style.clipPath = 'polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%)';
     } else {
       shape.style.borderRadius = '50%';
     }
@@ -127,10 +143,10 @@ function addGeometricElements(container: HTMLElement) {
     shape.style.zIndex = '0';
     shape.style.transform = `rotate(${Math.random() * 360}deg)`;
     
-    // Add animation
+    // Add more complex animation
     const animation = shape.animate([
       { transform: `rotate(0deg) translate(0, 0) scale(1)` },
-      { transform: `rotate(${Math.random() * 360}deg) translate(${Math.random() * 40 - 20}px, ${Math.random() * 40 - 20}px) scale(${0.9 + Math.random() * 0.2})` }
+      { transform: `rotate(${Math.random() * 360}deg) translate(${Math.random() * 40 - 20}px, ${Math.random() * 40 - 20}px) scale(${0.9 + Math.random() * 0.3})` }
     ], {
       duration: 20000 + Math.random() * 15000,
       iterations: Infinity,

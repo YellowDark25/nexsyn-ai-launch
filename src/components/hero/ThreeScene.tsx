@@ -1,6 +1,7 @@
 
 import React, { useEffect, useState, useRef } from "react";
 import TransformationFlow from "./TransformationFlow";
+import { Badge } from "../ui/badge";
 
 // Lighter alternative to the heavy 3D scene
 const ThreeScene = ({ isVisible }: { isVisible: boolean }) => {
@@ -31,47 +32,47 @@ const ThreeScene = ({ isVisible }: { isVisible: boolean }) => {
   return (
     <div 
       ref={containerRef}
-      className={`w-full h-[450px] relative transition-opacity duration-1000 ${
+      className={`w-full h-[450px] relative transition-opacity duration-1000 overflow-visible ${
         isVisible ? "opacity-100" : "opacity-0"
       }`}
     >
       {/* Main transformation flow SVG animation */}
       <TransformationFlow mousePosition={mousePosition} />
       
-      {/* Floating metric badges with improved styling */}
-      <div 
-        className="absolute -top-5 right-5 bg-gradient-to-r from-nexlime/90 to-nexlime/70 text-nexblack px-4 py-2 rounded-full text-sm font-bold shadow-lg animate-float transform hover:scale-105 transition-all cursor-default"
+      {/* Floating metric badges with improved glassmorphism styling */}
+      <Badge 
+        className="absolute -top-10 right-5 bg-gradient-to-r from-nexlime/80 to-nexlime/60 text-nexblack px-4 py-2 rounded-full text-sm font-bold animate-float shadow-lg hover:shadow-nexlime/30 backdrop-blur-sm border border-white/20 transform hover:scale-105 transition-all cursor-default"
         style={{ 
           animationDelay: '0.5s',
           transform: `translate(${-mousePosition.x * 10}px, ${-mousePosition.y * 10}px)`
         }}
       >
         +200% produtividade
-      </div>
+      </Badge>
       
-      <div 
-        className="absolute bottom-10 left-10 bg-gradient-to-r from-nexorange/90 to-nexorange/70 text-white px-4 py-2 rounded-full text-sm font-bold shadow-lg animate-float transform hover:scale-105 transition-all cursor-default"
+      <Badge 
+        className="absolute bottom-10 left-10 bg-gradient-to-r from-nexorange/80 to-nexorange/60 text-white px-4 py-2 rounded-full text-sm font-bold animate-float shadow-lg hover:shadow-nexorange/30 backdrop-blur-sm border border-white/20 transform hover:scale-105 transition-all cursor-default"
         style={{ 
           animationDelay: '1s',
           transform: `translate(${mousePosition.x * 15}px, ${mousePosition.y * 15}px)`
         }}
       >
         -40% retrabalho
-      </div>
+      </Badge>
       
-      <div 
-        className="absolute top-1/3 left-5 bg-gradient-to-r from-white/90 to-white/70 text-nexblack px-4 py-2 rounded-full text-sm font-bold shadow-lg animate-float transform hover:scale-105 transition-all cursor-default"
+      <Badge 
+        className="absolute top-1/3 left-5 bg-gradient-to-r from-white/80 to-white/60 text-nexblack px-4 py-2 rounded-full text-sm font-bold animate-float shadow-lg hover:shadow-white/30 backdrop-blur-sm border border-white/20 transform hover:scale-105 transition-all cursor-default"
         style={{ 
           animationDelay: '1.5s',
           transform: `translate(${mousePosition.x * 20}px, ${mousePosition.y * 10}px)`
         }}
       >
         +80% agilidade
-      </div>
+      </Badge>
       
-      {/* Subtle glow effects */}
-      <div className="absolute bottom-1/4 right-1/4 w-32 h-32 rounded-full bg-nexlime/10 blur-3xl"></div>
-      <div className="absolute top-1/3 left-1/3 w-40 h-40 rounded-full bg-nexorange/10 blur-3xl"></div>
+      {/* Improved glow effects for better integration */}
+      <div className="absolute -bottom-20 right-1/4 w-64 h-64 rounded-full bg-nexlime/10 blur-[80px]"></div>
+      <div className="absolute -top-20 left-1/3 w-80 h-80 rounded-full bg-nexorange/10 blur-[100px]"></div>
     </div>
   );
 };

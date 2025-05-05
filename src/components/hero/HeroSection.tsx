@@ -42,14 +42,17 @@ const HeroSection = () => {
       <ParticleBackground />
       
       <div className="container mx-auto px-4 md:px-8 py-16 z-10 relative">
-        <div className="flex flex-col md:flex-row items-center justify-between gap-8 md:gap-12">
+        {/* Removed the strict column layout for more fluid design */}
+        <div className="flex flex-wrap items-center justify-between relative">
           {/* Left side - Text content */}
-          <HeroContent isVisible={isVisible} />
+          <div className="w-full lg:w-1/2 z-10">
+            <HeroContent isVisible={isVisible} />
+          </div>
           
-          {/* Right side - Spline 3D Scene */}
-          <div className="w-full md:w-1/2 flex justify-center">
+          {/* Right side - Spline 3D Scene - made it overlap slightly for better integration */}
+          <div className="w-full lg:w-1/2 lg:absolute lg:right-0 lg:top-0 lg:bottom-0 flex items-center justify-center">
             {isMounted && (
-              <div className="w-full max-w-md h-[450px] relative">
+              <div className="w-full h-[450px] lg:h-full relative">
                 <SplineScene mousePosition={mousePosition} />
               </div>
             )}

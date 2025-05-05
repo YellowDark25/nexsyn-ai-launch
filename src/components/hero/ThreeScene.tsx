@@ -1,76 +1,77 @@
 
-import React, { Suspense, useEffect, useState } from "react";
-import { Canvas } from "@react-three/fiber";
-import ProcessScene from "./three/ProcessScene";
-import { Html } from "@react-three/drei";
+import React, { useEffect, useState, useRef } from "react";
+import TransformationFlow from "./TransformationFlow";
 
-// Loading component for 3D scene
-const ThreeSceneLoader = () => {
-  const [progress, setProgress] = useState(0);
-  
-  useEffect(() => {
-    // Simulate loading progress
-    const interval = setInterval(() => {
-      setProgress(prev => {
-        const nextProgress = prev + Math.random() * 10;
-        return nextProgress >= 100 ? 100 : nextProgress;
-      });
-    }, 200);
-    
-    return () => clearInterval(interval);
-  }, []);
-  
-  return (
-    <Html center>
-      <div className="flex flex-col items-center text-nexwhite">
-        <div className="w-32 h-1 bg-gray-800 rounded-full overflow-hidden mb-2">
-          <div 
-            className="h-full bg-gradient-to-r from-nexlime to-nexorange rounded-full transition-all duration-300"
-            style={{ width: `${progress}%` }}
-          ></div>
-        </div>
-        <p className="text-xs font-medium">Carregando visualização 3D...</p>
-      </div>
-    </Html>
-  );
-};
-
-// Main component to be exported
+// Lighter alternative to the heavy 3D scene
 const ThreeScene = ({ isVisible }: { isVisible: boolean }) => {
+  const containerRef = useRef<HTMLDivElement>(null);
+  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
+  
+  // Handle mouse movement for parallax effect
+  useEffect(() => {
+    const handleMouseMove = (e: MouseEvent) => {
+      if (containerRef.current) {
+        // Calculate mouse position relative to container center
+        const rect = containerRef.current.getBoundingClientRect();
+        const centerX = rect.left + rect.width / 2;
+        const centerY = rect.top + rect.height / 2;
+        
+        // Normalize values between -1 and 1
+        const x = (e.clientX - centerX) / (rect.width / 2);
+        const y = (e.clientY - centerY) / (rect.height / 2);
+        
+        setMousePosition({ x, y });
+      }
+    };
+    
+    window.addEventListener("mousemove", handleMouseMove);
+    return () => window.removeEventListener("mousemove", handleMouseMove);
+  }, []);
+
   return (
     <div 
-      className={`w-full transition-opacity duration-1000 ${
+      ref={containerRef}
+      className={`w-full h-[450px] relative transition-opacity duration-1000 ${
         isVisible ? "opacity-100" : "opacity-0"
       }`}
-      style={{ height: "450px" }} // Increased height for better visualization
     >
-      <Canvas 
-        shadows
-        dpr={[1, 2]} 
-        gl={{ 
-          antialias: true,
-          alpha: true,
-          logarithmicDepthBuffer: true
-        }}
-        className="bg-nexbg rounded-xl shadow-xl glass-morphism"
-      >
-        <Suspense fallback={<ThreeSceneLoader />}>
-          <ProcessScene />
-        </Suspense>
-      </Canvas>
+      {/* Main transformation flow SVG animation */}
+      <TransformationFlow mousePosition={mousePosition} />
       
-      {/* Add floating metrics badges */}
-      <div className="absolute -top-5 -right-5 bg-nexlime/90 text-nexblack px-4 py-2 rounded-full text-sm font-bold shadow-lg animate-pulse-soft transform hover:scale-105 transition-all cursor-default">
+      {/* Floating metric badges with improved styling */}
+      <div 
+        className="absolute -top-5 right-5 bg-gradient-to-r from-nexlime/90 to-nexlime/70 text-nexblack px-4 py-2 rounded-full text-sm font-bold shadow-lg animate-float transform hover:scale-105 transition-all cursor-default"
+        style={{ 
+          animationDelay: '0.5s',
+          transform: `translate(${-mousePosition.x * 10}px, ${-mousePosition.y * 10}px)`
+        }}
+      >
         +200% produtividade
       </div>
       
-      <div className="absolute -bottom-4 -left-4 bg-nexorange/90 text-white px-4 py-2 rounded-full text-sm font-bold shadow-lg animate-pulse-soft transform hover:scale-105 transition-all cursor-default" style={{animationDelay: '1s'}}>
+      <div 
+        className="absolute bottom-10 left-10 bg-gradient-to-r from-nexorange/90 to-nexorange/70 text-white px-4 py-2 rounded-full text-sm font-bold shadow-lg animate-float transform hover:scale-105 transition-all cursor-default"
+        style={{ 
+          animationDelay: '1s',
+          transform: `translate(${mousePosition.x * 15}px, ${mousePosition.y * 15}px)`
+        }}
+      >
         -40% retrabalho
       </div>
       
-      <div className="absolute top-1/4 -left-4 bg-white/90 text-nexblack px-4 py-2 rounded-full text-sm font-bold shadow-lg animate-pulse-soft transform hover:scale-105 transition-all cursor-default" style={{animationDelay: '2s'}}>
+      <div 
+        className="absolute top-1/3 left-5 bg-gradient-to-r from-white/90 to-white/70 text-nexblack px-4 py-2 rounded-full text-sm font-bold shadow-lg animate-float transform hover:scale-105 transition-all cursor-default"
+        style={{ 
+          animationDelay: '1.5s',
+          transform: `translate(${mousePosition.x * 20}px, ${mousePosition.y * 10}px)`
+        }}
+      >
         +80% agilidade
       </div>
+      
+      {/* Subtle glow effects */}
+      <div className="absolute bottom-1/4 right-1/4 w-32 h-32 rounded-full bg-nexlime/10 blur-3xl"></div>
+      <div className="absolute top-1/3 left-1/3 w-40 h-40 rounded-full bg-nexorange/10 blur-3xl"></div>
     </div>
   );
 };

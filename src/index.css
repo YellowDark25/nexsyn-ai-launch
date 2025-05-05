@@ -127,7 +127,6 @@
   
   .particle {
     position: absolute;
-    border-radius: 50%;
     pointer-events: none;
   }
   
@@ -160,7 +159,7 @@
     @apply backdrop-blur-2xl bg-black/40 border border-white/10;
   }
   
-  /* New animations and styles for updated hero section */
+  /* Animations and styles for updated hero section */
   @keyframes float {
     0%, 100% { transform: translateY(0); }
     50% { transform: translateY(-10px); }
@@ -182,5 +181,33 @@
   .geometric-shape {
     pointer-events: none;
     z-index: 1;
+  }
+  
+  /* New animations for the fluid hero effect */
+  @keyframes spin-slow {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+  }
+  
+  .animate-spin-slow {
+    animation: spin-slow 15s linear infinite;
+  }
+  
+  @keyframes flow {
+    0% { opacity: 0.2; transform: scale(0.8); }
+    50% { opacity: 1; transform: scale(1.2); }
+    100% { opacity: 0.2; transform: scale(0.8); }
+  }
+  
+  .animate-flow-1 {
+    animation: flow 4s infinite;
+  }
+  
+  .animate-flow-2 {
+    animation: flow 6s infinite 1s;
+  }
+  
+  .animate-flow-3 {
+    animation: flow 5s infinite 2s;
   }
 }

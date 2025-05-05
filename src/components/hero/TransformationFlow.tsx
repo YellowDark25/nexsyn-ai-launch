@@ -1,6 +1,6 @@
 
 import React, { useRef, useEffect } from 'react';
-import { Check, Cog, Robot, Clock, MessageSquare } from "lucide-react";
+import { Check, Cog, Bot, Clock, MessageSquare } from "lucide-react";
 
 // SVG animation that replaces the 3D scene
 const TransformationFlow = ({ mousePosition }: { mousePosition: { x: number, y: number } }) => {
@@ -121,7 +121,7 @@ const TransformationFlow = ({ mousePosition }: { mousePosition: { x: number, y: 
         }}
       >
         <div className="rounded-full p-4 backdrop-blur-sm bg-white/10 border border-white/30">
-          <Robot size={38} className="text-white animate-pulse-soft" />
+          <Bot size={38} className="text-white animate-pulse-soft" />
         </div>
         <div className="mt-2 text-xs font-medium text-white text-center">IA</div>
       </div>

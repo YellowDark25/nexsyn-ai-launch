@@ -1,6 +1,7 @@
 
 import React, { useRef } from "react";
-import { Grid, PerspectiveCamera, useFrame } from "@react-three/drei";
+import { Grid, PerspectiveCamera, Text } from "@react-three/drei";
+import { useFrame } from "@react-three/fiber";
 import * as THREE from "three";
 import ProcessIcon from "./ProcessIcon";
 import TransformationPipeline from "./TransformationPipeline";
@@ -78,14 +79,18 @@ const ProcessScene = () => {
             opacity={0.1}
             side={THREE.DoubleSide}
           />
-          <mesh position={[0, 0, 0.01]}>
-            <textGeometry args={["IA integrada ao seu processo", { size: 0.2, height: 0.01 }]} />
-            <meshStandardMaterial 
-              color="#FFFFFF"
-              emissive="#C9D921"
-              emissiveIntensity={0.5}
-            />
-          </mesh>
+          <Text
+            position={[0, 0, 0.01]}
+            fontSize={0.2}
+            color="#FFFFFF"
+            anchorX="center"
+            anchorY="middle"
+            font="/assets/fonts/Inter-Bold.woff"
+            outlineColor="#C9D921"
+            outlineWidth={0.005}
+          >
+            IA integrada ao seu processo
+          </Text>
         </mesh>
       </group>
     </>

@@ -95,7 +95,7 @@ const ConnectionFlow = ({
     end[2] - start[2]
   );
   const length = direction.length();
-  const midpoint = [
+  const midpoint: [number, number, number] = [
     (start[0] + end[0]) / 2,
     (start[1] + end[1]) / 2,
     (start[2] + end[2]) / 2

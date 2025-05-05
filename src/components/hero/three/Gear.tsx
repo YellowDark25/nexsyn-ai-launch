@@ -2,7 +2,7 @@
 import React, { useRef, useMemo } from "react";
 import { useFrame } from "@react-three/fiber";
 import * as THREE from "three";
-import { mergeGeometries } from "three/examples/jsm/utils/BufferGeometryUtils.js";
+import { BufferGeometryUtils } from "three/examples/jsm/utils/BufferGeometryUtils";
 
 // Component for creating a gear with specified properties
 const Gear = ({ 
@@ -55,7 +55,7 @@ const Gear = ({
     }
     
     // Use the properly imported mergeGeometries function
-    return mergeGeometries(geometries);
+    return BufferGeometryUtils.mergeGeometries(geometries);
   }, [teethCount]);
 
   // Define material properties
@@ -91,9 +91,9 @@ const Gear = ({
       ref={meshRef} 
       geometry={gearGeometry} 
       material={material}
-      position={new THREE.Vector3(...position)}
-      rotation={new THREE.Euler(...rotation)}
-      scale={typeof scale === 'number' ? new THREE.Vector3(scale, scale, scale) : new THREE.Vector3(...scale)}
+      position={position}
+      rotation={rotation}
+      scale={typeof scale === 'number' ? [scale, scale, scale] : scale}
       castShadow
       receiveShadow
     />

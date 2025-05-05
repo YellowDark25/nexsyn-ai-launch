@@ -68,6 +68,15 @@ const FlowLine = ({
     }
   });
 
+  // Calculate bottleneck position
+  const bottleneckPosition = useMemo(() => {
+    if (curve) {
+      const point = curve.getPoint(0.6);
+      return [point.x, point.y, point.z];
+    }
+    return [0, 0, 0];
+  }, [curve]);
+
   return (
     <>
       <mesh ref={curveRef}>
@@ -84,11 +93,7 @@ const FlowLine = ({
       {hasBottleneck && (
         <mesh 
           ref={bottleneckRef} 
-          position={[
-            curve.getPoint(0.6).x, 
-            curve.getPoint(0.6).y, 
-            curve.getPoint(0.6).z
-          ]}
+          position={bottleneckPosition}
         >
           <sphereGeometry args={[0.1, 16, 16]} />
           <meshStandardMaterial 

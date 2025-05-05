@@ -1,22 +1,26 @@
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, lazy, Suspense } from "react";
 import ParticleBackground from "./hero/ParticleBackground";
 import HeroContent from "./hero/HeroContent";
 import WaveDecoration from "./hero/WaveDecoration";
-import dynamic from 'next/dynamic';
 
-// Dynamically import ThreeScene with no SSR to avoid hydration issues
-const ThreeScene = dynamic(() => import('./hero/ThreeScene'), { ssr: false });
+// Lazy load the ThreeScene component for better performance
+const ThreeScene = lazy(() => import('./hero/ThreeScene'));
 
 const HeroSection = () => {
   const [isVisible, setIsVisible] = useState(false);
+  const [isMounted, setIsMounted] = useState(false);
 
-  // Animation on load
+  // Animation on load and client-side rendering check
   useEffect(() => {
+    // Mark component as mounted (client-side)
+    setIsMounted(true);
+    
     // Small delay for entrance animation
     const timer = setTimeout(() => {
       setIsVisible(true);
     }, 300);
+    
     return () => clearTimeout(timer);
   }, []);
 
@@ -32,7 +36,11 @@ const HeroSection = () => {
           
           {/* Right side - 3D Scene */}
           <div className="w-full md:w-1/2 flex justify-center">
-            {typeof window !== 'undefined' && <ThreeScene isVisible={isVisible} />}
+            {isMounted && (
+              <Suspense fallback={<div className="h-[400px] w-full flex items-center justify-center text-nexlime/50">Carregando...</div>}>
+                <ThreeScene isVisible={isVisible} />
+              </Suspense>
+            )}
           </div>
         </div>
       </div>

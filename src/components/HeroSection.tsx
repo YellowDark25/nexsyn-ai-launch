@@ -37,24 +37,21 @@ const HeroSection = () => {
   }, []);
 
   return (
-    <section id="home" className="relative min-h-screen bg-gradient-to-br from-[#15191F] to-[#1A1F2C] flex items-center pt-20 overflow-hidden">
-      {/* Background with enhanced particles */}
+    <section id="home" className="relative min-h-screen bg-gradient-to-br from-[#15191F] to-[#1A1F2C] flex items-center pt-16 overflow-hidden">
+      {/* Enhanced background with particles */}
       <ParticleBackground />
       
-      <div className="container mx-auto px-4 md:px-8 py-16 z-10 relative">
-        {/* Removed the strict column layout for more fluid design */}
-        <div className="flex flex-wrap items-center justify-between relative">
-          {/* Left side - Text content */}
-          <div className="w-full lg:w-1/2 z-10">
+      <div className="container mx-auto px-4 z-10 relative">
+        <div className="flex flex-col lg:flex-row items-center relative">
+          {/* Left side - Text content with improved glassmorphism */}
+          <div className="w-full lg:w-1/2 z-10 px-0 md:px-4">
             <HeroContent isVisible={isVisible} />
           </div>
           
-          {/* Right side - Spline 3D Scene - made it overlap slightly for better integration */}
-          <div className="w-full lg:w-1/2 lg:absolute lg:right-0 lg:top-0 lg:bottom-0 flex items-center justify-center">
+          {/* Right side - Spline 3D Scene - fully integrated, no box constraints */}
+          <div className="w-full lg:w-1/2 h-[500px] lg:h-[600px] relative">
             {isMounted && (
-              <div className="w-full h-[450px] lg:h-full relative">
-                <SplineScene mousePosition={mousePosition} />
-              </div>
+              <SplineScene mousePosition={mousePosition} />
             )}
           </div>
         </div>

@@ -5,11 +5,12 @@ import { ArrowRight, Play } from "lucide-react";
 const HeroContent = ({ isVisible }: { isVisible: boolean }) => {
   return (
     <div 
-      className={`w-full md:w-1/2 mb-10 md:mb-0 transition-all duration-700 transform ${isVisible ? 'translate-y-0 opacity-100' : 'translate-y-10 opacity-0'}`}
+      className={`w-full transition-all duration-700 transform ${isVisible ? 'translate-y-0 opacity-100' : 'translate-y-10 opacity-0'}`}
     >
-      <div className="neo-blur p-8 rounded-2xl relative overflow-hidden">
-        <div className="absolute -top-28 -right-28 w-56 h-56 bg-nexorange/20 rounded-full blur-3xl"></div>
-        <div className="absolute -bottom-28 -left-28 w-56 h-56 bg-nexlime/20 rounded-full blur-3xl"></div>
+      <div className="backdrop-blur-xl bg-black/20 border border-white/10 rounded-2xl p-8 relative overflow-hidden shadow-[0_10px_30px_-15px_rgba(0,0,0,0.5)]">
+        {/* Subtle inner glow effects */}
+        <div className="absolute -top-28 -right-28 w-64 h-64 bg-nexorange/20 rounded-full blur-3xl"></div>
+        <div className="absolute -bottom-28 -left-28 w-64 h-64 bg-nexlime/20 rounded-full blur-3xl"></div>
         
         <h1 className="text-2xl md:text-3xl lg:text-4xl font-bold leading-tight mb-4">
           <span className="bg-gradient-to-r from-nexlime to-nexlime/80 bg-clip-text text-transparent block mb-2">
@@ -17,7 +18,7 @@ const HeroContent = ({ isVisible }: { isVisible: boolean }) => {
           </span>
         </h1>
         
-        <p className="text-nexwhite font-normal font-poppins text-lg mb-5">
+        <p className="text-nexwhite font-normal font-poppins text-lg mb-5 opacity-90">
           👨‍💼 Para donos de pequenas e médias empresas que querem mais eficiência e menos retrabalho.
         </p>
         
@@ -34,7 +35,8 @@ const HeroContent = ({ isVisible }: { isVisible: boolean }) => {
           </span>
         </h2>
         
-        <div className="glass-morphism p-4 rounded-xl mb-6">
+        {/* Improved card with subtle glassmorphism */}
+        <div className="backdrop-blur-md bg-white/5 border border-white/10 rounded-xl p-4 mb-6 shadow-[0_10px_30px_-15px_rgba(201,217,33,0.2)]">
           <h3 className="text-xl font-medium mb-3 flex items-center">
             <span className="mr-2">✨</span>
             <span>Consultoria estratégica com IA:</span>
@@ -63,7 +65,7 @@ const HeroContent = ({ isVisible }: { isVisible: boolean }) => {
         <div className="flex flex-col sm:flex-row gap-4 mt-8">
           <a 
             href="#contato" 
-            className="inline-flex items-center justify-center bg-gradient-to-r from-nexorange to-nexorange/90 hover:from-nexorange/90 hover:to-nexorange text-white px-6 py-3 rounded-lg font-semibold text-lg transition-all duration-300 hover:shadow-[0_0_15px_rgba(255,111,0,0.5)] group relative overflow-hidden"
+            className="inline-flex items-center justify-center bg-gradient-to-r from-nexorange to-nexorange/90 hover:from-nexorange/90 hover:to-nexorange text-white px-6 py-3 rounded-lg font-semibold text-lg transition-all duration-300 hover:shadow-[0_0_20px_rgba(255,111,0,0.5)] group relative overflow-hidden"
           >
             <span className="relative z-10">Agende agora. é GRÁTIS</span>
             <ArrowRight className="ml-2 group-hover:translate-x-2 transition-transform duration-300 relative z-10" />

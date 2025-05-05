@@ -72,9 +72,9 @@ const FlowLine = ({
   const bottleneckPosition = useMemo(() => {
     if (curve) {
       const point = curve.getPoint(0.6);
-      return [point.x, point.y, point.z];
+      return new THREE.Vector3(point.x, point.y, point.z);
     }
-    return [0, 0, 0];
+    return new THREE.Vector3(0, 0, 0);
   }, [curve]);
 
   return (

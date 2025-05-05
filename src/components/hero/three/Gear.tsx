@@ -2,7 +2,7 @@
 import React, { useRef, useMemo } from "react";
 import { useFrame } from "@react-three/fiber";
 import * as THREE from "three";
-import { BufferGeometryUtils } from "three/examples/jsm/utils/BufferGeometryUtils";
+import * as BufferGeometryUtils from "three/examples/jsm/utils/BufferGeometryUtils.js";
 
 // Component for creating a gear with specified properties
 const Gear = ({ 
@@ -55,7 +55,7 @@ const Gear = ({
     }
     
     // Use the properly imported mergeGeometries function
-    return BufferGeometryUtils.mergeGeometries(geometries);
+    return BufferGeometryUtils.mergeBufferGeometries(geometries);
   }, [teethCount]);
 
   // Define material properties

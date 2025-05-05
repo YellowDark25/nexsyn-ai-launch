@@ -22,7 +22,7 @@ const SplineScene = ({ mousePosition = { x: 0, y: 0 } }: SplineSceneProps) => {
     return () => window.removeEventListener('resize', checkMobile);
   }, []);
 
-  // Função para lidar com o evento de carregamento concluído
+  // Function to handle load completion event
   const handleOnLoad = () => {
     console.log('Spline scene loaded');
     setIsLoaded(true);
@@ -30,7 +30,7 @@ const SplineScene = ({ mousePosition = { x: 0, y: 0 } }: SplineSceneProps) => {
 
   return (
     <div className="w-full h-full relative">
-      {/* Loader enquanto o modelo não carrega */}
+      {/* Loader while the model is loading */}
       {!isLoaded && (
         <div className="absolute inset-0 flex items-center justify-center z-10">
           <div className="flex flex-col items-center">
@@ -40,23 +40,22 @@ const SplineScene = ({ mousePosition = { x: 0, y: 0 } }: SplineSceneProps) => {
         </div>
       )}
       
-      {/* Container para a cena Spline com efeito parallax suave */}
+      {/* Container for the Spline scene with smooth parallax effect */}
       <div 
         className="w-full h-[450px] relative"
         style={{ 
           transform: `translate(${mousePosition.x * -5}px, ${mousePosition.y * -5}px)`,
-          transition: 'transform 0.3s ease-out',
-          opacity: isLoaded ? 1 : 0.3,
-          transition: 'opacity 0.5s ease-in-out' 
+          transition: 'transform 0.3s ease-out, opacity 0.5s ease-in-out',
+          opacity: isLoaded ? 1 : 0.3
         }}
       >
         <Spline
-          scene="https://prod.spline.design/6d509e18-de8c-4533-9286-2c84e9b9472b/scene.splinecode"
+          scene="https://prod.spline.design/X-N7E0biv1z0w431/scene.splinecode"
           onLoad={handleOnLoad}
         />
       </div>
       
-      {/* Mantemos os badges de métricas da versão anterior */}
+      {/* Metrics badges */}
       <div 
         className="absolute -top-5 right-5 bg-gradient-to-r from-nexlime/90 to-nexlime/70 text-nexblack px-4 py-2 rounded-full text-sm font-bold shadow-lg animate-float transform hover:scale-105 transition-all cursor-default z-20"
         style={{ 

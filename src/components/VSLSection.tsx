@@ -1,3 +1,4 @@
+
 import React from "react";
 import { Button } from "@/components/ui/button";
 import useYouTubePlayer from "@/hooks/useYouTubePlayer";
@@ -56,7 +57,7 @@ const VSLSection = () => {
               isVideoLoaded={isVideoLoaded}
               togglePlay={togglePlay}
               playerRef={playerRef}
-              onLoad={() => setIsVideoLoaded(true)}
+              onLoad={() => {}} // Fixed: Removed reference to setIsVideoLoaded
             />
             
             {/* Custom video controls */}

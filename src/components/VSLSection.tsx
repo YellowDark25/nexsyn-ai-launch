@@ -1,251 +1,34 @@
-import React, { useState, useRef, useEffect } from "react";
-import { AspectRatio } from "@/components/ui/aspect-ratio";
+import React from "react";
 import { Button } from "@/components/ui/button";
-import { Play, Pause, Volume2, VolumeX, Fullscreen } from "lucide-react";
-import { Slider } from "@/components/ui/slider";
-
-// Import the YouTube type definitions
-// (the actual type is defined in the youtube.d.ts file)
+import useYouTubePlayer from "@/hooks/useYouTubePlayer";
+import useFullscreen from "@/components/vsl/useFullscreen";
+import YouTube from "@/components/vsl/YouTube";
+import VideoProgressBar from "@/components/vsl/VideoProgressBar";
+import VideoControls from "@/components/vsl/VideoControls";
 
 const VSLSection = () => {
-  const [isPlaying, setIsPlaying] = useState(false);
-  const [isMuted, setIsMuted] = useState(true);
-  const [isVideoLoaded, setIsVideoLoaded] = useState(false);
-  const [progress, setProgress] = useState(0);
-  const [duration, setDuration] = useState(0);
-  const [currentTime, setCurrentTime] = useState(0);
-  const [isFullscreen, setIsFullscreen] = useState(false);
-  const videoContainerRef = useRef<HTMLDivElement>(null);
-  const progressInterval = useRef<number | null>(null);
-
-  // YouTube iframe API reference
-  const youtubePlayerRef = useRef<HTMLIFrameElement>(null);
-  const youtubeApiReady = useRef(false);
-
-  // Load YouTube API
-  useEffect(() => {
-    // Define callback for API ready
-    // Now TypeScript recognizes this as a valid property on window
-    window.onYouTubeIframeAPIReady = () => {
-      youtubeApiReady.current = true;
-      console.log("YouTube API loaded");
-    };
-
-    // Add YouTube API script if not already loaded
-    if (!document.getElementById('youtube-api')) {
-      const tag = document.createElement('script');
-      tag.id = 'youtube-api';
-      tag.src = 'https://www.youtube.com/iframe_api';
-      const firstScriptTag = document.getElementsByTagName('script')[0];
-      if (firstScriptTag.parentNode) {
-        firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
-      }
-    }
-  }, []);
-
-  // Function to handle video play/pause
-  const togglePlay = () => {
-    if (youtubePlayerRef.current && youtubePlayerRef.current.contentWindow) {
-      if (isPlaying) {
-        youtubePlayerRef.current.contentWindow.postMessage('{"event":"command","func":"pauseVideo","args":""}', '*');
-        if (progressInterval.current) {
-          window.clearInterval(progressInterval.current);
-          progressInterval.current = null;
-        }
-      } else {
-        youtubePlayerRef.current.contentWindow.postMessage('{"event":"command","func":"playVideo","args":""}', '*');
-        startProgressTracker();
-      }
-      setIsPlaying(!isPlaying);
-    }
-  };
-
-  // Function to handle mute/unmute
-  const toggleMute = () => {
-    if (youtubePlayerRef.current && youtubePlayerRef.current.contentWindow) {
-      if (isMuted) {
-        youtubePlayerRef.current.contentWindow.postMessage('{"event":"command","func":"unMute","args":""}', '*');
-      } else {
-        youtubePlayerRef.current.contentWindow.postMessage('{"event":"command","func":"mute","args":""}', '*');
-      }
-      setIsMuted(!isMuted);
-    }
-  };
-
-  // Function to track video progress
-  const startProgressTracker = () => {
-    if (progressInterval.current) {
-      window.clearInterval(progressInterval.current);
-    }
-
-    // More reliable progress tracking using regular interval
-    progressInterval.current = window.setInterval(() => {
-      if (youtubePlayerRef.current && youtubePlayerRef.current.contentWindow) {
-        // Request current time and duration
-        youtubePlayerRef.current.contentWindow.postMessage('{"event":"command","func":"getCurrentTime","args":""}', '*');
-        youtubePlayerRef.current.contentWindow.postMessage('{"event":"command","func":"getDuration","args":""}', '*');
-      }
-    }, 500); // Poll more frequently for smoother updates
-  };
-
-  // Handle fullscreen toggle
-  const toggleFullscreen = () => {
-    if (!videoContainerRef.current) return;
-
-    if (!isFullscreen) {
-      const element = videoContainerRef.current;
-      if (element.requestFullscreen) {
-        element.requestFullscreen();
-      } else if ((element as any).mozRequestFullScreen) {
-        (element as any).mozRequestFullScreen();
-      } else if ((element as any).webkitRequestFullscreen) {
-        (element as any).webkitRequestFullscreen();
-      } else if ((element as any).msRequestFullscreen) {
-        (element as any).msRequestFullscreen();
-      }
-    } else {
-      if (document.exitFullscreen) {
-        document.exitFullscreen();
-      } else if ((document as any).mozCancelFullScreen) {
-        (document as any).mozCancelFullScreen();
-      } else if ((document as any).webkitExitFullscreen) {
-        (document as any).webkitExitFullscreen();
-      } else if ((document as any).msExitFullscreen) {
-        (document as any).msExitFullscreen();
-      }
-    }
-  };
-
-  // Listen for fullscreen change events
-  useEffect(() => {
-    const handleFullscreenChange = () => {
-      setIsFullscreen(
-        document.fullscreenElement !== null || 
-        (document as any).webkitFullscreenElement !== null ||
-        (document as any).mozFullScreenElement !== null || 
-        (document as any).msFullscreenElement !== null
-      );
-    };
-
-    document.addEventListener('fullscreenchange', handleFullscreenChange);
-    document.addEventListener('webkitfullscreenchange', handleFullscreenChange);
-    document.addEventListener('mozfullscreenchange', handleFullscreenChange);
-    document.addEventListener('MSFullscreenChange', handleFullscreenChange);
-
-    return () => {
-      document.removeEventListener('fullscreenchange', handleFullscreenChange);
-      document.removeEventListener('webkitfullscreenchange', handleFullscreenChange);
-      document.removeEventListener('mozfullscreenchange', handleFullscreenChange);
-      document.removeEventListener('MSFullscreenChange', handleFullscreenChange);
-    };
-  }, []);
-
-  // Handle YouTube messages
-  useEffect(() => {
-    const handleYouTubeMessage = (event: MessageEvent) => {
-      try {
-        if (typeof event.data === 'string') {
-          let data;
-          try {
-            data = JSON.parse(event.data);
-          } catch (e) {
-            // Ignore non-JSON messages
-            return;
-          }
-          
-          // Handle player state changes
-          if (data.event === 'onStateChange') {
-            if (data.info === 0) { // video ended
-              setIsPlaying(false);
-              if (progressInterval.current) {
-                window.clearInterval(progressInterval.current);
-                progressInterval.current = null;
-              }
-              setProgress(100); // Ensure progress bar shows completed
-            } else if (data.info === 1) { // video playing
-              setIsPlaying(true);
-              if (!progressInterval.current) {
-                startProgressTracker();
-              }
-            } else if (data.info === 2) { // video paused
-              setIsPlaying(false);
-              if (progressInterval.current) {
-                window.clearInterval(progressInterval.current);
-                progressInterval.current = null;
-              }
-            }
-          }
-          
-          // Handle duration info
-          if (data.event === 'getDuration') {
-            setDuration(data.info || 0);
-          }
-          
-          // Handle current time info
-          if (data.event === 'getCurrentTime') {
-            const newTime = data.info || 0;
-            setCurrentTime(newTime);
-            if (duration > 0) {
-              const newProgress = (newTime / duration) * 100;
-              setProgress(newProgress);
-            }
-          }
-
-          // Handle player ready
-          if (data.event === 'onReady') {
-            setIsVideoLoaded(true);
-            // Send initial commands to hide annotations and related videos
-            if (youtubePlayerRef.current && youtubePlayerRef.current.contentWindow) {
-              youtubePlayerRef.current.contentWindow.postMessage('{"event":"command","func":"mute","args":""}', '*');
-              
-              // Initial duration query
-              youtubePlayerRef.current.contentWindow.postMessage('{"event":"command","func":"getDuration","args":""}', '*');
-            }
-          }
-        }
-      } catch (error) {
-        console.error("Error handling YouTube message:", error);
-      }
-    };
-
-    window.addEventListener('message', handleYouTubeMessage);
-    
-    return () => {
-      window.removeEventListener('message', handleYouTubeMessage);
-      if (progressInterval.current) {
-        window.clearInterval(progressInterval.current);
-        progressInterval.current = null;
-      }
-    };
-  }, [duration]);
+  const { elementRef, isFullscreen, toggleFullscreen } = useFullscreen();
+  const { 
+    playerRef, 
+    isVideoLoaded, 
+    isPlaying, 
+    isMuted, 
+    duration, 
+    currentTime, 
+    progress, 
+    togglePlay, 
+    toggleMute, 
+    seekTo 
+  } = useYouTubePlayer({ 
+    videoId: "s6mtYJ-pO6o"
+  });
 
   // Handle video seek - only allow seeking to parts that have been watched
   const handleSeek = (value: number[]) => {
-    if (!value.length || !youtubePlayerRef.current || !youtubePlayerRef.current.contentWindow) {
-      return;
-    }
+    if (!value.length) return;
     
     const seekTime = (value[0] / 100) * duration;
-    youtubePlayerRef.current.contentWindow.postMessage(`{"event":"command","func":"seekTo","args":[${seekTime}, true]}`, '*');
-    setProgress(value[0]);
-    setCurrentTime(seekTime);
-    
-    // If video is paused, update tracker to show new position
-    if (!isPlaying) {
-      youtubePlayerRef.current.contentWindow.postMessage('{"event":"command","func":"getCurrentTime","args":""}', '*');
-    }
-  };
-
-  // Format time (seconds to MM:SS)
-  const formatTime = (seconds: number) => {
-    const minutes = Math.floor(seconds / 60);
-    const remainingSeconds = Math.floor(seconds % 60);
-    return `${minutes}:${remainingSeconds < 10 ? '0' : ''}${remainingSeconds}`;
-  };
-
-  // Handle YouTube iframe load event
-  const handleIframeLoad = () => {
-    setIsVideoLoaded(true);
+    seekTo(seekTime);
   };
 
   return (
@@ -265,90 +48,35 @@ const VSLSection = () => {
           </p>
         </div>
         
-        <div className="max-w-4xl mx-auto relative" ref={videoContainerRef}>
+        <div className="max-w-4xl mx-auto relative" ref={elementRef}>
           <div className="rounded-xl overflow-hidden border-2 border-nexorange/50 shadow-lg shadow-nexorange/20">
-            {!isVideoLoaded && (
-              <div className="absolute inset-0 flex items-center justify-center bg-black/80 z-10">
-                <div className="animate-pulse flex flex-col items-center">
-                  <div className="h-16 w-16 rounded-full border-4 border-t-nexorange border-r-nexlime border-b-nexorange border-l-nexlime animate-spin mb-4"></div>
-                  <p className="text-white">Carregando vídeo...</p>
-                </div>
-              </div>
-            )}
-            
-            <div className="relative">
-              <AspectRatio ratio={16 / 9}>
-                <iframe 
-                  ref={youtubePlayerRef}
-                  className="w-full h-full"
-                  src="https://www.youtube.com/embed/s6mtYJ-pO6o?enablejsapi=1&rel=0&modestbranding=1&autoplay=0&mute=1&controls=0&showinfo=0&origin=https://lovable.dev"
-                  title="Nexsyn IA - Transformando seu negócio"
-                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                  onLoad={handleIframeLoad}
-                  loading="lazy"
-                  frameBorder="0"
-                ></iframe>
-              </AspectRatio>
-              
-              {!isPlaying && (
-                <div 
-                  className="absolute inset-0 flex items-center justify-center bg-black/60 cursor-pointer group"
-                  onClick={togglePlay}
-                >
-                  <div className="w-16 h-16 md:w-20 md:h-20 rounded-full bg-nexorange flex items-center justify-center transform group-hover:scale-110 transition-all duration-300">
-                    <Play size={32} className="text-white ml-1" />
-                  </div>
-                </div>
-              )}
-            </div>
+            <YouTube
+              videoId="s6mtYJ-pO6o"
+              isPlaying={isPlaying}
+              isVideoLoaded={isVideoLoaded}
+              togglePlay={togglePlay}
+              playerRef={playerRef}
+              onLoad={() => setIsVideoLoaded(true)}
+            />
             
             {/* Custom video controls */}
             <div className="bg-black/90 p-3 flex flex-col gap-2">
               {/* Progress bar */}
-              <div className="flex items-center gap-2">
-                <span className="text-xs text-white min-w-[40px]">{formatTime(currentTime)}</span>
-                <Slider
-                  value={[progress]}
-                  min={0}
-                  max={100}
-                  step={0.1}
-                  onValueChange={handleSeek}
-                  className="flex-1"
-                />
-                <span className="text-xs text-white min-w-[40px]">{formatTime(duration)}</span>
-              </div>
+              <VideoProgressBar
+                currentTime={currentTime}
+                duration={duration}
+                progress={progress}
+                onSeek={handleSeek}
+              />
               
               {/* Controls */}
-              <div className="flex justify-between items-center">
-                <div className="flex items-center gap-2">
-                  <button 
-                    onClick={togglePlay}
-                    className="p-2 bg-nexorange/20 rounded-full hover:bg-nexorange/40 transition-colors"
-                    aria-label={isPlaying ? "Pausar" : "Reproduzir"}
-                  >
-                    {isPlaying ? 
-                      <Pause size={20} className="text-white" /> : 
-                      <Play size={20} className="text-white ml-0.5" />
-                    }
-                  </button>
-                  
-                  <button 
-                    onClick={toggleMute} 
-                    className="p-2 bg-black/70 rounded-full hover:bg-nexorange/40 transition-colors"
-                    aria-label={isMuted ? "Ativar som" : "Desativar som"}
-                  >
-                    {isMuted ? <VolumeX size={20} className="text-white" /> : <Volume2 size={20} className="text-white" />}
-                  </button>
-                </div>
-                
-                <button 
-                  onClick={toggleFullscreen}
-                  className="p-2 bg-black/70 rounded-full hover:bg-nexorange/40 transition-colors"
-                  aria-label="Tela cheia"
-                >
-                  <Fullscreen size={20} className="text-white" />
-                </button>
-              </div>
+              <VideoControls
+                isPlaying={isPlaying}
+                isMuted={isMuted}
+                togglePlay={togglePlay}
+                toggleMute={toggleMute}
+                toggleFullscreen={toggleFullscreen}
+              />
             </div>
           </div>
         </div>

@@ -3,6 +3,7 @@ import React, { useState } from "react";
 import { motion } from "framer-motion";
 import { toast } from "../../hooks/use-toast";
 import { InputField } from "./InputField";
+import { CheckboxField } from "./CheckboxField";
 import { TextAreaField } from "./TextAreaField";
 import { SubmitButton } from "./SubmitButton";
 import { SubmissionSuccess } from "./SubmissionSuccess";
@@ -170,22 +171,15 @@ export const ContactForm = ({ isVisible }: ContactFormProps) => {
         rows={4}
       />
       
-      <InputField 
+      <CheckboxField 
         id="privacy-policy"
         label="Concordo com a <a href='/politica-de-privacidade' class='text-nexorange hover:underline'>Política de Privacidade</a> e com o processamento dos meus dados *"
-        value=""
-        onChange={() => {}}
-        placeholder=""
+        checked={privacyPolicyAccepted}
+        onCheckedChange={handlePrivacyPolicyChange}
         isVisible={isVisible}
         animationOrder={4}
-        isCheckbox={true}
-        checked={privacyPolicyAccepted}
-        onCheckboxChange={handlePrivacyPolicyChange}
+        error={errors.privacyPolicy}
       />
-      
-      {errors.privacyPolicy && (
-        <p className="text-sm text-red-500 mt-1">{errors.privacyPolicy}</p>
-      )}
       
       <div className="text-center">
         <SubmitButton 

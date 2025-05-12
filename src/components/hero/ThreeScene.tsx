@@ -42,8 +42,7 @@ const ThreeScene = ({ isVisible }: { isVisible: boolean }) => {
         path: '/assets/animations/solution-animation.json',
         rendererSettings: {
           progressiveLoad: true,
-          preserveAspectRatio: 'xMidYMid slice',
-          clearCanvas: false
+          preserveAspectRatio: 'xMidYMid slice'
         }
       });
       

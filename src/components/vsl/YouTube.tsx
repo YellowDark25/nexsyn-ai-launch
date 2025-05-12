@@ -45,15 +45,6 @@ const YouTube: React.FC<YouTubeProps> = ({
           </div>
         </div>
       )}
-      
-      {!isVideoLoaded && !isPlaying && (
-        <div className="absolute inset-0 flex items-center justify-center bg-black/80 z-10">
-          <div className="animate-pulse flex flex-col items-center">
-            <div className="h-16 w-16 rounded-full border-4 border-t-nexorange border-r-nexlime border-b-nexorange border-l-nexlime animate-spin mb-4"></div>
-            <p className="text-white">Carregando vídeo...</p>
-          </div>
-        </div>
-      )}
     </div>
   );
 };

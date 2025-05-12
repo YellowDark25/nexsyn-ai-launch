@@ -18,15 +18,25 @@ const VSLSection = () => {
 
   // YouTube iframe API reference
   const youtubePlayerRef = useRef<HTMLIFrameElement>(null);
+  const youtubeApiReady = useRef(false);
 
   // Load YouTube API
   useEffect(() => {
-    // Add YouTube API script
-    const tag = document.createElement('script');
-    tag.src = 'https://www.youtube.com/iframe_api';
-    const firstScriptTag = document.getElementsByTagName('script')[0];
-    if (firstScriptTag.parentNode) {
-      firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+    // Define callback for API ready
+    window.onYouTubeIframeAPIReady = () => {
+      youtubeApiReady.current = true;
+      console.log("YouTube API loaded");
+    };
+
+    // Add YouTube API script if not already loaded
+    if (!document.getElementById('youtube-api')) {
+      const tag = document.createElement('script');
+      tag.id = 'youtube-api';
+      tag.src = 'https://www.youtube.com/iframe_api';
+      const firstScriptTag = document.getElementsByTagName('script')[0];
+      if (firstScriptTag.parentNode) {
+        firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+      }
     }
   }, []);
 
@@ -65,16 +75,14 @@ const VSLSection = () => {
       window.clearInterval(progressInterval.current);
     }
 
+    // More reliable progress tracking using regular interval
     progressInterval.current = window.setInterval(() => {
       if (youtubePlayerRef.current && youtubePlayerRef.current.contentWindow) {
-        // Get current time using getVideoCurrentTime
-        youtubePlayerRef.current.contentWindow.postMessage('{"event":"listening"}', '*');
+        // Request current time and duration
         youtubePlayerRef.current.contentWindow.postMessage('{"event":"command","func":"getCurrentTime","args":""}', '*');
-        
-        // Get duration using getVideoDuration
         youtubePlayerRef.current.contentWindow.postMessage('{"event":"command","func":"getDuration","args":""}', '*');
       }
-    }, 1000);
+    }, 500); // Poll more frequently for smoother updates
   };
 
   // Handle fullscreen toggle
@@ -134,7 +142,13 @@ const VSLSection = () => {
     const handleYouTubeMessage = (event: MessageEvent) => {
       try {
         if (typeof event.data === 'string') {
-          const data = JSON.parse(event.data);
+          let data;
+          try {
+            data = JSON.parse(event.data);
+          } catch (e) {
+            // Ignore non-JSON messages
+            return;
+          }
           
           // Handle player state changes
           if (data.event === 'onStateChange') {
@@ -144,6 +158,7 @@ const VSLSection = () => {
                 window.clearInterval(progressInterval.current);
                 progressInterval.current = null;
               }
+              setProgress(100); // Ensure progress bar shows completed
             } else if (data.info === 1) { // video playing
               setIsPlaying(true);
               if (!progressInterval.current) {
@@ -160,14 +175,16 @@ const VSLSection = () => {
           
           // Handle duration info
           if (data.event === 'getDuration') {
-            setDuration(data.info);
+            setDuration(data.info || 0);
           }
           
           // Handle current time info
           if (data.event === 'getCurrentTime') {
-            setCurrentTime(data.info);
+            const newTime = data.info || 0;
+            setCurrentTime(newTime);
             if (duration > 0) {
-              setProgress((data.info / duration) * 100);
+              const newProgress = (newTime / duration) * 100;
+              setProgress(newProgress);
             }
           }
 
@@ -177,39 +194,42 @@ const VSLSection = () => {
             // Send initial commands to hide annotations and related videos
             if (youtubePlayerRef.current && youtubePlayerRef.current.contentWindow) {
               youtubePlayerRef.current.contentWindow.postMessage('{"event":"command","func":"mute","args":""}', '*');
+              
+              // Initial duration query
+              youtubePlayerRef.current.contentWindow.postMessage('{"event":"command","func":"getDuration","args":""}', '*');
             }
           }
         }
       } catch (error) {
-        // Ignore parsing errors for non-JSON messages
+        console.error("Error handling YouTube message:", error);
       }
     };
 
     window.addEventListener('message', handleYouTubeMessage);
+    
     return () => {
       window.removeEventListener('message', handleYouTubeMessage);
       if (progressInterval.current) {
         window.clearInterval(progressInterval.current);
+        progressInterval.current = null;
       }
     };
   }, [duration]);
 
   // Handle video seek - only allow seeking to parts that have been watched
   const handleSeek = (value: number[]) => {
-    // Only allow seeking to positions less than or equal to the current progress
-    const maxAllowedProgress = progress;
-    const requestedProgress = value[0];
+    if (!value.length || !youtubePlayerRef.current || !youtubePlayerRef.current.contentWindow) {
+      return;
+    }
     
-    if (requestedProgress <= maxAllowedProgress) {
-      const seekTime = (requestedProgress / 100) * duration;
-      if (youtubePlayerRef.current && youtubePlayerRef.current.contentWindow) {
-        youtubePlayerRef.current.contentWindow.postMessage(`{"event":"command","func":"seekTo","args":[${seekTime}, true]}`, '*');
-        setProgress(requestedProgress);
-        setCurrentTime(seekTime);
-      }
-    } else {
-      // If trying to seek ahead, reset to current position
-      setProgress(progress);
+    const seekTime = (value[0] / 100) * duration;
+    youtubePlayerRef.current.contentWindow.postMessage(`{"event":"command","func":"seekTo","args":[${seekTime}, true]}`, '*');
+    setProgress(value[0]);
+    setCurrentTime(seekTime);
+    
+    // If video is paused, update tracker to show new position
+    if (!isPlaying) {
+      youtubePlayerRef.current.contentWindow.postMessage('{"event":"command","func":"getCurrentTime","args":""}', '*');
     }
   };
 
@@ -258,7 +278,7 @@ const VSLSection = () => {
                 <iframe 
                   ref={youtubePlayerRef}
                   className="w-full h-full"
-                  src="https://www.youtube.com/embed/s6mtYJ-pO6o?enablejsapi=1&rel=0&modestbranding=1&autoplay=0&mute=1&controls=0&showinfo=0"
+                  src="https://www.youtube.com/embed/s6mtYJ-pO6o?enablejsapi=1&rel=0&modestbranding=1&autoplay=0&mute=1&controls=0&showinfo=0&origin=https://lovable.dev"
                   title="Nexsyn IA - Transformando seu negócio"
                   allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                   onLoad={handleIframeLoad}

@@ -33,14 +33,14 @@ const HeroSection = () => {
   }, []);
 
   return (
-    <section id="home" className="relative min-h-screen bg-gradient-to-br from-[#15191F] to-[#1A1F2C] flex items-center pt-16 overflow-hidden">
+    <section id="home" className="relative min-h-screen bg-gradient-to-br from-[#15191F] to-[#1A1F2C] flex items-center pt-16 pb-24 overflow-hidden">
       {/* Enhanced background with particles */}
       <ParticleBackground />
       
       <div className="container mx-auto px-4 z-10 relative">
         <div className="flex flex-col lg:flex-row items-center relative">
           {/* Left side - Text content with improved glassmorphism */}
-          <div className="w-full lg:w-1/2 z-10 px-0 md:px-4">
+          <div className="w-full lg:w-1/2 z-10 px-0 md:px-4 mb-10 lg:mb-0">
             <HeroContent isVisible={isVisible} />
           </div>
           
@@ -51,7 +51,7 @@ const HeroSection = () => {
         </div>
       </div>
       
-      {/* Enhanced bottom wave decoration */}
+      {/* Enhanced bottom wave decoration with more space */}
       <WaveDecoration />
     </section>
   );

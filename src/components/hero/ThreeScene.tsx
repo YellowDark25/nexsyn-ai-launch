@@ -56,6 +56,7 @@ const ThreeScene = ({ isVisible }: { isVisible: boolean }) => {
       className={`w-full h-full relative transition-opacity duration-1000 ${
         isVisible ? "opacity-100" : "opacity-0"
       }`}
+      style={{ marginBottom: "2rem" }} // Adicionando margem inferior para evitar cortes
     >
       {/* Main visual element - Lottie animation instead of 3D */}
       <div 

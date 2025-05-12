@@ -55,12 +55,12 @@ const ContactSection = () => {
           </p>
         </div>
 
-        <div className="bg-nexbg rounded-2xl shadow-xl p-6 md:p-10 max-w-4xl mx-auto">
+        <div className="bg-[#0E141F] rounded-2xl shadow-xl p-6 md:p-10 max-w-4xl mx-auto border border-nexblue/20">
           {!isSubmitted ? (
             <form onSubmit={handleSubmit} className="space-y-6">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
-                  <label htmlFor="name" className="block text-base font-medium text-white mb-1">
+                  <label htmlFor="name" className="block text-base font-medium text-white mb-2">
                     Seu nome completo *
                   </label>
                   <input
@@ -70,13 +70,13 @@ const ContactSection = () => {
                     required
                     value={formData.name}
                     onChange={handleChange}
-                    className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-nexorange focus:border-transparent text-gray-800 font-medium"
+                    className="w-full px-4 py-3 rounded-lg bg-[#1A1F2C] border border-gray-600 focus:outline-none focus:ring-2 focus:ring-nexorange focus:border-transparent text-white font-medium"
                     placeholder="Digite seu nome"
                   />
                 </div>
                 
                 <div>
-                  <label htmlFor="whatsapp" className="block text-base font-medium text-white mb-1">
+                  <label htmlFor="whatsapp" className="block text-base font-medium text-white mb-2">
                     WhatsApp (com DDD) *
                   </label>
                   <input
@@ -86,14 +86,14 @@ const ContactSection = () => {
                     required
                     value={formData.whatsapp}
                     onChange={handleChange}
-                    className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-nexorange focus:border-transparent text-gray-800 font-medium"
+                    className="w-full px-4 py-3 rounded-lg bg-[#1A1F2C] border border-gray-600 focus:outline-none focus:ring-2 focus:ring-nexorange focus:border-transparent text-white font-medium"
                     placeholder="(00) 00000-0000"
                   />
                 </div>
               </div>
               
               <div>
-                <label htmlFor="company" className="block text-base font-medium text-white mb-1">
+                <label htmlFor="company" className="block text-base font-medium text-white mb-2">
                   Nome da empresa *
                 </label>
                 <input
@@ -103,13 +103,13 @@ const ContactSection = () => {
                   required
                   value={formData.company}
                   onChange={handleChange}
-                  className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-nexorange focus:border-transparent text-gray-800 font-medium"
+                  className="w-full px-4 py-3 rounded-lg bg-[#1A1F2C] border border-gray-600 focus:outline-none focus:ring-2 focus:ring-nexorange focus:border-transparent text-white font-medium"
                   placeholder="Digite o nome da sua empresa"
                 />
               </div>
               
               <div>
-                <label htmlFor="challenge" className="block text-base font-medium text-white mb-1">
+                <label htmlFor="challenge" className="block text-base font-medium text-white mb-2">
                   Qual seu principal desafio atual? *
                 </label>
                 <textarea
@@ -119,7 +119,7 @@ const ContactSection = () => {
                   value={formData.challenge}
                   onChange={handleChange}
                   rows={4}
-                  className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-nexorange focus:border-transparent text-gray-800 font-medium"
+                  className="w-full px-4 py-3 rounded-lg bg-[#1A1F2C] border border-gray-600 focus:outline-none focus:ring-2 focus:ring-nexorange focus:border-transparent text-white font-medium"
                   placeholder="Descreva brevemente seu principal desafio ou objetivo com IA"
                 />
               </div>

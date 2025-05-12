@@ -101,56 +101,58 @@ const ResultsSection = () => {
           </p>
         </div>
 
-        <div className="relative bg-nexbg rounded-2xl shadow-lg p-6 md:p-10 overflow-hidden">
+        <div className="relative bg-[#0E141F] rounded-2xl shadow-lg p-6 md:p-10 overflow-hidden">
           <div className="absolute top-6 right-6 flex space-x-2">
             <button 
               onClick={slideLeft} 
               disabled={position === 0}
-              className={`p-2 rounded-full ${position === 0 ? 'bg-gray-300 text-gray-500' : 'bg-nexblue text-white'}`}
+              className={`p-2 rounded-full ${position === 0 ? 'bg-gray-600 text-gray-400' : 'bg-nexblue text-white'}`}
+              aria-label="Slide anterior"
             >
               <ArrowLeft size={20} />
             </button>
             <button 
               onClick={slideRight} 
               disabled={position === beforeAfterContent.length - 1}
-              className={`p-2 rounded-full ${position === beforeAfterContent.length - 1 ? 'bg-gray-300 text-gray-500' : 'bg-nexblue text-white'}`}
+              className={`p-2 rounded-full ${position === beforeAfterContent.length - 1 ? 'bg-gray-600 text-gray-400' : 'bg-nexblue text-white'}`}
+              aria-label="Próximo slide"
             >
               <ArrowRight size={20} />
             </button>
           </div>
 
-          <h3 className="text-2xl font-bold mb-8 text-nexblue">
+          <h3 className="text-2xl font-bold mb-8 text-white">
             {content.title}
           </h3>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-            <div className="bg-white rounded-xl p-6 shadow-md transition-all duration-500">
-              <div className="flex items-center mb-4">
+            <div className="bg-[#1A1F2C] rounded-xl p-6 shadow-md border border-red-300/20 transition-all duration-500">
+              <div className="flex items-center mb-6">
                 <div className="w-3 h-3 rounded-full bg-red-500 mr-2"></div>
-                <h4 className="font-bold text-lg">{content.before.title}</h4>
+                <h4 className="font-bold text-lg text-white">{content.before.title}</h4>
               </div>
               
-              <ul className="space-y-3">
+              <ul className="space-y-4">
                 {content.before.points.map((point, idx) => (
                   <li key={idx} className="flex items-start">
-                    <span className="inline-flex items-center justify-center rounded-full bg-red-100 text-red-600 h-6 w-6 mr-3 mt-0.5 shrink-0 text-xs">✕</span>
-                    <span className="text-gray-600">{point}</span>
+                    <span className="inline-flex items-center justify-center rounded-full bg-red-800/30 text-red-300 h-6 w-6 mr-3 mt-0.5 shrink-0 text-xs">✕</span>
+                    <span className="text-gray-200 font-medium">{point}</span>
                   </li>
                 ))}
               </ul>
             </div>
             
-            <div className="bg-white rounded-xl p-6 shadow-md transition-all duration-500">
-              <div className="flex items-center mb-4">
+            <div className="bg-[#1A1F2C] rounded-xl p-6 shadow-md border border-green-300/20 transition-all duration-500">
+              <div className="flex items-center mb-6">
                 <div className="w-3 h-3 rounded-full bg-green-500 mr-2"></div>
-                <h4 className="font-bold text-lg">{content.after.title}</h4>
+                <h4 className="font-bold text-lg text-white">{content.after.title}</h4>
               </div>
               
-              <ul className="space-y-3">
+              <ul className="space-y-4">
                 {content.after.points.map((point, idx) => (
                   <li key={idx} className="flex items-start">
-                    <span className="inline-flex items-center justify-center rounded-full bg-green-100 text-green-600 h-6 w-6 mr-3 mt-0.5 shrink-0 text-xs">✓</span>
-                    <span className="text-gray-600">{point}</span>
+                    <span className="inline-flex items-center justify-center rounded-full bg-green-800/30 text-green-300 h-6 w-6 mr-3 mt-0.5 shrink-0 text-xs">✓</span>
+                    <span className="text-gray-200 font-medium">{point}</span>
                   </li>
                 ))}
               </ul>

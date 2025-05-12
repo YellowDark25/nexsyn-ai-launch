@@ -16,6 +16,34 @@ const Index = () => {
   // Alterando o título da página
   useEffect(() => {
     document.title = "Consultoria Estratégica em IA | Nexsyn";
+    
+    // Função para lidar com a navegação por âncoras (hash links)
+    const handleHashLink = () => {
+      const { hash } = window.location;
+      if (hash) {
+        // Pequeno atraso para garantir que os elementos estejam carregados
+        setTimeout(() => {
+          const element = document.querySelector(hash);
+          if (element) {
+            const navbarHeight = 80; // altura aproximada da navbar
+            const elementPosition = element.getBoundingClientRect().top;
+            const offsetPosition = elementPosition + window.pageYOffset - navbarHeight;
+            
+            window.scrollTo({
+              top: offsetPosition,
+              behavior: "smooth"
+            });
+          }
+        }, 100);
+      }
+    };
+
+    // Executar ao carregar a página
+    handleHashLink();
+
+    // Adicionar listener para mudanças no hash
+    window.addEventListener('hashchange', handleHashLink);
+    return () => window.removeEventListener('hashchange', handleHashLink);
   }, []);
 
   return (

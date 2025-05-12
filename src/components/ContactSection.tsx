@@ -43,24 +43,24 @@ const ContactSection = () => {
   };
 
   return (
-    <section id="contato" className="py-20 bg-white">
+    <section id="contato" className="py-20 bg-gradient-to-b from-white to-gray-100">
       <div className="container mx-auto px-4 md:px-8">
         <div className="text-center mb-16">
           <h2 className="text-3xl md:text-4xl font-bold mb-4">
-            <span className="text-nexorange">Agende seu diagnóstico</span> gratuito
+            <span className="text-nexorange">Agende seu diagnóstico</span> <span className="text-nexblue">gratuito</span>
           </h2>
-          <p className="text-lg md:text-xl max-w-3xl mx-auto text-gray-600">
+          <p className="text-lg md:text-xl max-w-3xl mx-auto text-gray-700 font-medium">
             Preencha o formulário abaixo e nossa equipe entrará em contato para agendar
             uma conversa sem compromisso sobre como a IA pode transformar sua empresa.
           </p>
         </div>
 
-        <div className="bg-nexbg rounded-2xl shadow-lg p-6 md:p-10 max-w-4xl mx-auto">
+        <div className="bg-nexbg rounded-2xl shadow-xl p-6 md:p-10 max-w-4xl mx-auto">
           {!isSubmitted ? (
             <form onSubmit={handleSubmit} className="space-y-6">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
-                  <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-1">
+                  <label htmlFor="name" className="block text-base font-medium text-white mb-1">
                     Seu nome completo *
                   </label>
                   <input
@@ -70,13 +70,13 @@ const ContactSection = () => {
                     required
                     value={formData.name}
                     onChange={handleChange}
-                    className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-nexorange focus:border-transparent"
+                    className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-nexorange focus:border-transparent text-gray-800 font-medium"
                     placeholder="Digite seu nome"
                   />
                 </div>
                 
                 <div>
-                  <label htmlFor="whatsapp" className="block text-sm font-medium text-gray-700 mb-1">
+                  <label htmlFor="whatsapp" className="block text-base font-medium text-white mb-1">
                     WhatsApp (com DDD) *
                   </label>
                   <input
@@ -86,14 +86,14 @@ const ContactSection = () => {
                     required
                     value={formData.whatsapp}
                     onChange={handleChange}
-                    className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-nexorange focus:border-transparent"
+                    className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-nexorange focus:border-transparent text-gray-800 font-medium"
                     placeholder="(00) 00000-0000"
                   />
                 </div>
               </div>
               
               <div>
-                <label htmlFor="company" className="block text-sm font-medium text-gray-700 mb-1">
+                <label htmlFor="company" className="block text-base font-medium text-white mb-1">
                   Nome da empresa *
                 </label>
                 <input
@@ -103,13 +103,13 @@ const ContactSection = () => {
                   required
                   value={formData.company}
                   onChange={handleChange}
-                  className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-nexorange focus:border-transparent"
+                  className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-nexorange focus:border-transparent text-gray-800 font-medium"
                   placeholder="Digite o nome da sua empresa"
                 />
               </div>
               
               <div>
-                <label htmlFor="challenge" className="block text-sm font-medium text-gray-700 mb-1">
+                <label htmlFor="challenge" className="block text-base font-medium text-white mb-1">
                   Qual seu principal desafio atual? *
                 </label>
                 <textarea
@@ -119,7 +119,7 @@ const ContactSection = () => {
                   value={formData.challenge}
                   onChange={handleChange}
                   rows={4}
-                  className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-nexorange focus:border-transparent"
+                  className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-nexorange focus:border-transparent text-gray-800 font-medium"
                   placeholder="Descreva brevemente seu principal desafio ou objetivo com IA"
                 />
               </div>
@@ -141,11 +141,11 @@ const ContactSection = () => {
               <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-nexlime mb-6">
                 <Check size={32} className="text-nexblue" />
               </div>
-              <h3 className="text-2xl font-bold mb-4">Solicitação enviada com sucesso!</h3>
-              <p className="text-lg text-gray-700 mb-6">
+              <h3 className="text-2xl font-bold mb-4 text-white">Solicitação enviada com sucesso!</h3>
+              <p className="text-lg text-gray-200 mb-6">
                 Obrigado pelo seu interesse! Nossa equipe entrará em contato em breve para agendar seu diagnóstico gratuito.
               </p>
-              <p className="text-lg font-medium">
+              <p className="text-lg font-medium text-white">
                 Enquanto isso, que tal seguir a Nexsyn nas redes sociais?
               </p>
               <div className="flex justify-center space-x-4 mt-6">

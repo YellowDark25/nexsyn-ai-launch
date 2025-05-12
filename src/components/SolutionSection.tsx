@@ -65,7 +65,7 @@ const SolutionSection = () => {
   }, []);
 
   return (
-    <section id="solucoes" className="relative py-24 bg-gradient-to-b from-[#222632] to-[#1A1F2C]">
+    <section id="solucoes" className="relative py-24 bg-gradient-to-b from-[#1f2330] to-[#15191F]">
       <div className="container mx-auto px-4">
         <div className="text-center mb-16">
           <h2 className="text-4xl md:text-5xl font-bold mb-6 text-gradient-primary">
@@ -73,7 +73,7 @@ const SolutionSection = () => {
               Nossas Soluções
             </span>
           </h2>
-          <p className="text-xl text-gray-300 max-w-3xl mx-auto">
+          <p className="text-xl text-white max-w-3xl mx-auto font-medium">
             Metodologia comprovada para aplicar Inteligência Artificial onde realmente importa para o seu negócio.
           </p>
         </div>
@@ -107,7 +107,7 @@ const SolutionSection = () => {
 
           {/* Texto */}
           <div className="w-full md:w-1/2">
-            <div className="neo-blur p-8 rounded-xl">
+            <div className="bg-black/40 backdrop-blur-md p-8 rounded-xl border border-white/10 shadow-lg">
               <h3 className="text-3xl font-bold mb-6 text-white">
                 Transformação Digital Estratégica
               </h3>
@@ -121,7 +121,7 @@ const SolutionSection = () => {
                   </div>
                   <div>
                     <h4 className="font-semibold text-xl mb-2 text-white">Diagnóstico Personalizado</h4>
-                    <p className="text-gray-300">Avaliação detalhada dos seus processos para identificar oportunidades de automação com IA</p>
+                    <p className="text-gray-100 text-lg">Avaliação detalhada dos seus processos para identificar oportunidades de automação com IA</p>
                   </div>
                 </li>
                 
@@ -133,7 +133,7 @@ const SolutionSection = () => {
                   </div>
                   <div>
                     <h4 className="font-semibold text-xl mb-2 text-white">Desenvolvimento Sob Medida</h4>
-                    <p className="text-gray-300">Implementação de soluções de IA customizadas para suas necessidades específicas</p>
+                    <p className="text-gray-100 text-lg">Implementação de soluções de IA customizadas para suas necessidades específicas</p>
                   </div>
                 </li>
                 
@@ -145,7 +145,7 @@ const SolutionSection = () => {
                   </div>
                   <div>
                     <h4 className="font-semibold text-xl mb-2 text-white">Integração Sem Rupturas</h4>
-                    <p className="text-gray-300">Implementação suave com seus sistemas atuais, sem interrupções no seu negócio</p>
+                    <p className="text-gray-100 text-lg">Implementação suave com seus sistemas atuais, sem interrupções no seu negócio</p>
                   </div>
                 </li>
               </ul>

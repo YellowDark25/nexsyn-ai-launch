@@ -24,7 +24,7 @@ const Navbar = () => {
   const menuItems = [
     { name: "Home", href: "#home" },
     { name: "Problema", href: "#problema" },
-    { name: "Solução", href: "#solucao" },
+    { name: "Solução", href: "#solucoes" },
     { name: "Resultados", href: "#resultados" },
     { name: "Depoimentos", href: "#depoimentos" },
     { name: "Contato", href: "#contato" }
@@ -53,7 +53,9 @@ const Navbar = () => {
             <a
               key={item.name}
               href={item.href}
-              className="text-gray-200 hover:text-nexorange transition-colors duration-300 font-medium"
+              className={`text-gray-200 hover:text-nexorange transition-colors duration-300 font-medium ${
+                item.name === "Solução" ? "text-nexorange" : ""
+              }`}
             >
               {item.name}
             </a>
@@ -85,7 +87,9 @@ const Navbar = () => {
               <a
                 key={item.name}
                 href={item.href}
-                className="py-3 text-gray-200 hover:text-nexorange border-b border-gray-700"
+                className={`py-3 hover:text-nexorange border-b border-gray-700 ${
+                  item.name === "Solução" ? "text-nexorange" : "text-gray-200"
+                }`}
                 onClick={() => setIsMobileMenuOpen(false)}
               >
                 {item.name}

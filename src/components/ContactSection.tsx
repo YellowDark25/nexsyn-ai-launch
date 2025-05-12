@@ -1,6 +1,6 @@
 
 import React, { useState } from "react";
-import { Check } from "lucide-react";
+import { Check, Instagram, Linkedin, Youtube } from "lucide-react";
 import { toast } from "../hooks/use-toast";
 
 interface FormData {
@@ -149,19 +149,19 @@ const ContactSection = () => {
                 Enquanto isso, que tal seguir a Nexsyn nas redes sociais?
               </p>
               <div className="flex justify-center space-x-4 mt-6">
-                <a href="#" className="hover:scale-110 transition-transform duration-300">
+                <a href="https://www.linkedin.com/" target="_blank" rel="noopener noreferrer" className="hover:scale-110 transition-transform duration-300">
                   <div className="w-10 h-10 rounded-full bg-nexblue flex items-center justify-center text-white">
-                    in
+                    <Linkedin size={20} />
                   </div>
                 </a>
-                <a href="#" className="hover:scale-110 transition-transform duration-300">
+                <a href="https://www.instagram.com/nexsyn.si/" target="_blank" rel="noopener noreferrer" className="hover:scale-110 transition-transform duration-300">
                   <div className="w-10 h-10 rounded-full bg-nexblue flex items-center justify-center text-white">
-                    f
+                    <Instagram size={20} />
                   </div>
                 </a>
-                <a href="#" className="hover:scale-110 transition-transform duration-300">
+                <a href="https://www.youtube.com/@SomosNexsyn" target="_blank" rel="noopener noreferrer" className="hover:scale-110 transition-transform duration-300">
                   <div className="w-10 h-10 rounded-full bg-nexblue flex items-center justify-center text-white">
-                    ig
+                    <Youtube size={20} />
                   </div>
                 </a>
               </div>

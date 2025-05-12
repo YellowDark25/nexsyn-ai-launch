@@ -1,5 +1,6 @@
 
 import React from "react";
+import { Instagram, Linkedin, Youtube } from "lucide-react";
 
 const Footer = () => {
   const currentYear = new Date().getFullYear();
@@ -18,19 +19,19 @@ const Footer = () => {
               Consultoria estratégica em Inteligência Artificial para empresas que querem resultados reais.
             </p>
             <div className="flex space-x-4">
-              <a href="#" className="hover:text-nexlime transition-colors duration-300">
-                <div className="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center">
-                  in
+              <a href="https://www.linkedin.com/" target="_blank" rel="noopener noreferrer" className="hover:text-nexlime transition-colors duration-300">
+                <div className="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center hover:bg-white/20">
+                  <Linkedin size={18} />
                 </div>
               </a>
-              <a href="#" className="hover:text-nexlime transition-colors duration-300">
-                <div className="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center">
-                  f
+              <a href="https://www.instagram.com/nexsyn.si/" target="_blank" rel="noopener noreferrer" className="hover:text-nexlime transition-colors duration-300">
+                <div className="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center hover:bg-white/20">
+                  <Instagram size={18} />
                 </div>
               </a>
-              <a href="#" className="hover:text-nexlime transition-colors duration-300">
-                <div className="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center">
-                  ig
+              <a href="https://www.youtube.com/@SomosNexsyn" target="_blank" rel="noopener noreferrer" className="hover:text-nexlime transition-colors duration-300">
+                <div className="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center hover:bg-white/20">
+                  <Youtube size={18} />
                 </div>
               </a>
             </div>

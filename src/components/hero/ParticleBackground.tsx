@@ -1,7 +1,9 @@
 
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
 const ParticleBackground = () => {
+  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
+
   useEffect(() => {
     const heroSection = document.getElementById("hero-background");
     if (!heroSection) return;
@@ -10,7 +12,15 @@ const ParticleBackground = () => {
     const existingParticles = heroSection.querySelectorAll(".particle, .geometric-shape");
     existingParticles.forEach(p => p.remove());
 
-    // Create fewer particles for better focus on the main flow animation
+    // Adiciona listener para o movimento do mouse
+    const handleMouseMove = (e: MouseEvent) => {
+      setMousePosition({
+        x: e.clientX / window.innerWidth,
+        y: e.clientY / window.innerHeight
+      });
+    };
+
+    // Create particles with improved animation
     for (let i = 0; i < 30; i++) {
       const particle = document.createElement("div");
       particle.classList.add("particle");
@@ -51,55 +61,73 @@ const ParticleBackground = () => {
       } else if (i % 4 === 2) {
         particle.style.background = "linear-gradient(135deg, rgba(255, 255, 255, 0.3), rgba(255, 255, 255, 0.1))";
       } else {
-        // New gradient for more variety
         particle.style.background = "linear-gradient(135deg, rgba(201, 217, 33, 0.2), rgba(255, 111, 0, 0.2))";
       }
 
       // Add to container
       heroSection.appendChild(particle);
 
-      // More subtle animation for better performance
-      animateParticle(particle);
+      // Animação aprimorada
+      animateParticle(particle, i);
     }
     
-    // Add fewer geometric elements
+    // Add geometric elements
     addGeometricElements(heroSection, 4);
     
-    function animateParticle(particle: HTMLElement) {
-      // More subtle movement
+    window.addEventListener('mousemove', handleMouseMove);
+
+    function animateParticle(particle: HTMLElement, index: number) {
+      // Calcular movimento baseado em parte na posição do mouse
       const xMove = Math.random() * 8 - 4; 
       const yMove = Math.random() * 8 - 4;
       const rotation = Math.random() * 360;
       const duration = Math.random() * 30000 + 20000; // Longer duration for smoother effect
       
-      const animation = particle.animate([
-        {
-          transform: "translate(0, 0) rotate(0deg)",
-          opacity: particle.style.opacity
-        }, 
-        {
-          transform: `translate(${xMove * 8}px, ${yMove * 8}px) rotate(${rotation}deg)`,
-          opacity: (parseFloat(particle.style.opacity) * 0.7).toString()
-        }
-      ], {
-        duration,
-        iterations: Infinity,
-        direction: "alternate",
-        easing: "ease-in-out"
-      });
+      const updateParticlePosition = () => {
+        // Influência sutil do mouse na animação
+        const mouseInfluence = 5;
+        const mouseX = (mousePosition.x - 0.5) * mouseInfluence;
+        const mouseY = (mousePosition.y - 0.5) * mouseInfluence;
+        
+        const animation = particle.animate([
+          {
+            transform: "translate(0, 0) rotate(0deg)",
+            opacity: particle.style.opacity
+          }, 
+          {
+            transform: `translate(${xMove * 8 + mouseX}px, ${yMove * 8 + mouseY}px) rotate(${rotation}deg)`,
+            opacity: (parseFloat(particle.style.opacity) * 0.7).toString()
+          }
+        ], {
+          duration,
+          iterations: 1,
+          easing: "ease-in-out",
+          fill: "forwards"
+        });
+        
+        animation.onfinish = () => {
+          updateParticlePosition();
+        };
+      };
+      
+      // Iniciar com atraso escalonado
+      setTimeout(() => {
+        updateParticlePosition();
+      }, index * 100);
     }
     
     return () => {
       // Clean up particles when component unmounts
       const particles = document.querySelectorAll(".particle, .geometric-shape");
       particles.forEach(p => p.remove());
+      window.removeEventListener('mousemove', handleMouseMove);
     };
-  }, []);
+  }, [mousePosition]);
   
   return <div id="hero-background" className="absolute inset-0 particle-container z-0"></div>;
 };
 
-// Helper function to add geometric elements
+// Helper function to add geometric elements with mouse interaction
 function addGeometricElements(container: HTMLElement, count: number) {
   const shapes = [
     { type: 'triangle', color: 'rgba(201, 217, 33, 0.12)' },
@@ -108,7 +136,7 @@ function addGeometricElements(container: HTMLElement, count: number) {
     { type: 'polygon', color: 'rgba(201, 217, 33, 0.10)' }
   ];
   
-  // Create geometric shapes
+  // Create geometric shapes with enhanced interaction
   for (let i = 0; i < count; i++) {
     const shape = document.createElement('div');
     const shapeType = shapes[i % shapes.length];
@@ -124,7 +152,7 @@ function addGeometricElements(container: HTMLElement, count: number) {
     shape.style.left = `${Math.random() * 90 + 5}%`;
     shape.style.top = `${Math.random() * 90 + 5}%`;
     
-    shape.style.opacity = '0.1';  // More subtle
+    shape.style.opacity = '0.1';
     shape.style.background = shapeType.color;
     
     if (shapeType.type === 'triangle') {
@@ -139,18 +167,45 @@ function addGeometricElements(container: HTMLElement, count: number) {
     
     shape.style.zIndex = '0';
     shape.style.transform = `rotate(${Math.random() * 360}deg)`;
+    shape.style.transition = 'transform 3s ease-out, opacity 2s ease';
     
-    // Smoother, slower animation
-    const animation = shape.animate([
-      { transform: `rotate(0deg) translate(0, 0) scale(1)` },
-      { transform: `rotate(${Math.random() * 360}deg) translate(${Math.random() * 20 - 10}px, ${Math.random() * 20 - 10}px) scale(${0.92 + Math.random() * 0.16})` }
-    ], {
-      duration: 40000 + Math.random() * 20000,
-      iterations: Infinity,
-      direction: 'alternate',
-      easing: 'ease-in-out'
+    // Adicionando interação sutil com o mouse
+    shape.addEventListener('mousemove', (e) => {
+      const rect = shape.getBoundingClientRect();
+      const x = e.clientX - rect.left;
+      const y = e.clientY - rect.top;
+      const centerX = rect.width / 2;
+      const centerY = rect.height / 2;
+      
+      const moveX = (x - centerX) / 20;
+      const moveY = (y - centerY) / 20;
+      
+      shape.style.transform = `rotate(${Math.random() * 360}deg) translate(${moveX}px, ${moveY}px)`;
+      shape.style.opacity = '0.2';
     });
     
+    // Reset ao remover mouse
+    shape.addEventListener('mouseleave', () => {
+      shape.style.transform = `rotate(${Math.random() * 360}deg) translate(0px, 0px)`;
+      shape.style.opacity = '0.1';
+    });
+    
+    // Animação constante e lenta
+    const animateShape = () => {
+      const animation = shape.animate([
+        { transform: `rotate(0deg) translate(0, 0) scale(1)` },
+        { transform: `rotate(${Math.random() * 360}deg) translate(${Math.random() * 20 - 10}px, ${Math.random() * 20 - 10}px) scale(${0.92 + Math.random() * 0.16})` }
+      ], {
+        duration: 40000 + Math.random() * 20000,
+        iterations: 1,
+        easing: 'ease-in-out',
+        fill: 'forwards'
+      });
+      
+      animation.onfinish = animateShape;
+    };
+    
+    animateShape();
     container.appendChild(shape);
   }
 }

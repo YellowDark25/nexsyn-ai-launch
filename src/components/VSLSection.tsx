@@ -32,6 +32,10 @@ const VSLSection = () => {
     seekTo(seekTime);
   };
 
+  const handleVideoLoad = () => {
+    console.log("YouTube iframe loaded");
+  };
+
   return (
     <section id="vsl" className="py-16 bg-[#222632] relative overflow-hidden">
       {/* Background particles */}
@@ -57,7 +61,7 @@ const VSLSection = () => {
               isVideoLoaded={isVideoLoaded}
               togglePlay={togglePlay}
               playerRef={playerRef}
-              onLoad={() => {}} // Fixed: Removed reference to setIsVideoLoaded
+              onLoad={handleVideoLoad}
             />
             
             {/* Custom video controls */}

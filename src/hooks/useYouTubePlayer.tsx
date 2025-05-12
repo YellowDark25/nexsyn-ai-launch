@@ -40,7 +40,10 @@ const useYouTubePlayer = ({ videoId, onReady }: UseYouTubePlayerProps): UseYouTu
 
   // Handle player state changes
   const handleStateChange = (stateCode: number) => {
+    console.log("Player state changed:", stateCode);
     switch (stateCode) {
+      case -1: // unstarted
+        break;
       case 0: // video ended
         setIsPlaying(false);
         if (progressInterval.current) {
@@ -51,6 +54,7 @@ const useYouTubePlayer = ({ videoId, onReady }: UseYouTubePlayerProps): UseYouTu
         break;
       case 1: // video playing
         setIsPlaying(true);
+        setIsVideoLoaded(true); // Mark video as loaded when it starts playing
         if (!progressInterval.current) {
           startProgressTracker();
         }
@@ -61,6 +65,12 @@ const useYouTubePlayer = ({ videoId, onReady }: UseYouTubePlayerProps): UseYouTu
           window.clearInterval(progressInterval.current);
           progressInterval.current = null;
         }
+        break;
+      case 3: // video buffering
+        setIsVideoLoaded(true); // Mark video as loaded when it starts buffering
+        break;
+      case 5: // video cued
+        setIsVideoLoaded(true); // Mark video as loaded when it's cued
         break;
     }
   };
@@ -81,6 +91,7 @@ const useYouTubePlayer = ({ videoId, onReady }: UseYouTubePlayerProps): UseYouTu
 
   // Handle player ready
   const handlePlayerReady = () => {
+    console.log("Player is ready");
     setIsVideoLoaded(true);
     
     // Send initial commands

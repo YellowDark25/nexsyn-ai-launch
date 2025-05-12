@@ -34,6 +34,8 @@ const useYouTubeMessages = ({
             return;
           }
           
+          console.log("YouTube message received:", data.event);
+          
           // Handle player state changes
           if (data.event === 'onStateChange' && onStateChange) {
             onStateChange(data.info);

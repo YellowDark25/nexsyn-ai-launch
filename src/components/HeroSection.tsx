@@ -3,18 +3,14 @@ import React, { useState, useEffect } from "react";
 import ParticleBackground from "./hero/ParticleBackground";
 import HeroContent from "./hero/HeroContent";
 import WaveDecoration from "./hero/WaveDecoration";
-import SplineScene from "./hero/SplineScene";
+import ThreeScene from "./hero/ThreeScene";
 
 const HeroSection = () => {
   const [isVisible, setIsVisible] = useState(false);
-  const [isMounted, setIsMounted] = useState(false);
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
 
   // Animation on load and client-side rendering check
   useEffect(() => {
-    // Mark component as mounted (client-side)
-    setIsMounted(true);
-    
     // Small delay for entrance animation
     const timer = setTimeout(() => {
       setIsVisible(true);
@@ -48,11 +44,9 @@ const HeroSection = () => {
             <HeroContent isVisible={isVisible} />
           </div>
           
-          {/* Right side - Spline 3D Scene - fully integrated, no box constraints */}
+          {/* Right side - Light weight ThreeScene instead of Spline */}
           <div className="w-full lg:w-1/2 h-[500px] lg:h-[600px] relative">
-            {isMounted && (
-              <SplineScene mousePosition={mousePosition} />
-            )}
+            <ThreeScene isVisible={isVisible} />
           </div>
         </div>
       </div>

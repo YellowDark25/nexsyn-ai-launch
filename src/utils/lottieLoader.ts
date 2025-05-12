@@ -1,69 +1,30 @@
+export {};
 
-/**
- * This file ensures that the lottie-player web component is properly loaded
- * before it's used in the React components.
- */
-
-let lottieLoaded = false;
-let lottieLoadPromise: Promise<void> | null = null;
-
-// Function to ensure Lottie Player is loaded
-export const ensureLottiePlayerLoaded = async (): Promise<void> => {
-  if (lottieLoaded) return Promise.resolve();
-  
-  // Only create one promise to avoid multiple parallel loads
-  if (!lottieLoadPromise) {
-    lottieLoadPromise = new Promise<void>(async (resolve, reject) => {
-      try {
-        // Check if the custom element is already defined
-        if (!customElements.get('lottie-player')) {
-          console.log('Loading lottie-player...');
-          // Dynamically import the lottie player component
-          await import('@lottiefiles/lottie-player');
-          console.log('Lottie player successfully loaded');
-        }
-        lottieLoaded = true;
-        resolve();
-      } catch (error) {
-        console.error('Failed to load lottie player:', error);
-        reject(error);
-      }
-    });
+declare global {
+  interface Window {
+    lottie: any;
   }
-  
-  // Add a timeout to prevent hanging
-  const timeoutPromise = new Promise<void>((_, reject) => {
-    setTimeout(() => reject(new Error("Lottie player load timeout")), 8000);
-  });
-  
-  // Race between loading and timeout
-  return Promise.race([lottieLoadPromise, timeoutPromise]);
-};
+}
 
-export const createLottiePlayerElement = (
-  animationData: any, 
-  options: {
-    width?: string;
-    height?: string;
-    loop?: boolean;
-    autoplay?: boolean;
-    speed?: string;
-  } = {}
-): HTMLElement => {
-  const player = document.createElement('lottie-player');
-  
-  // Set the animation data
-  player.setAttribute('src', JSON.stringify(animationData));
-  
-  // Set default options
-  player.setAttribute('background', 'transparent');
-  player.setAttribute('speed', options.speed || '1');
-  
-  if (options.width) player.style.width = options.width;
-  if (options.height) player.style.height = options.height;
-  
-  if (options.loop !== false) player.setAttribute('loop', '');
-  if (options.autoplay !== false) player.setAttribute('autoplay', '');
-  
-  return player;
+export const ensureLottiePlayerLoaded = async (): Promise<void> => {
+  return new Promise((resolve, reject) => {
+    if (window.lottie) {
+      resolve();
+      return;
+    }
+
+    try {
+      // Use dynamic import for lottie-web (smaller bundle)
+      import('lottie-web').then(module => {
+        window.lottie = module.default;
+        resolve();
+      }).catch(error => {
+        console.error('Failed to load lottie-web dynamically:', error);
+        reject(error);
+      });
+    } catch (error) {
+      console.error('Error loading lottie-web:', error);
+      reject(error);
+    }
+  });
 };

@@ -11,6 +11,7 @@ interface InputFieldProps {
   isVisible: boolean;
   animationOrder: number;
   type?: string;
+  error?: string;
 }
 
 export const InputField = ({ 
@@ -21,7 +22,8 @@ export const InputField = ({
   placeholder, 
   isVisible,
   animationOrder,
-  type = "text" 
+  type = "text",
+  error
 }: InputFieldProps) => {
   const inputAnimation = {
     hidden: { opacity: 0, x: -20 },
@@ -40,6 +42,7 @@ export const InputField = ({
       variants={inputAnimation}
       custom={animationOrder}
       animate={isVisible ? "visible" : "hidden"}
+      className="mb-2"
     >
       <label htmlFor={id} className="block text-base font-medium text-white mb-2">
         {label}
@@ -51,9 +54,12 @@ export const InputField = ({
         required
         value={value}
         onChange={onChange}
-        className="w-full px-4 py-3 rounded-lg bg-[#1A1F2C] border border-gray-600 focus:outline-none focus:ring-2 focus:ring-nexorange focus:border-transparent text-white font-medium transition-all duration-300"
+        className={`w-full px-4 py-3 rounded-lg bg-[#1A1F2C] border ${error ? 'border-red-500' : 'border-gray-600'} focus:outline-none focus:ring-2 focus:ring-nexorange focus:border-transparent text-white font-medium transition-all duration-300`}
         placeholder={placeholder}
       />
+      {error && (
+        <p className="mt-1 text-sm text-red-500">{error}</p>
+      )}
     </motion.div>
   );
 };

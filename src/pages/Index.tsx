@@ -8,7 +8,7 @@ import SolutionSection from '../components/SolutionSection';
 import ResultsSection from '../components/ResultsSection';
 import TestimonialsSection from '../components/TestimonialsSection';
 import OfferSection from '../components/OfferSection';
-import ContactSection from '../components/ContactSection';
+import ContactSection from '../components/contact/ContactSection';
 import Footer from '../components/Footer';
 import WhatsappButton from '../components/WhatsappButton';
 

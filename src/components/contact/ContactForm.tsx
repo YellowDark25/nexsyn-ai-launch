@@ -13,6 +13,10 @@ interface FormData {
   challenge: string;
 }
 
+interface FormErrors {
+  whatsapp?: string;
+}
+
 interface ContactFormProps {
   isVisible: boolean;
 }
@@ -25,19 +29,41 @@ export const ContactForm = ({ isVisible }: ContactFormProps) => {
     challenge: ""
   });
 
+  const [errors, setErrors] = useState<FormErrors>({});
   const [isLoading, setIsLoading] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
+    
+    // Clear error when user starts typing
+    if (name === 'whatsapp' && errors.whatsapp) {
+      setErrors(prev => ({ ...prev, whatsapp: undefined }));
+    }
+  };
+
+  const validateWhatsApp = (number: string): boolean => {
+    // Brazilian phone number format with optional country code
+    // Accepts formats like: +55 65 92934536, 55 65 92934536, 65 92934536, 6592934536
+    const whatsappRegex = /^(\+?\d{2}\s?)?(\d{2})\s?(\d{8,9})$/;
+    return whatsappRegex.test(number);
   };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     
-    // Validação básica
-    if (!formData.name || !formData.whatsapp || !formData.company || !formData.challenge) {
+    // Validate WhatsApp number
+    if (!validateWhatsApp(formData.whatsapp)) {
+      setErrors({
+        ...errors,
+        whatsapp: "Formato inválido. Use: (DDD) 00000-0000 ou 00 00000-0000"
+      });
+      return;
+    }
+    
+    // Basic validation for other fields
+    if (!formData.name || !formData.company || !formData.challenge) {
       toast({
         title: "Erro no envio",
         description: "Por favor, preencha todos os campos do formulário.",
@@ -49,7 +75,7 @@ export const ContactForm = ({ isVisible }: ContactFormProps) => {
     
     setIsLoading(true);
     
-    // Preparar mensagem para WhatsApp
+    // Prepare WhatsApp message
     const message = `
 *Nova solicitação de diagnóstico:*
 *Nome:* ${formData.name}
@@ -58,13 +84,13 @@ export const ContactForm = ({ isVisible }: ContactFormProps) => {
 *Desafio:* ${formData.challenge}
     `.trim();
     
-    // Número do Alberto
+    // Alberto's phone number
     const phoneNumber = "+556592934536";
     
-    // Criar URL do WhatsApp
+    // Create WhatsApp URL
     const whatsappURL = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`;
     
-    // Abrir WhatsApp em nova janela
+    // Open WhatsApp in new window
     window.open(whatsappURL, "_blank");
     
     setTimeout(() => {
@@ -104,6 +130,7 @@ export const ContactForm = ({ isVisible }: ContactFormProps) => {
           isVisible={isVisible}
           animationOrder={1}
           type="tel"
+          error={errors.whatsapp}
         />
       </div>
       

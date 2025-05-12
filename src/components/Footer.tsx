@@ -1,20 +1,12 @@
-
 import React from "react";
 import { Instagram, Linkedin, Youtube } from "lucide-react";
-
 const Footer = () => {
   const currentYear = new Date().getFullYear();
-  
-  return (
-    <footer className="bg-[#15191F] text-white py-12">
+  return <footer className="bg-[#15191F] text-white py-12">
       <div className="container mx-auto px-4 md:px-8">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           <div className="flex flex-col">
-            <img 
-              src="/lovable-uploads/9e39c707-25f3-40d0-9e71-cdebc2d511eb.png" 
-              alt="NEXSYN Logo" 
-              className="h-10 mb-4" 
-            />
+            <img src="/lovable-uploads/9e39c707-25f3-40d0-9e71-cdebc2d511eb.png" alt="NEXSYN Logo" className="h-8 mb-3" />
             <p className="text-gray-300 mb-4">
               Consultoria estratégica em Inteligência Artificial para empresas que querem resultados reais.
             </p>
@@ -76,8 +68,6 @@ const Footer = () => {
           </p>
         </div>
       </div>
-    </footer>
-  );
+    </footer>;
 };
-
 export default Footer;

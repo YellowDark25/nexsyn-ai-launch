@@ -15,6 +15,7 @@ interface FormData {
 
 interface FormErrors {
   whatsapp?: string;
+  privacyPolicy?: string;
 }
 
 interface ContactFormProps {
@@ -29,6 +30,7 @@ export const ContactForm = ({ isVisible }: ContactFormProps) => {
     challenge: ""
   });
 
+  const [privacyPolicyAccepted, setPrivacyPolicyAccepted] = useState(false);
   const [errors, setErrors] = useState<FormErrors>({});
   const [isLoading, setIsLoading] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
@@ -43,6 +45,13 @@ export const ContactForm = ({ isVisible }: ContactFormProps) => {
     }
   };
 
+  const handlePrivacyPolicyChange = (checked: boolean) => {
+    setPrivacyPolicyAccepted(checked);
+    if (checked && errors.privacyPolicy) {
+      setErrors(prev => ({ ...prev, privacyPolicy: undefined }));
+    }
+  };
+
   const validateWhatsApp = (number: string): boolean => {
     // Brazilian phone number format with optional country code
     // Accepts formats like: +55 65 92934536, 55 65 92934536, 65 92934536, 6592934536
@@ -53,12 +62,23 @@ export const ContactForm = ({ isVisible }: ContactFormProps) => {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     
+    let formErrors: FormErrors = {};
+    let hasError = false;
+    
     // Validate WhatsApp number
     if (!validateWhatsApp(formData.whatsapp)) {
-      setErrors({
-        ...errors,
-        whatsapp: "Formato inválido. Use: (DDD) 00000-0000 ou 00 00000-0000"
-      });
+      formErrors.whatsapp = "Formato inválido. Use: (DDD) 00000-0000 ou 00 00000-0000";
+      hasError = true;
+    }
+    
+    // Validate privacy policy acceptance
+    if (!privacyPolicyAccepted) {
+      formErrors.privacyPolicy = "Você precisa aceitar a política de privacidade para continuar.";
+      hasError = true;
+    }
+    
+    if (hasError) {
+      setErrors(formErrors);
       return;
     }
     
@@ -154,6 +174,23 @@ export const ContactForm = ({ isVisible }: ContactFormProps) => {
         animationOrder={3}
         rows={4}
       />
+      
+      <InputField 
+        id="privacy-policy"
+        label="Concordo com a <a href='/politica-de-privacidade' target='_blank' class='text-nexorange hover:underline'>Política de Privacidade</a> e com o processamento dos meus dados *"
+        value=""
+        onChange={() => {}}
+        placeholder=""
+        isVisible={isVisible}
+        animationOrder={4}
+        isCheckbox={true}
+        checked={privacyPolicyAccepted}
+        onCheckboxChange={handlePrivacyPolicyChange}
+      />
+      
+      {errors.privacyPolicy && (
+        <p className="text-sm text-red-500 mt-1">{errors.privacyPolicy}</p>
+      )}
       
       <div className="text-center">
         <SubmitButton 

@@ -1,6 +1,7 @@
 
 import React from "react";
 import { motion } from "framer-motion";
+import { Checkbox } from "../ui/checkbox";
 
 interface InputFieldProps {
   id: string;
@@ -12,6 +13,9 @@ interface InputFieldProps {
   animationOrder: number;
   type?: string;
   error?: string;
+  isCheckbox?: boolean;
+  checked?: boolean;
+  onCheckboxChange?: (checked: boolean) => void;
 }
 
 export const InputField = ({ 
@@ -23,7 +27,10 @@ export const InputField = ({
   isVisible,
   animationOrder,
   type = "text",
-  error
+  error,
+  isCheckbox = false,
+  checked = false,
+  onCheckboxChange
 }: InputFieldProps) => {
   const inputAnimation = {
     hidden: { opacity: 0, x: -20 },
@@ -44,21 +51,39 @@ export const InputField = ({
       animate={isVisible ? "visible" : "hidden"}
       className="mb-2"
     >
-      <label htmlFor={id} className="block text-base font-medium text-white mb-2">
-        {label}
-      </label>
-      <input
-        type={type}
-        id={id}
-        name={id}
-        required
-        value={value}
-        onChange={onChange}
-        className={`w-full px-4 py-3 rounded-lg bg-[#1A1F2C] border ${error ? 'border-red-500' : 'border-gray-600'} focus:outline-none focus:ring-2 focus:ring-nexorange focus:border-transparent text-white font-medium transition-all duration-300`}
-        placeholder={placeholder}
-      />
-      {error && (
-        <p className="mt-1 text-sm text-red-500">{error}</p>
+      {isCheckbox ? (
+        <div className="flex items-start space-x-2 mt-2">
+          <Checkbox 
+            id={id} 
+            checked={checked} 
+            onCheckedChange={onCheckboxChange} 
+            className="mt-1 data-[state=checked]:bg-nexorange data-[state=checked]:border-nexorange"
+          />
+          <label 
+            htmlFor={id} 
+            className="text-sm text-gray-300 cursor-pointer"
+            dangerouslySetInnerHTML={{ __html: label }}
+          />
+        </div>
+      ) : (
+        <>
+          <label htmlFor={id} className="block text-base font-medium text-white mb-2">
+            {label}
+          </label>
+          <input
+            type={type}
+            id={id}
+            name={id}
+            required
+            value={value}
+            onChange={onChange}
+            className={`w-full px-4 py-3 rounded-lg bg-[#1A1F2C] border ${error ? 'border-red-500' : 'border-gray-600'} focus:outline-none focus:ring-2 focus:ring-nexorange focus:border-transparent text-white font-medium transition-all duration-300`}
+            placeholder={placeholder}
+          />
+          {error && (
+            <p className="mt-1 text-sm text-red-500">{error}</p>
+          )}
+        </>
       )}
     </motion.div>
   );

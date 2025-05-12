@@ -1,4 +1,3 @@
-
 import React, { useState } from "react";
 import { Check, Instagram, Linkedin, Youtube } from "lucide-react";
 import { toast } from "../hooks/use-toast";
@@ -23,8 +22,8 @@ const ContactSection = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
   
-  // Usando o hook de revelação de scroll para animações
-  const { ref: formRef, isVisible: isFormVisible } = useScrollReveal({
+  // Usando o hook de revelação de scroll para animações com a tipagem correta
+  const { ref, isVisible: isFormVisible } = useScrollReveal({
     threshold: 0.1,
   });
 
@@ -136,7 +135,7 @@ const ContactSection = () => {
         </motion.div>
 
         <motion.div 
-          ref={formRef}
+          ref={ref as React.RefObject<HTMLDivElement>}
           className="bg-[#0E141F] rounded-2xl shadow-xl p-6 md:p-10 max-w-4xl mx-auto border border-nexblue/20"
           variants={formAnimation}
           initial="hidden"

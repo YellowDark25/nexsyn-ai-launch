@@ -1,9 +1,11 @@
-
 import React, { useState, useRef, useEffect } from "react";
 import { AspectRatio } from "@/components/ui/aspect-ratio";
 import { Button } from "@/components/ui/button";
 import { Play, Pause, Volume2, VolumeX, Fullscreen } from "lucide-react";
 import { Slider } from "@/components/ui/slider";
+
+// Import the YouTube type definitions
+// (the actual type is defined in the youtube.d.ts file)
 
 const VSLSection = () => {
   const [isPlaying, setIsPlaying] = useState(false);
@@ -23,6 +25,7 @@ const VSLSection = () => {
   // Load YouTube API
   useEffect(() => {
     // Define callback for API ready
+    // Now TypeScript recognizes this as a valid property on window
     window.onYouTubeIframeAPIReady = () => {
       youtubeApiReady.current = true;
       console.log("YouTube API loaded");

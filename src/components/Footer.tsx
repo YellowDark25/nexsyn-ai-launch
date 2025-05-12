@@ -1,5 +1,8 @@
+
 import React from "react";
 import { Instagram, Linkedin, Youtube } from "lucide-react";
+import { Link } from "react-router-dom";
+
 const Footer = () => {
   const currentYear = new Date().getFullYear();
   return <footer className="bg-[#15191F] text-white py-12">
@@ -56,9 +59,9 @@ const Footer = () => {
             &copy; {currentYear} NEXSYN Intelligence. Todos os direitos reservados.
           </p>
           <div className="flex space-x-4 text-sm text-gray-400">
-            <a href="#" className="hover:text-nexlime transition-colors duration-300">Termos de Uso</a>
+            <Link to="/politica-de-privacidade" className="hover:text-nexlime transition-colors duration-300">Política de Privacidade</Link>
             <span>|</span>
-            <a href="#" className="hover:text-nexlime transition-colors duration-300">Política de Privacidade</a>
+            <Link to="/politica-de-privacidade" className="hover:text-nexlime transition-colors duration-300">Termos de Uso</Link>
           </div>
         </div>
         

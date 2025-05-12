@@ -1,4 +1,3 @@
-
 import React, { useState } from "react";
 import { motion } from "framer-motion";
 import { toast } from "../../hooks/use-toast";
@@ -177,7 +176,7 @@ export const ContactForm = ({ isVisible }: ContactFormProps) => {
       
       <InputField 
         id="privacy-policy"
-        label="Concordo com a <a href='/politica-de-privacidade' target='_blank' class='text-nexorange hover:underline'>Política de Privacidade</a> e com o processamento dos meus dados *"
+        label="Concordo com a <a href='/politica-de-privacidade' class='text-nexorange hover:underline'>Política de Privacidade</a> e com o processamento dos meus dados *"
         value=""
         onChange={() => {}}
         placeholder=""

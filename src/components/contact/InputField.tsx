@@ -2,6 +2,7 @@
 import React from "react";
 import { motion } from "framer-motion";
 import { Checkbox } from "../ui/checkbox";
+import { Link } from "react-router-dom";
 
 interface InputFieldProps {
   id: string;
@@ -44,6 +45,33 @@ export const InputField = ({
     })
   };
 
+  // Function to replace anchor tags with React Router Links
+  const renderLabel = () => {
+    if (!isCheckbox) return label;
+    
+    // Use regex to find and replace anchor tags with Link components
+    const linkPattern = /<a\s+href=['"]([^'"]+)['"]\s+(?:target=['"][^'"]*['"])?\s*class=['"]([^'"]+)['"]\s*>([^<]+)<\/a>/;
+    const match = label.match(linkPattern);
+    
+    if (match) {
+      const [fullMatch, href, className, text] = match;
+      const beforeLink = label.substring(0, label.indexOf(fullMatch));
+      const afterLink = label.substring(label.indexOf(fullMatch) + fullMatch.length);
+      
+      return (
+        <>
+          {beforeLink}
+          <Link to={href} className={className}>
+            {text}
+          </Link>
+          {afterLink}
+        </>
+      );
+    }
+    
+    return label;
+  };
+
   return (
     <motion.div 
       variants={inputAnimation}
@@ -62,8 +90,9 @@ export const InputField = ({
           <label 
             htmlFor={id} 
             className="text-sm text-gray-300 cursor-pointer"
-            dangerouslySetInnerHTML={{ __html: label }}
-          />
+          >
+            {renderLabel()}
+          </label>
         </div>
       ) : (
         <>

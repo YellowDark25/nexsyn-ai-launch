@@ -101,7 +101,7 @@ export const ContactForm = ({ isVisible }: ContactFormProps) => {
     `.trim();
     
     // Updated phone number
-    const phoneNumber = "+5565999745637";
+    const phoneNumber = "+556592934536";
     
     // Create WhatsApp URL
     const whatsappURL = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`;

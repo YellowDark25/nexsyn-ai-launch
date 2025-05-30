@@ -1,9 +1,11 @@
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, Suspense } from "react";
 import ParticleBackground from "./hero/ParticleBackground";
 import HeroContent from "./hero/HeroContent";
 import WaveDecoration from "./hero/WaveDecoration";
-import ThreeScene from "./hero/ThreeScene";
+
+// Lazy load the heavy ThreeScene component
+const LazyThreeScene = React.lazy(() => import("./hero/ThreeScene"));
 
 const HeroSection = () => {
   const [isVisible, setIsVisible] = useState(false);
@@ -44,9 +46,15 @@ const HeroSection = () => {
             <HeroContent isVisible={isVisible} />
           </div>
           
-          {/* Right side - Light weight ThreeScene instead of Spline */}
+          {/* Right side - Lazy loaded ThreeScene with fallback */}
           <div className="w-full lg:w-1/2 h-[500px] lg:h-[600px] relative">
-            <ThreeScene isVisible={isVisible} />
+            <Suspense fallback={
+              <div className="w-full h-full flex items-center justify-center">
+                <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-nexorange"></div>
+              </div>
+            }>
+              <LazyThreeScene isVisible={isVisible} />
+            </Suspense>
           </div>
         </div>
       </div>

@@ -4,10 +4,10 @@ import React from "react";
 const WhatsappButton = () => {
   return (
     <a
-      href="https://wa.me/5511999999999?text=Olá!%20Vi%20o%20site%20da%20Nexsyn%20e%20gostaria%20de%20mais%20informações%20sobre%20consultoria%20em%20IA."
+      href="https://wa.me/5565999745637?text=Olá!%20Vi%20o%20site%20da%20Nexsyn%20e%20gostaria%20de%20mais%20informações%20sobre%20consultoria%20em%20IA."
       target="_blank"
       rel="noopener noreferrer"
-      className="whatsapp-button"
+      className="whatsapp-button fixed bottom-6 right-6 z-50"
     >
       <div className="bg-green-500 text-white p-4 rounded-full shadow-lg flex items-center justify-center hover:bg-green-600 transition-colors">
         <svg

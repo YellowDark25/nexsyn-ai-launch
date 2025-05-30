@@ -100,8 +100,8 @@ export const ContactForm = ({ isVisible }: ContactFormProps) => {
 *Desafio:* ${formData.challenge}
     `.trim();
     
-    // Alberto's phone number
-    const phoneNumber = "+556592934536";
+    // Updated phone number
+    const phoneNumber = "+5565999745637";
     
     // Create WhatsApp URL
     const whatsappURL = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`;
@@ -142,7 +142,7 @@ export const ContactForm = ({ isVisible }: ContactFormProps) => {
           label="WhatsApp (com DDD) *"
           value={formData.whatsapp}
           onChange={handleChange}
-          placeholder="(00) 00000-0000"
+          placeholder="(65) 99999-9999"
           isVisible={isVisible}
           animationOrder={1}
           type="tel"
@@ -173,7 +173,7 @@ export const ContactForm = ({ isVisible }: ContactFormProps) => {
       
       <CheckboxField 
         id="privacy-policy"
-        label="Concordo com a <a href='/politica-de-privacidade' class='text-nexorange hover:underline'>Política de Privacidade</a> e com o processamento dos meus dados *"
+        label="Concordo com a <a href='/politica-de-privacidade' class='text-nexorange hover:underline'>Política de Privacidade</a> e com os <a href='/termos-de-servico' class='text-nexorange hover:underline'>Termos de Serviço</a> *"
         checked={privacyPolicyAccepted}
         onCheckedChange={handlePrivacyPolicyChange}
         isVisible={isVisible}

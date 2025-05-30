@@ -1,7 +1,7 @@
 
 import React from "react";
 import { motion } from "framer-motion";
-import { Check, Instagram, Linkedin, Youtube } from "lucide-react";
+import { Check, Instagram, Linkedin, Youtube, Clock, MessageCircle } from "lucide-react";
 
 const SocialLink = ({ href, icon }: { href: string, icon: React.ReactNode }) => {
   return (
@@ -46,13 +46,40 @@ export const SubmissionSuccess = () => {
       >
         <Check size={32} className="text-nexblue" />
       </motion.div>
+      
       <h3 className="text-2xl font-bold mb-4 text-white">Solicitação enviada com sucesso!</h3>
+      
       <p className="text-lg text-gray-200 mb-6">
         Obrigado pelo seu interesse! Você será redirecionado para o WhatsApp para enviar seus dados ao nosso consultor.
       </p>
+
+      <div className="bg-nexblue/20 rounded-lg p-6 mb-6">
+        <h4 className="text-lg font-semibold text-white mb-4">O que acontece agora?</h4>
+        <div className="space-y-3 text-left">
+          <div className="flex items-start">
+            <div className="mt-1 mr-3 text-nexlime">
+              <Clock size={18} />
+            </div>
+            <p className="text-gray-200">
+              <strong className="text-white">Retorno em até 24h</strong> - Nossa equipe analisará sua solicitação e entrará em contato em até 24 horas úteis.
+            </p>
+          </div>
+          
+          <div className="flex items-start">
+            <div className="mt-1 mr-3 text-nexlime">
+              <MessageCircle size={18} />
+            </div>
+            <p className="text-gray-200">
+              <strong className="text-white">Diagnóstico</strong> - Agendaremos uma reunião online de 30 minutos para entender melhor seu caso e preparar um plano personalizado.
+            </p>
+          </div>
+        </div>
+      </div>
+      
       <p className="text-lg font-medium text-white">
         Enquanto isso, que tal seguir a Nexsyn nas redes sociais?
       </p>
+      
       <SocialMediaLinks />
     </motion.div>
   );

@@ -48,7 +48,7 @@ const Footer = () => {
             <h3 className="text-lg font-bold mb-4">Contato</h3>
             <ul className="space-y-2">
               <li>contato@nexsyn.com.br</li>
-              <li>(11) 99999-9999</li>
+              <li>(65) 99974-5637</li>
               <li>São Paulo, Brasil</li>
             </ul>
           </div>
@@ -61,7 +61,7 @@ const Footer = () => {
           <div className="flex space-x-4 text-sm text-gray-400">
             <Link to="/politica-de-privacidade" className="hover:text-nexlime transition-colors duration-300">Política de Privacidade</Link>
             <span>|</span>
-            <Link to="/politica-de-privacidade" className="hover:text-nexlime transition-colors duration-300">Termos de Uso</Link>
+            <Link to="/termos-de-servico" className="hover:text-nexlime transition-colors duration-300">Termos de Serviço</Link>
           </div>
         </div>
         

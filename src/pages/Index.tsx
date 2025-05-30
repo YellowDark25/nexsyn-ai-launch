@@ -1,4 +1,3 @@
-
 import React, { useEffect, Suspense } from 'react';
 import Navbar from '../components/Navbar';
 import HeroSection from '../components/HeroSection';
@@ -9,6 +8,7 @@ import OfferSection from '../components/OfferSection';
 import ContactSection from '../components/contact/ContactSection';
 import Footer from '../components/Footer';
 import WhatsappButton from '../components/WhatsappButton';
+import AnalyticsTracker from '../components/analytics/AnalyticsTracker';
 import { LazyVSLSection, LazyTestimonialsSection, LazyFAQSection } from '../components/LazyComponents';
 
 // Loading component for better UX
@@ -19,6 +19,9 @@ const SectionLoader = () => (
 );
 
 const Index = () => {
+  // Analytics Measurement ID - replace with your actual GA4 Measurement ID
+  const GA_MEASUREMENT_ID = process.env.REACT_APP_GA_MEASUREMENT_ID || 'G-XXXXXXXXXX';
+
   // Changing page title and SEO improvements
   useEffect(() => {
     document.title = "Consultoria Estratégica em IA | Nexsyn - Transforme sua Empresa com Inteligência Artificial";
@@ -94,6 +97,9 @@ const Index = () => {
 
   return (
     <div className="min-h-screen bg-nexbg">
+      {/* Analytics Tracker */}
+      <AnalyticsTracker measurementId={GA_MEASUREMENT_ID} />
+      
       <Navbar />
       <HeroSection />
       

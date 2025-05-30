@@ -1,4 +1,3 @@
-
 import React, { useState } from "react";
 import { motion } from "framer-motion";
 import { toast } from "../../hooks/use-toast";
@@ -8,6 +7,7 @@ import { TextAreaField } from "./TextAreaField";
 import { SubmitButton } from "./SubmitButton";
 import { SubmissionSuccess } from "./SubmissionSuccess";
 import { validateWhatsApp } from "../../utils/formValidation";
+import { useConversionTracking } from "../../hooks/useConversionTracking";
 
 interface FormData {
   name: string;
@@ -26,6 +26,8 @@ interface ContactFormProps {
 }
 
 export const ContactForm = ({ isVisible }: ContactFormProps) => {
+  const { trackFormSubmission, trackWhatsAppClick } = useConversionTracking();
+  
   const [formData, setFormData] = useState<FormData>({
     name: "",
     whatsapp: "",
@@ -91,6 +93,12 @@ export const ContactForm = ({ isVisible }: ContactFormProps) => {
     
     setIsLoading(true);
     
+    // Track form submission
+    trackFormSubmission('diagnostic_request', {
+      company: formData.company,
+      challenge_type: formData.challenge?.substring(0, 50) // First 50 chars for categorization
+    });
+    
     // Prepare WhatsApp message
     const message = `
 *Nova solicitação de diagnóstico:*
@@ -105,6 +113,9 @@ export const ContactForm = ({ isVisible }: ContactFormProps) => {
     
     // Create WhatsApp URL
     const whatsappURL = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`;
+    
+    // Track WhatsApp click
+    trackWhatsAppClick('contact_form');
     
     // Open WhatsApp in new window
     window.open(whatsappURL, "_blank");

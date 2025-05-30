@@ -1,13 +1,21 @@
 
 import React from "react";
+import { useConversionTracking } from "../hooks/useConversionTracking";
 
 const WhatsappButton = () => {
+  const { trackWhatsAppClick } = useConversionTracking();
+
+  const handleClick = () => {
+    trackWhatsAppClick('floating_button');
+  };
+
   return (
     <a
       href="https://wa.me/556592934536?text=Olá!%20Vi%20o%20site%20da%20Nexsyn%20e%20gostaria%20de%20mais%20informações%20sobre%20consultoria%20em%20IA."
       target="_blank"
       rel="noopener noreferrer"
       className="whatsapp-button fixed bottom-6 right-6 z-50"
+      onClick={handleClick}
     >
       <div className="bg-green-500 text-white p-4 rounded-full shadow-lg flex items-center justify-center hover:bg-green-600 transition-colors">
         <svg

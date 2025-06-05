@@ -1,18 +1,20 @@
-
 import React, { useState } from "react";
 import { ArrowLeft, ArrowRight, CheckCircle, XCircle } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { ScrollReveal } from "./ui/scroll-reveal";
+import { cn } from "@/lib/utils";
 
 const ResultsSection = () => {
   const [position, setPosition] = useState(0);
   
   const slideLeft = () => {
-    if (position > 0) setPosition(position - 1);
+    setPosition((prev) => (prev === 0 ? beforeAfterContent.length - 1 : prev - 1));
+    setSlideDirection(-1);
   };
   
   const slideRight = () => {
-    if (position < 1) setPosition(position + 1);
+    setPosition((prev) => (prev === beforeAfterContent.length - 1 ? 0 : prev + 1));
+    setSlideDirection(1);
   };
 
   const beforeAfterContent = [{
@@ -56,47 +58,51 @@ const ResultsSection = () => {
 
   const [slideDirection, setSlideDirection] = useState(0);
 
-  const handleSlide = (newDirection: number) => {
-    setSlideDirection(newDirection);
-    if (newDirection > 0) {
-      slideRight();
-    } else {
-      slideLeft();
-    }
-  };
-
   return (
-    <section id="resultados" className="py-20 bg-white">
-      <div className="container mx-auto px-4 md:px-8">
-        <ScrollReveal animation="fade-down" className="text-center mb-16">
-          <h2 className="text-3xl md:text-4xl font-bold mb-4 text-nexorange">
-            <span className="text-nexblue">Antes e Depois</span> com IA
+    <section id="resultados" className="relative py-24 overflow-hidden bg-gradient-to-br from-[#0A1A3A] via-[#0F1B4D] to-[#1A1B51]">
+      {/* Efeitos de fundo */}
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-orange-500/5 via-transparent to-transparent opacity-70"></div>
+      <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI5IiBoZWlnaHQ6IjkiPgo8cmVjdCB3aWR0aD0iOSIgaGVpZ2h0PSI5IiBmaWxsPSIjZmZmZmZmIiBvcGFjaXR5PSIwLjAxIj48L3JlY3Q+CjxwYXRoIGQ9Ik0wIDVMOSAwWk02IDRMNCA2Wk0tMSAxTDEgLTFaIiBzdHJva2U9IiNmZmZmZmYiIHN0cm9rZS13aWR0aD0iMC41IiBzdHJva2Utb3BhY2l0eT0iMC4wNSI+PC9wYXRoPgo8L3N2Zz4=')] opacity-20"></div>
+      <div className="absolute inset-0 bg-gradient-to-r from-blue-900/20 via-transparent to-blue-900/10"></div>
+      <div className="absolute -top-40 -right-40 w-96 h-96 bg-orange-400/10 rounded-full mix-blend-screen blur-3xl"></div>
+      <div className="absolute -bottom-40 -left-40 w-96 h-96 bg-amber-400/10 rounded-full mix-blend-screen blur-3xl"></div>
+      <div className="container mx-auto px-4 md:px-6 relative z-10">
+        <ScrollReveal animation="fade-down" className="text-center mb-16 space-y-4">
+          <h2 className="text-3xl md:text-4xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-orange-300 via-orange-400 to-amber-400">
+            Antes e Depois com <span className="text-white">IA</span>
           </h2>
-          <p className="text-lg md:text-xl max-w-3xl mx-auto text-gray-600">
+          <p className="text-lg md:text-xl max-w-3xl mx-auto text-gray-300">
             Veja a transformação que a IA aplicada de forma estratégica pode trazer para a sua operação
           </p>
         </ScrollReveal>
 
-        <ScrollReveal animation="zoom-in">
-          <motion.div 
-            className="relative bg-[#0E141F] rounded-2xl shadow-lg p-6 md:p-10 overflow-hidden"
-            whileHover={{ boxShadow: "0 25px 50px -12px rgba(0, 0, 0, 0.5)" }}
-          >
-            <div className="absolute top-6 right-6 flex space-x-2">
-              <motion.button 
-                onClick={() => handleSlide(-1)} 
-                disabled={position === 0} 
-                className={`p-2 rounded-full transition-colors ${position === 0 ? 'bg-gray-600 text-gray-400' : 'bg-nexblue text-white'}`} 
+        <div className="relative max-w-5xl mx-auto">
+
+            <div className="absolute top-4 md:top-10 right-4 md:right-10 flex space-x-2 z-20">
+              <motion.button
+                onClick={slideLeft}
+                className={cn(
+                  "p-2 rounded-full transition-colors",
+                  position === 0
+                    ? "bg-gray-600 text-gray-400 cursor-not-allowed"
+                    : "bg-nexblue hover:bg-nexblue/80 text-white"
+                )}
+                disabled={position === 0}
                 aria-label="Slide anterior"
                 whileHover={position !== 0 ? { scale: 1.1 } : {}}
                 whileTap={position !== 0 ? { scale: 0.9 } : {}}
               >
                 <ArrowLeft size={20} />
               </motion.button>
-              <motion.button 
-                onClick={() => handleSlide(1)} 
-                disabled={position === beforeAfterContent.length - 1} 
-                className={`p-2 rounded-full transition-colors ${position === beforeAfterContent.length - 1 ? 'bg-gray-600 text-gray-400' : 'bg-nexblue text-white'}`} 
+              <motion.button
+                onClick={slideRight}
+                className={cn(
+                  "p-2 rounded-full transition-colors",
+                  position === beforeAfterContent.length - 1
+                    ? "bg-gray-600 text-gray-400 cursor-not-allowed"
+                    : "bg-nexblue hover:bg-nexblue/80 text-white"
+                )}
+                disabled={position === beforeAfterContent.length - 1}
                 aria-label="Próximo slide"
                 whileHover={position !== beforeAfterContent.length - 1 ? { scale: 1.1 } : {}}
                 whileTap={position !== beforeAfterContent.length - 1 ? { scale: 0.9 } : {}}
@@ -105,103 +111,107 @@ const ResultsSection = () => {
               </motion.button>
             </div>
 
-            <AnimatePresence mode="wait" custom={slideDirection}>
-              <motion.div
-                key={position}
-                custom={slideDirection}
-                variants={slideVariants}
-                initial="enter"
-                animate="center"
-                exit="exit"
-                transition={{ 
-                  duration: 0.5,
-                  type: "spring",
-                  stiffness: 300,
-                  damping: 30
-                }}
-              >
-                <h3 className="text-2xl font-bold mb-8 text-white">
-                  {content.title}
-                </h3>
+          <AnimatePresence mode="wait" custom={slideDirection}>
+            <motion.div
+              key={position}
+              custom={slideDirection}
+              variants={slideVariants}
+              initial="enter"
+              animate="center"
+              exit="exit"
+              transition={{
+                duration: 0.5,
+                ease: "easeInOut",
+              }}
+              className="bg-gradient-to-br from-gray-900/80 to-gray-950/80 backdrop-blur-sm rounded-2xl shadow-2xl p-6 md:p-10 border border-gray-700/50"
+            >
+              <h3 className="text-2xl font-bold mb-8 text-white text-center md:text-left">
+                {content.title}
+              </h3>
 
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                  <motion.div 
-                    className="bg-[#1A1F2C] rounded-xl p-6 shadow-md border border-red-300/20"
-                    whileHover={{ 
-                      y: -5, 
-                      borderColor: "rgba(239, 68, 68, 0.4)",
-                      boxShadow: "0 10px 25px -5px rgba(239, 68, 68, 0.2)"
-                    }}
-                  >
-                    <div className="flex items-center mb-6">
-                      <div className="w-3 h-3 rounded-full bg-red-500 mr-2"></div>
-                      <h4 className="font-bold text-lg text-white">{content.before.title}</h4>
-                    </div>
-                    
-                    <ul className="space-y-4">
-                      {content.before.points.map((point, idx) => (
-                        <motion.li 
-                          key={idx} 
-                          className="flex items-start"
-                          initial={{ opacity: 0, x: -20 }}
-                          animate={{ opacity: 1, x: 0 }}
-                          transition={{ delay: idx * 0.1 }}
-                          whileHover={{ x: 3 }}
-                        >
-                          <XCircle className="text-red-400 h-6 w-6 mr-3 mt-0.5 shrink-0" />
-                          <span className="text-gray-200 font-medium">{point}</span>
-                        </motion.li>
-                      ))}
-                    </ul>
-                  </motion.div>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <motion.div
+                  className="bg-gradient-to-br from-gray-900/50 to-gray-800/50 backdrop-blur-sm rounded-xl p-6 shadow-lg border border-red-500/20 hover:border-red-500/40 transition-all duration-300"
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.5, delay: 0.1 }}
+                >
+                  <div className="flex items-center mb-6">
+                    <div className="w-4 h-4 rounded-full bg-red-500 mr-3"></div>
+                    <h4 className="font-bold text-lg text-white">{content.before.title}</h4>
+                  </div>
                   
-                  <motion.div 
-                    className="bg-[#1A1F2C] rounded-xl p-6 shadow-md border border-green-300/20"
-                    whileHover={{ 
-                      y: -5, 
-                      borderColor: "rgba(34, 197, 94, 0.4)",
-                      boxShadow: "0 10px 25px -5px rgba(34, 197, 94, 0.2)"
-                    }}
-                  >
-                    <div className="flex items-center mb-6">
-                      <div className="w-3 h-3 rounded-full bg-green-500 mr-2"></div>
-                      <h4 className="font-bold text-lg text-white">{content.after.title}</h4>
-                    </div>
-                    
-                    <ul className="space-y-4">
-                      {content.after.points.map((point, idx) => (
-                        <motion.li 
-                          key={idx} 
-                          className="flex items-start"
-                          initial={{ opacity: 0, x: -20 }}
-                          animate={{ opacity: 1, x: 0 }}
-                          transition={{ delay: idx * 0.1 + 0.2 }}
-                          whileHover={{ x: 3 }}
-                        >
-                          <CheckCircle className="text-green-400 h-6 w-6 mr-3 mt-0.5 shrink-0" />
-                          <span className="text-gray-200 font-medium">{point}</span>
-                        </motion.li>
-                      ))}
-                    </ul>
-                  </motion.div>
-                </div>
-              </motion.div>
-            </AnimatePresence>
-          </motion.div>
-        </ScrollReveal>
-        
-        <ScrollReveal animation="fade-up" delay={300} className="mt-10 text-center">
-          <p className="text-lg md:text-xl max-w-3xl mx-auto text-gray-700 font-medium mb-6">
+                  <ul className="space-y-4">
+                    {content.before.points.map((point, idx) => (
+                      <motion.li
+                        key={idx}
+                        className="flex items-start text-gray-300 text-sm leading-relaxed"
+                        initial={{ opacity: 0, x: -20 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        transition={{ delay: idx * 0.1 + 0.2 }}
+                      >
+                        <XCircle className="text-red-400 h-5 w-5 mr-3 mt-0.5 shrink-0" />
+                        <span>{point}</span>
+                      </motion.li>
+                    ))}
+                  </ul>
+                </motion.div>
+                
+                <motion.div
+                  className="bg-gradient-to-br from-gray-900/50 to-gray-800/50 backdrop-blur-sm rounded-xl p-6 shadow-lg border border-green-500/20 hover:border-green-500/40 transition-all duration-300"
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.5, delay: 0.3 }}
+                >
+                  <div className="flex items-center mb-6">
+                    <div className="w-4 h-4 rounded-full bg-green-500 mr-3"></div>
+                    <h4 className="font-bold text-lg text-white">{content.after.title}</h4>
+                  </div>
+                  
+                  <ul className="space-y-4">
+                    {content.after.points.map((point, idx) => (
+                      <motion.li
+                        key={idx}
+                        className="flex items-start text-gray-300 text-sm leading-relaxed"
+                        initial={{ opacity: 0, x: -20 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        transition={{ delay: idx * 0.1 + 0.4 }}
+                      >
+                        <CheckCircle className="text-green-400 h-5 w-5 mr-3 mt-0.5 shrink-0" />
+                        <span>{point}</span>
+                      </motion.li>
+                    ))}
+                  </ul>
+                </motion.div>
+              </div>
+            </motion.div>
+          </AnimatePresence>
+
+           <div className="flex justify-center space-x-2 mt-8">
+            {beforeAfterContent.map((_, index) => (
+              <button
+                key={index}
+                onClick={() => setPosition(index)}
+                className={cn(
+                  "w-3 h-3 rounded-full transition-all duration-300",
+                  position === index ? "bg-gradient-to-r from-orange-400 to-amber-400 w-8 scale-110" : "bg-gray-600/50 hover:bg-gray-500/70 w-3"
+                )}
+                aria-label={`Ver slide ${index + 1}`}
+              />
+            ))}
+          </div>
+
+        </div>
+
+        <ScrollReveal animation="fade-up" delay={300} className="mt-16 text-center">
+          <p className="text-lg md:text-xl max-w-3xl mx-auto text-gray-300 font-medium mb-8">
             Estamos transformando empresas como a sua todos os dias. Você pode ser o próximo.
           </p>
-          <motion.a 
-            href="#contato" 
-            className="inline-flex items-center bg-nexorange hover:bg-nexorange/90 text-white px-8 py-4 rounded-lg font-semibold text-lg transition-all duration-300"
-            whileHover={{ 
-              scale: 1.05,
-              boxShadow: "0 10px 25px -5px rgba(255, 111, 0, 0.4)"
-            }}
-            whileTap={{ scale: 0.97 }}
+          <motion.a
+            href="#contato"
+            className="inline-flex items-center bg-gradient-to-r from-orange-400 to-amber-400 hover:from-orange-500 hover:to-amber-500 text-white px-8 py-4 rounded-full font-semibold text-lg transition-all duration-300 hover:shadow-xl hover:shadow-orange-500/20 hover:-translate-y-0.5"
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
           >
             Quero transformar minha empresa
           </motion.a>

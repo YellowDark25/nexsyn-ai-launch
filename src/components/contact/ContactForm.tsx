@@ -60,7 +60,7 @@ export const ContactForm = ({ isVisible }: ContactFormProps) => {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     
-    let formErrors: FormErrors = {};
+    const formErrors: FormErrors = {};
     let hasError = false;
     
     // Validate WhatsApp number
@@ -101,11 +101,13 @@ export const ContactForm = ({ isVisible }: ContactFormProps) => {
     
     // Prepare WhatsApp message
     const message = `
-*Nova solicitação de diagnóstico:*
+*Solicitação de diagnóstico:*
 *Nome:* ${formData.name}
 *WhatsApp:* ${formData.whatsapp}
 *Empresa:* ${formData.company}
 *Desafio:* ${formData.challenge}
+
+Vim através da Landpage e gostaria de saber mais sobre as soluções.
     `.trim();
     
     // Updated phone number

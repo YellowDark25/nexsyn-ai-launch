@@ -5,6 +5,19 @@
 
 // Track if the API is already loaded
 let youtubeApiLoaded = false;
+let youtubeApiLoading = false;
+const youtubeApiListeners: Array<() => void> = [];
+
+// Função para notificar todos os ouvintes quando a API estiver pronta
+const notifyYouTubeApiReady = () => {
+  youtubeApiLoaded = true;
+  youtubeApiLoading = false;
+  console.log("YouTube API loaded and notifying listeners");
+  
+  // Notificar todos os ouvintes
+  youtubeApiListeners.forEach(listener => listener());
+  youtubeApiListeners.length = 0; // Limpar a lista de ouvintes
+};
 
 /**
  * Loads the YouTube IFrame API if not already loaded
@@ -14,35 +27,71 @@ export const loadYouTubeApi = (): Promise<void> => {
   return new Promise((resolve) => {
     // If API is already loaded, resolve immediately
     if (youtubeApiLoaded) {
+      console.log("YouTube API already loaded, resolving immediately");
       resolve();
       return;
     }
 
-    // If window.onYouTubeIframeAPIReady is already defined, store the original
-    const originalCallback = window.onYouTubeIframeAPIReady;
+    // If API is already loading, just add to the listeners
+    if (youtubeApiLoading) {
+      console.log("YouTube API is already loading, adding to listeners");
+      youtubeApiListeners.push(resolve);
+      return;
+    }
 
-    // Define callback for API ready
+    console.log("Starting to load YouTube API");
+    youtubeApiLoading = true;
+
+    // Store the original callback if it exists
+    const originalOnYouTubeIframeAPIReady = window.onYouTubeIframeAPIReady;
+    
+    // Define our callback for API ready
     window.onYouTubeIframeAPIReady = () => {
-      youtubeApiLoaded = true;
-      console.log("YouTube API loaded");
+      console.log("YouTube API ready");
       
-      // Call the original callback if it existed
-      if (originalCallback) {
-        originalCallback();
+      // Call the original callback if it exists
+      if (typeof originalOnYouTubeIframeAPIReady === 'function') {
+        console.log("Calling original onYouTubeIframeAPIReady");
+        originalOnYouTubeIframeAPIReady();
       }
       
-      resolve();
+      // Notify all listeners that the API is ready
+      notifyYouTubeApiReady();
     };
 
     // Add YouTube API script if not already loaded
-    if (!document.getElementById('youtube-api')) {
+    if (!document.getElementById('youtube-iframe-api')) {
+      console.log("Adding YouTube API script");
       const tag = document.createElement('script');
-      tag.id = 'youtube-api';
+      tag.id = 'youtube-iframe-api';
       tag.src = 'https://www.youtube.com/iframe_api';
+      tag.async = true;
+      tag.defer = true;
+      
+      tag.onerror = (error) => {
+        console.error("Error loading YouTube API:", error);
+        youtubeApiLoading = false;
+        youtubeApiListeners.length = 0; // Clear listeners on error
+      };
+      
       const firstScriptTag = document.getElementsByTagName('script')[0];
-      if (firstScriptTag.parentNode) {
+      if (firstScriptTag?.parentNode) {
         firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+      } else {
+        document.head.appendChild(tag);
       }
+    } else {
+      console.log("YouTube API script already exists");
     }
+
+    // Add to listeners to be notified when the API is ready
+    youtubeApiListeners.push(resolve);
   });
+};
+
+// Força a recarga da API do YouTube se necessário
+export const reloadYouTubeApi = (): Promise<void> => {
+  youtubeApiLoaded = false;
+  youtubeApiLoading = false;
+  return loadYouTubeApi();
 };

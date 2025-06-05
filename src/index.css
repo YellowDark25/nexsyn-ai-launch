@@ -1,123 +1,82 @@
 
+/* Importar a fonte Poppins */
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap');
 
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+/* Importações do Tailwind CSS */
+@import 'tailwindcss/base';
+@import 'tailwindcss/components';
+@import 'tailwindcss/utilities';
 
+/* Configurações base */
 @layer base {
   :root {
-    --background: 240 10% 3.9%;
-    --foreground: 0 0% 98%;
-
-    --card: 240 10% 3.9%;
-    --card-foreground: 0 0% 98%;
-
-    --popover: 240 10% 3.9%;
-    --popover-foreground: 0 0% 98%;
-
-    --primary: 0 0% 98%;
-    --primary-foreground: 240 5.9% 10%;
-
-    --secondary: 240 3.7% 15.9%;
-    --secondary-foreground: 0 0% 98%;
-
-    --muted: 240 3.7% 15.9%;
-    --muted-foreground: 240 5% 64.9%;
-
-    --accent: 240 3.7% 15.9%;
-    --accent-foreground: 0 0% 98%;
-
-    --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 0 0% 98%;
-
-    --border: 240 3.7% 15.9%;
-    --input: 240 3.7% 15.9%;
-    --ring: 240 4.9% 83.9%;
-
     --radius: 0.5rem;
-
-    --sidebar-background: 240 10% 3.9%;
-    --sidebar-foreground: 0 0% 98%;
-    --sidebar-primary: 224.3 76.3% 48%;
-    --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 240 3.7% 15.9%;
-    --sidebar-accent-foreground: 0 0% 98%;
-    --sidebar-border: 240 3.7% 15.9%;
-    --sidebar-ring: 217.2 91.2% 59.8%;
   }
 
-  .light {
-    --background: 0 0% 100%;
-    --foreground: 222.2 84% 4.9%;
-
-    --card: 0 0% 100%;
-    --card-foreground: 222.2 84% 4.9%;
-
-    --popover: 0 0% 100%;
-    --popover-foreground: 222.2 84% 4.9%;
-
-    --primary: 222.2 47.4% 11.2%;
-    --primary-foreground: 210 40% 98%;
-
-    --secondary: 210 40% 96.1%;
-    --secondary-foreground: 222.2 47.4% 11.2%;
-
-    --muted: 210 40% 96.1%;
-    --muted-foreground: 215.4 16.3% 46.9%;
-
-    --accent: 210 40% 96.1%;
-    --accent-foreground: 222.2 47.4% 11.2%;
-
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 210 40% 98%;
-
-    --border: 214.3 31.8% 91.4%;
-    --input: 214.3 31.8% 91.4%;
-    --ring: 222.2 84% 4.9%;
-
-    --sidebar-background: 0 0% 98%;
-    --sidebar-foreground: 240 5.3% 26.1%;
-    --sidebar-primary: 240 5.9% 10%;
-    --sidebar-primary-foreground: 0 0% 98%;
-    --sidebar-accent: 240 4.8% 95.9%;
-    --sidebar-accent-foreground: 240 5.9% 10%;
-    --sidebar-border: 220 13% 91%;
-    --sidebar-ring: 217.2 91.2% 59.8%;
-  }
-}
-
-@layer base {
   * {
-    @apply border-border;
+    border-color: hsl(var(--border));
+  }
+
+  /* Estilos base para html e body */
+  html, body {
+    width: 100%;
+    max-width: 100%;
+    margin: 0;
+    padding: 0;
+    overflow-x: hidden;
+    position: relative;
+    font-family: 'Poppins', sans-serif;
   }
 
   body {
-    @apply bg-[#1A1F2C] text-nexwhite font-poppins;
-    overflow-x: hidden;
+    background-color: hsl(var(--background));
+    color: hsl(var(--foreground));
     scroll-behavior: smooth;
+  }
+  
+  /* Garante que imagens e elementos não ultrapassem a largura da tela */
+  img, video, iframe, object, embed {
+    max-width: 100%;
+    height: auto;
+  }
+  
+  /* Previne quebra de layout em elementos com largura fixa */
+  * {
+    box-sizing: border-box;
   }
 
   h1, h2, h3, h4, h5, h6 {
-    @apply font-poppins font-bold;
+    font-family: 'Poppins', sans-serif;
+    font-weight: 700;
   }
 
   .glow-effect {
     box-shadow: 0 0 15px rgba(255, 111, 0, 0.5);
   }
   
-  .text-gradient {
-    background: linear-gradient(90deg, #002147 0%, #FF6F00 100%);
+  .hero-gradient-text {
+    background: linear-gradient(to right, #FF6F00, #f97316, #fbbf24);
     -webkit-background-clip: text;
+    background-clip: text;
     color: transparent;
   }
 
   .hover-scale {
-    @apply transition-transform duration-300 hover:scale-105 hover:shadow-xl;
+    transition: transform 300ms ease, box-shadow 300ms ease;
+  }
+  
+  .hover-scale:hover {
+    transform: scale(1.05);
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
   }
   
   .card-hover {
-    @apply transition-all duration-300 hover:-translate-y-2 hover:shadow-lg;
+    transition: all 300ms ease;
+  }
+  
+  .card-hover:hover {
+    transform: translateY(-0.5rem);
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
   }
   
   .particle-container {
@@ -130,18 +89,7 @@
     pointer-events: none;
   }
   
-  .whatsapp-button {
-    position: fixed;
-    right: 20px;
-    bottom: 20px;
-    z-index: 1000;
-    animation: pulse-soft 2s infinite;
-    transition: transform 0.3s ease;
-  }
-  
-  .whatsapp-button:hover {
-    transform: scale(1.1);
-  }
+    /* WhatsApp button styles moved to component */
 
   .snap-scroll {
     scroll-snap-type: y mandatory;
@@ -152,11 +100,16 @@
   }
   
   .glass-morphism {
-    @apply backdrop-blur-xl bg-white/5 border border-white/10 shadow-[0_4px_12px_-2px_rgba(0,0,0,0.3)];
+    backdrop-filter: blur(12px);
+    background-color: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 0 4px 12px -2px rgba(0, 0, 0, 0.3);
   }
   
   .neo-blur {
-    @apply backdrop-blur-2xl bg-black/40 border border-white/10;
+    backdrop-filter: blur(24px);
+    background-color: rgba(0, 0, 0, 0.4);
+    border: 1px solid rgba(255, 255, 255, 0.1);
   }
   
   /* Animations and styles for updated hero section */

@@ -3,6 +3,7 @@ export interface YouTubePlayerState {
   isPlaying: boolean;
   isMuted: boolean;
   isVideoLoaded: boolean;
+  hasError: boolean;
   progress: number;
   duration: number;
   currentTime: number;
@@ -18,7 +19,7 @@ export interface YouTubePlayerActions {
 
 export interface YouTubePlayerMessageData {
   event: string;
-  info?: any;
+  info?: unknown;
 }
 
 export interface UseYouTubePlayerProps {

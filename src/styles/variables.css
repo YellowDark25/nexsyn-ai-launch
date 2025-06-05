@@ -1,0 +1,77 @@
+:root {
+  /* Cores base */
+  --background: 210 11% 7%;
+  --foreground: 0 0% 96%;
+  
+  /* Cores de card */
+  --card: 210 11% 7%;
+  --card-foreground: 0 0% 96%;
+  
+  /* Cores de popover */
+  --popover: 210 11% 7%;
+  --popover-foreground: 0 0% 96%;
+  
+  /* Cores primárias */
+  --primary: 66 70% 49%; /* #C9D921 */
+  --primary-foreground: 210 11% 7%;
+  
+  /* Cores secundárias */
+  --secondary: 218 17% 35%;
+  --secondary-foreground: 0 0% 96%;
+  
+  /* Cores de destaque */
+  --accent: 218 17% 35%;
+  --accent-foreground: 0 0% 96%;
+  
+  /* Cores de texto suave */
+  --muted: 210 17% 25%; 
+  --muted-foreground: 215 20% 65%;
+  
+  /* Cores de destaque Nexsyn */
+  --nexlime: 66 70% 49%; /* #C9D921 */
+  --nexorange: 32 100% 50%; /* #FF6F00 */
+  --nexblue: 214 100% 14%; /* #002147 */
+  --nexblack: 255 12% 7%; /* #100F13 */
+  --nexwhite: 180 20% 95%; /* #F1F5F5 */
+  
+  /* Cores de borda */
+  --border: 210 17% 25%;
+  --input: 210 17% 25%;
+  --ring: 66 70% 49%;
+  
+  /* Bordas arredondadas */
+  --radius: 0.5rem;
+  
+  /* Sidebar */
+  --sidebar-background: 210 24% 13%;
+  --sidebar-foreground: 210 20% 90%;
+  --sidebar-primary: 66 70% 49%;
+  --sidebar-primary-foreground: 210 11% 7%;
+  --sidebar-accent: 210 17% 25%;
+  --sidebar-accent-foreground: 210 20% 90%;
+  --sidebar-border: 210 17% 25%;
+  --sidebar-ring: 66 70% 49%;
+  
+  /* Destructive colors */
+  --destructive: 0 84% 60%;
+  --destructive-foreground: 0 0% 98%;
+}
+
+/* Dark mode overrides */
+.dark {
+  --background: 210 24% 13%;
+  --foreground: 210 20% 90%;
+  
+  --primary: 66 70% 49%;
+  --primary-foreground: 210 24% 13%;
+  
+  --secondary: 210 17% 25%;
+  --secondary-foreground: 210 20% 90%;
+  
+  --accent: 210 17% 25%;
+  --accent-foreground: 210 20% 90%;
+  
+  --border: 210 17% 25%;
+  --input: 210 17% 25%;
+  --ring: 66 70% 49%;
+}

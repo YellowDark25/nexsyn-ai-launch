@@ -1,7 +1,12 @@
 
 import { createRoot } from 'react-dom/client'
 import App from './App.tsx'
-import './index.css'
+
+// Importações de CSS na ordem correta
+import './styles/variables.css' // 1. Variáveis CSS primeiro
+import './index.css' // 2. Estilos base do Tailwind
+import './styles/globals.css' // 3. Estilos globais personalizados
+
 import { ensureLottiePlayerLoaded } from './utils/lottieLoader'
 
 // Initialize lottie-player before rendering the app

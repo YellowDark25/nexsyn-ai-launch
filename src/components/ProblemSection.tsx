@@ -1,120 +1,120 @@
+"use client"
 
-import React from "react";
-import { Bug, Clock, Users } from "lucide-react";
-import { ScrollReveal } from "./ui/scroll-reveal";
-import { motion } from "framer-motion";
+import React, { useEffect, useRef } from "react"
+import { motion } from "framer-motion"
+import { AlertTriangle, Code, Zap } from "lucide-react"
+import { cn } from "@/lib/utils"
 
-const ProblemCard = ({ icon: Icon, title, description, index }: {
-  icon: React.ElementType,
-  title: string,
-  description: string,
-  index: number
-}) => {
+interface ProblemCardProps {
+  icon: React.ReactNode
+  title: string
+  description: string
+  className?: string
+}
+
+function ProblemCard({ icon, title, description, className }: ProblemCardProps) {
   return (
-    <ScrollReveal 
-      delay={index * 100}
-      animation="fade-up"
-      className="w-full"
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.5 }}
+      viewport={{ once: true }}
+      className={cn(
+        "w-full rounded-2xl overflow-hidden shadow-[0_25px_50px_-12px_rgba(255,145,0,0.1)] border border-orange-400/20 bg-gradient-to-br from-[#0A1A3A]/90 to-[#1A1B51]/90 backdrop-blur-xl p-1.5 h-full",
+        "hover:shadow-[0_25px_50px_-12px_rgba(255,145,0,0.2)] transition-shadow duration-300",
+        className
+      )}
     >
-      <motion.div 
-        className="card-hover bg-[#222632] rounded-xl p-6 shadow-md border border-gray-800 h-full"
-        whileHover={{ 
-          y: -10, 
-          boxShadow: "0 20px 25px -5px rgba(0, 0, 0, 0.5)",
-          borderColor: "rgba(255,111,0,0.3)"
-        }}
-        transition={{ type: "spring", stiffness: 300, damping: 20 }}
-      >
-        <motion.div 
-          className="rounded-full bg-nexorange/20 p-3 inline-flex mb-4"
-          whileHover={{ 
-            scale: 1.1, 
-            backgroundColor: "rgba(255,111,0,0.3)" 
-          }}
-        >
-          <Icon size={28} className="text-nexorange" />
-        </motion.div>
-        <motion.h3 
-          className="text-xl font-bold mb-3 text-white"
-          initial={{ opacity: 0.8 }}
-          whileHover={{ opacity: 1, textShadow: "0 0 8px rgba(255,111,0,0.3)" }}
-        >
-          {title}
-        </motion.h3>
-        <motion.p 
-          className="text-gray-300"
-          initial={{ opacity: 0.8 }}
-          whileHover={{ opacity: 1 }}
-        >
-          {description}
-        </motion.p>
-      </motion.div>
-    </ScrollReveal>
-  );
-};
+      <div className="relative bg-gradient-to-br from-[#0A1A3A] to-[#1A1B51] p-1 rounded-xl overflow-hidden h-full">
+        <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI5IiBoZWlnaHQ9IjkiPgo8cmVjdCB3aWR0aD0iOSIgaGVpZ2h0PSI5IiBmaWxsPSIjZmZmZmZmIiBvcGFjaXR5PSIwLjAyIj48L3JlY3Q+Cjwvc3ZnPg==')] opacity-20"></div>
+        <div className="relative z-10 p-6 h-full flex flex-col">
+          <div className="rounded-full flex items-center justify-center bg-gradient-to-br from-orange-500/10 to-orange-500/5 border border-orange-500/20 h-14 w-14 mb-6">
+            {React.cloneElement(icon as React.ReactElement, {
+              className: "h-6 w-6 text-orange-400"
+            })}
+          </div>
+          <h3 className="text-xl font-bold mb-4 text-white">{title}</h3>
+          <p className="text-gray-300 flex-grow">{description}</p>
+        </div>
+      </div>
+    </motion.div>
+  )
+}
 
-const ProblemSection = () => {
+interface ProblemSectionProps {
+  className?: string
+}
+
+export function ProblemSection({ className }: ProblemSectionProps) {
+  const sectionRef = useRef<HTMLDivElement>(null)
+
   const problems = [
     {
-      icon: Bug,
-      title: "Frustração com ferramentas",
-      description: "Muitas ferramentas prometem IA, mas não entregam resultados práticos ou exigem conhecimento técnico que a maioria das empresas não tem."
+      icon: <AlertTriangle className="h-6 w-6 text-orange-500" />,
+      title: "Complexidade Desnecessária",
+      description:
+        "Muitos desenvolvedores perdem tempo com configurações complexas e ferramentas que não agregam valor real ao produto final."
     },
     {
-      icon: Clock,
-      title: "Falta de tempo",
-      description: "Implementar IA exige dedicação e experimentação. A maioria dos gestores não consegue dedicar meses para encontrar a solução certa."
+      icon: <Zap className="h-6 w-6 text-orange-500" />,
+      title: "Performance Negligenciada",
+      description:
+        "Aplicações web modernas frequentemente sacrificam performance por conveniência, resultando em experiências lentas para os usuários."
     },
     {
-      icon: Users,
-      title: "Equipe despreparada",
-      description: "Contratar especialistas em IA é caro e criar conhecimento interno pode demorar anos, atrasando a inovação e resultados."
+      icon: <Code className="h-6 w-6 text-orange-500" />,
+      title: "Código Difícil de Manter",
+      description:
+        "Arquiteturas mal planejadas levam a código frágil e difícil de manter, aumentando o custo de desenvolvimento a longo prazo."
     }
-  ];
-  
-  return (
-    <section id="problema" className="py-20 bg-[#1A1F2C]">
-      <div className="container mx-auto px-4 md:px-8">
-        <ScrollReveal animation="fade-down" className="text-center mb-16">
-          <h2 className="text-3xl md:text-4xl font-bold mb-4">
-            <span className="text-nexorange">A dor real</span> das empresas com IA
-          </h2>
-          <p className="text-lg md:text-xl max-w-3xl mx-auto text-gray-300">
-            Lidamos diariamente com empresas que investiram em promessas de IA que não entregaram resultados.
-            Identificamos os 3 principais problemas:
-          </p>
-        </ScrollReveal>
+  ]
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+  return (
+    <section
+      id="problema"
+      ref={sectionRef}
+      className={cn(
+        "w-full py-24 relative overflow-hidden bg-gradient-to-br from-[#0A1A3A] via-[#0F1B4D] to-[#1A1B51]",
+        className
+      )}
+    >
+      {/* Efeitos de fundo */}
+      <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI5IiBoZWlnaHQ9IjkiPgo8cmVjdCB3aWR0aD0iOSIgaGVpZ2h0PSI5IiBmaWxsPSIjZmZmZmZmIiBvcGFjaXR5PSIwLjAxIj48L3JlY3Q+CjxwYXRoIGQ9Ik0wIDVMOSAwWk02IDRMNCA2Wk0tMSAxTDEgLTFaIiBzdHJva2U9IiNmZmZmZmYiIHN0cm9rZS13aWR0aD0iMC41IiBzdHJva2Utb3BhY2l0eT0iMC4wNSI+PC9wYXRoPgo8L3N2Zz4=')] opacity-20"></div>
+      <div className="absolute inset-0 bg-gradient-to-r from-blue-900/20 via-transparent to-blue-900/10"></div>
+      <div className="absolute -top-40 -right-40 w-96 h-96 bg-gradient-to-br from-blue-600/10 to-transparent rounded-full mix-blend-screen blur-3xl"></div>
+      <div className="absolute -bottom-40 -left-40 w-96 h-96 bg-gradient-to-br from-blue-800/10 to-transparent rounded-full mix-blend-screen blur-3xl"></div>
+      <div className="container px-4 md:px-6">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5 }}
+          viewport={{ once: true }}
+          className="flex flex-col items-center text-center mb-12"
+        >
+          <h2 className="text-4xl md:text-5xl font-bold tracking-tight mb-6">
+            <span className="text-white">Problemas que </span>
+            <span className="bg-gradient-to-r from-orange-300 via-orange-400 to-amber-400 bg-clip-text text-transparent">Resolvemos</span>
+          </h2>
+          <p className="text-xl text-gray-300 max-w-[800px] leading-relaxed">
+            Identificamos os principais desafios que desenvolvedores enfrentam hoje e criamos soluções eficientes para superá-los.
+          </p>
+        </motion.div>
+
+        <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3 relative z-10">
           {problems.map((problem, index) => (
-            <ProblemCard 
-              key={problem.title}
+            <ProblemCard
+              key={index}
               icon={problem.icon}
               title={problem.title}
               description={problem.description}
-              index={index}
             />
           ))}
         </div>
-
-        <ScrollReveal animation="fade-up" delay={300} className="mt-12 text-center">
-          <motion.p 
-            className="text-lg md:text-xl font-semibold text-nexorange"
-            whileInView={{ 
-              textShadow: ["0 0 0px rgba(255,111,0,0)", "0 0 8px rgba(255,111,0,0.5)", "0 0 0px rgba(255,111,0,0)"]
-            }}
-            transition={{ 
-              duration: 2,
-              repeat: Infinity,
-              repeatType: "loop"
-            }}
-          >
-            Esses desafios impedem que sua empresa capture o verdadeiro valor da Inteligência Artificial.
-          </motion.p>
-        </ScrollReveal>
       </div>
     </section>
-  );
-};
+  )
+}
 
-export default ProblemSection;
+export default function ProblemSectionExample() {
+  return <ProblemSection />
+}

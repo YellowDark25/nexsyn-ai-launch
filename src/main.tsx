@@ -1,6 +1,7 @@
 
 import { createRoot } from 'react-dom/client'
 import App from './App.tsx'
+import { Analytics } from '@vercel/analytics/react'
 
 // Importações de CSS na ordem correta
 import './styles/variables.css' // 1. Variáveis CSS primeiro
@@ -20,7 +21,12 @@ const root = createRoot(rootElement);
 
 // Render the app immediately to avoid blank screen
 // We'll handle Lottie loading in the components
-root.render(<App />);
+root.render(
+    <>
+      <App />
+      <Analytics />
+    </>
+  );
 
 // Pre-load Lottie in the background after app render
 ensureLottiePlayerLoaded()

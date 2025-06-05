@@ -157,7 +157,7 @@ const HeroSection = () => {
   return (
     <section
       id="home"
-      className={`relative min-h-screen ${HERO_BG} flex items-center pt-16 md:pt-20 pb-16 md:pb-24 overflow-visible`}
+      className={`relative min-h-screen ${HERO_BG} flex items-center pt-24 md:pt-28 lg:pt-32 pb-16 md:pb-24 overflow-visible`}
     >
       {/* Efeitos de fundo */}
       <div className={HERO_GRADIENT_BG}></div>

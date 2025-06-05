@@ -116,14 +116,14 @@ const Navbar = ({ onScrollToSection }: NavbarProps) => {
   return (
     <header
       className={cn(
-        "fixed top-0 left-0 right-0 z-50 transition-all duration-500 ease-in-out w-full overflow-hidden",
+        "fixed top-0 left-0 right-0 z-50 transition-all duration-300 ease-in-out w-full overflow-hidden",
         isScrolled
-          ? "bg-[#15191F]/90 backdrop-blur-md shadow-md py-2"
-          : "bg-transparent py-4"
+          ? "bg-[#15191F]/95 backdrop-blur-md shadow-lg py-2"
+          : "bg-gradient-to-b from-black/30 to-transparent py-4"
       )}
     >
-      <div className="mx-auto w-full max-w-[100vw] px-4 md:px-8">
-        <div className="flex justify-between items-center w-full">
+      <div className="mx-auto w-full max-w-[100vw] px-4 sm:px-6 lg:px-8">
+        <div className="flex justify-between items-center w-full h-16">
         {/* Logo */}
         <motion.a
           href="#home"
@@ -202,79 +202,130 @@ const Navbar = ({ onScrollToSection }: NavbarProps) => {
           Diagnóstico Gratuito
         </motion.a>
 
-        {/* Mobile Menu Button */}
-        <Sheet open={isMobileMenuOpen} onOpenChange={setIsMobileMenuOpen}>
-          <SheetTrigger asChild className="lg:hidden">
-            <Button 
-              variant="outline" 
-              size="icon"
-              className="text-gray-200 hover:text-white hover:bg-gray-800"
-              asChild
-            >
-              <motion.span
-                whileTap={{ scale: 0.9 }}
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
+        {/* Mobile Menu Button - Improved for better touch targets */}
+        <div className="lg:hidden">
+          <Sheet open={isMobileMenuOpen} onOpenChange={setIsMobileMenuOpen}>
+            <SheetTrigger asChild>
+              <Button 
+                variant="ghost" 
+                size="icon"
+                className="h-12 w-12 text-gray-200 hover:bg-gray-800/50 hover:text-white focus-visible:ring-2 focus-visible:ring-nexorange focus-visible:ring-offset-2 focus-visible:ring-offset-transparent"
+                aria-label={isMobileMenuOpen ? "Fechar menu" : "Abrir menu"}
               >
-                {isMobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
-              </motion.span>
-            </Button>
-          </SheetTrigger>
-          <SheetContent side="right" className="overflow-y-auto bg-[#15191F] text-white">
-            <SheetHeader>
-              <SheetTitle>
-                 {/* Logo inside mobile sheet */}
-                 <a href="#home" className="flex items-center"  onClick={() => setIsMobileMenuOpen(false)}>
-                    <img
-                      src="/lovable-uploads/9e39c707-25f3-40d0-9e71-cdebc2d511eb.png"
-                      alt="NEXSYN Logo"
-                      className="h-8 md:h-10"
-                    />
-                 </a>
-              </SheetTitle>
-            </SheetHeader>
-            {/* Mobile Menu */}
-            <nav className="flex flex-col p-4 mt-4">
-               {menuItems.map((item) => (
-                <motion.a
-                  key={item.id}
-                  href={item.href}
-                  className={cn(
-                    "py-3 border-b border-gray-700 text-gray-200",
-                    activeItem === item.id ? "text-nexorange" : ""
-                  )}
-                  onClick={(e) => {
-                    e.preventDefault();
-                    onScrollToSection(item.id);
-                    setIsMobileMenuOpen(false);
-                  }}
-                  initial={{ x: -20, opacity: 0 }}
-                  animate={{ x: 0, opacity: 1 }}
-                  transition={{ duration: 0.3 }}
-                  whileHover={{ x: 5 }}
+                <motion.span
+                  className="flex items-center justify-center w-full h-full"
+                  whileTap={{ scale: 0.9 }}
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
                 >
-                  {item.name}
-                </motion.a>
-               ))}
-               {/* CTA Button (Mobile) */}
-              <motion.a
-                href="#contato"
-                className="mt-4 bg-nexorange hover:bg-nexorange/90 text-white px-4 py-2 rounded-lg font-medium text-center"
-                onClick={(e) => {
+                  {isMobileMenuOpen ? (
+                    <X size={28} className="h-7 w-7" />
+                  ) : (
+                    <Menu size={28} className="h-7 w-7" />
+                  )}
+                </motion.span>
+              </Button>
+            </SheetTrigger>
+            <SheetContent 
+              side="right" 
+              className="w-full max-w-[85vw] sm:max-w-md bg-[#0f1218] border-l border-gray-800 overflow-y-auto"
+              onInteractOutside={(e) => {
+                // Prevent closing when clicking on interactive elements
+                const target = e.target as HTMLElement;
+                if (target.closest('.mobile-menu-content')) {
                   e.preventDefault();
-                  onScrollToSection("contato");
-                  setIsMobileMenuOpen(false);
-                }}
-                initial={{ y: 20, opacity: 0 }}
-                animate={{ y: 0, opacity: 1 }}
-                transition={{ duration: 0.3, delay: menuItems.length * 0.05 }}
-                whileTap={{ scale: 0.95 }}
-              >
-                Diagnóstico Gratuito
-              </motion.a>
-            </nav>
-          </SheetContent>
-        </Sheet>
+                }
+              }}
+            >
+              <div className="mobile-menu-content h-full flex flex-col">
+                <SheetHeader className="px-1 pt-2 pb-4 border-b border-gray-800">
+                  <SheetTitle className="text-left">
+                    <a 
+                      href="#home" 
+                      className="flex items-center"
+                      onClick={() => {
+                        onScrollToSection("home");
+                        setIsMobileMenuOpen(false);
+                      }}
+                    >
+                      <img
+                        src="/lovable-uploads/9e39c707-25f3-40d0-9e71-cdebc2d511eb.png"
+                        alt="NEXSYN Logo"
+                        className="h-10 w-auto"
+                      />
+                    </a>
+                  </SheetTitle>
+                </SheetHeader>
+                
+                {/* Mobile Menu Items */}
+                <nav className="flex-1 py-4 overflow-y-auto">
+                  <ul className="space-y-1">
+                    {menuItems.map((item, index) => (
+                      <motion.li 
+                        key={item.id}
+                        initial={{ x: -20, opacity: 0 }}
+                        animate={{ x: 0, opacity: 1 }}
+                        transition={{ 
+                          duration: 0.2, 
+                          delay: index * 0.05,
+                          ease: "easeOut"
+                        }}
+                      >
+                        <a
+                          href={item.href}
+                          className={cn(
+                            "block px-4 py-4 text-lg font-medium transition-colors duration-200 rounded-lg mx-2",
+                            activeItem === item.id 
+                              ? "bg-nexorange/10 text-nexorange" 
+                              : "text-gray-200 hover:bg-gray-800/50 hover:text-white"
+                          )}
+                          onClick={(e) => {
+                            e.preventDefault();
+                            onScrollToSection(item.id);
+                            // Add a small delay to allow the scroll to happen before closing
+                            setTimeout(() => setIsMobileMenuOpen(false), 100);
+                          }}
+                        >
+                          {item.name}
+                        </a>
+                      </motion.li>
+                    ))}
+                  </ul>
+                </nav>
+
+                {/* CTA Button (Mobile) */}
+                <motion.div 
+                  className="p-4 pt-2 border-t border-gray-800"
+                  initial={{ y: 20, opacity: 0 }}
+                  animate={{ y: 0, opacity: 1 }}
+                  transition={{ 
+                    duration: 0.3, 
+                    delay: (menuItems.length * 0.05) + 0.1,
+                    ease: "easeOut"
+                  }}
+                >
+                  <a
+                    href="#contato"
+                    className={cn(
+                      "block w-full text-center px-6 py-3 rounded-xl font-semibold text-base",
+                      "bg-gradient-to-r from-nexorange/90 to-amber-600 text-white",
+                      "hover:from-nexorange hover:to-amber-600 hover:shadow-lg hover:shadow-amber-500/20",
+                      "active:scale-95 transition-all duration-200",
+                      "focus:outline-none focus:ring-2 focus:ring-amber-500 focus:ring-offset-2 focus:ring-offset-[#0f1218]"
+                    )}
+                    onClick={(e) => {
+                      e.preventDefault();
+                      onScrollToSection("contato");
+                      setIsMobileMenuOpen(false);
+                    }}
+                  >
+                    Diagnóstico Gratuito
+                  </a>
+                </motion.div>
+              </div>
+            </SheetContent>
+          </Sheet>
+        </div>
 
         </div>
       </div>

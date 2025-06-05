@@ -123,7 +123,7 @@ const TestimonialsSection = () => {
     <section
       ref={sectionRef}
       id="depoimentos"
-      className="relative py-24 overflow-hidden bg-gradient-to-br from-[#0A1A3A] via-[#0F1B4D] to-[#1A1B51]"
+      className="relative py-16 sm:py-20 md:py-24 overflow-hidden bg-gradient-to-br from-[#0A1A3A] via-[#0F1B4D] to-[#1A1B51]"
     >
       {/* Efeitos de fundo */}
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-orange-500/5 via-transparent to-transparent opacity-70"></div>
@@ -136,12 +136,12 @@ const TestimonialsSection = () => {
            initial="hidden"
            animate={controls}
            variants={containerVariants}
-           className="text-center mb-12 space-y-4"
+           className="text-center mb-8 sm:mb-12 space-y-3 sm:space-y-4"
         >
-          <motion.h2 variants={itemVariants} className="text-3xl md:text-4xl font-bold mb-4 bg-clip-text text-transparent bg-gradient-to-r from-orange-300 via-orange-400 to-amber-400">
+          <motion.h2 variants={itemVariants} className="text-2xl sm:text-3xl md:text-4xl font-bold mb-3 sm:mb-4 bg-clip-text text-transparent bg-gradient-to-r from-orange-300 via-orange-400 to-amber-400">
             O que nossos <span className="text-white">clientes</span> dizem
           </motion.h2>
-          <motion.p variants={itemVariants} className="text-lg md:text-xl max-w-3xl mx-auto text-gray-300">
+          <motion.p variants={itemVariants} className="text-base sm:text-lg md:text-xl max-w-3xl mx-auto text-gray-300 px-2">
             Empresas reais, resultados reais. Conheça algumas histórias de transformação com a Nexsyn.
           </motion.p>
         </motion.div>
@@ -150,7 +150,7 @@ const TestimonialsSection = () => {
           initial="hidden"
           animate={controls}
           variants={containerVariants}
-          className="relative max-w-4xl mx-auto mt-12"
+          className="relative max-w-4xl mx-auto mt-8 sm:mt-12 px-2 sm:px-4"
           onTouchStart={handleTouchStart}
           onTouchMove={handleTouchMove}
           onTouchEnd={handleTouchEnd}
@@ -168,36 +168,36 @@ const TestimonialsSection = () => {
                   index === currentIndex ? "z-10" : "z-0 pointer-events-none"
                 )}
               >
-                <Card className="relative bg-gradient-to-br from-gray-900/50 to-gray-800/50 backdrop-blur-sm rounded-2xl shadow-2xl p-6 md:p-10 h-full flex flex-col border border-gray-700/50 hover:border-orange-500/30 transition-all duration-300">
+                <Card className="relative bg-gradient-to-br from-gray-900/50 to-gray-800/50 backdrop-blur-sm rounded-2xl shadow-2xl p-4 sm:p-6 md:p-8 h-full flex flex-col border border-gray-700/50 hover:border-orange-500/30 transition-all duration-300">
                   {/* Rating stars */}
-                  <div className="flex mb-4">
+                  <div className="flex mb-3 sm:mb-4">
                     {[...Array(testimonial.rating)].map((_, i) => (
-                      <Star key={i} className="text-amber-400 fill-amber-400" size={20} />
+                      <Star key={i} className="text-amber-400 fill-amber-400 w-4 h-4 sm:w-5 sm:h-5" />
                     ))}
                   </div>
 
                   {/* Testimonial text */}
-                  <p className="text-lg md:text-xl mb-6 text-gray-200 flex-grow relative pl-6">
-                    <Quote className="absolute -left-1 -top-2 text-orange-500/20" size={24} />
+                  <p className="text-sm sm:text-base md:text-lg mb-4 sm:mb-6 text-gray-200 flex-grow relative pl-5 sm:pl-6">
+                    <Quote className="absolute -left-1 -top-1 sm:-top-2 text-orange-500/20 w-4 h-4 sm:w-6 sm:h-6" />
                     {testimonial.text}
                   </p>
 
-                  <Separator className="my-4 bg-gray-700" />
+                  <Separator className="my-3 sm:my-4 bg-gray-700" />
 
                   {/* Person info */}
                   <div className="flex items-center">
-                     <Avatar className="h-14 w-14 border-2 border-orange-400/30">
+                     <Avatar className="h-10 w-10 sm:h-12 sm:w-12 md:h-14 md:w-14 border-2 border-orange-400/30">
                        {testimonial.image ? (
                          <AvatarImage src={testimonial.image} alt={testimonial.name} />
                        ) : (
-                         <AvatarFallback className="bg-gradient-to-br from-orange-500/20 to-amber-500/20 text-orange-300 font-bold text-xl">
+                         <AvatarFallback className="bg-gradient-to-br from-orange-500/20 to-amber-500/20 text-orange-300 font-bold text-base sm:text-lg md:text-xl">
                             {testimonial.name.charAt(0)}
                          </AvatarFallback>
                        )}
                      </Avatar>
-                    <div className="ml-4">
-                      <h4 className="font-bold text-white text-lg">{testimonial.name}</h4>
-                      <p className="text-gray-300 text-sm">
+                    <div className="ml-3 sm:ml-4">
+                      <h4 className="font-bold text-white text-sm sm:text-base md:text-lg">{testimonial.name}</h4>
+                      <p className="text-gray-300 text-xs sm:text-sm">
                         {testimonial.position}
                       </p>
                       <p className="text-orange-400 text-sm font-medium">
@@ -218,13 +218,13 @@ const TestimonialsSection = () => {
         </motion.div>
 
         {/* Navigation buttons and dots */}
-        <div className="flex justify-center items-center space-x-4 mt-8">
+        <div className="flex justify-center mt-6 sm:mt-8 space-x-1.5 sm:space-x-2 md:space-x-3">
           <button
             onClick={handlePrev}
-            className="p-3 rounded-full bg-gradient-to-br from-gray-800/50 to-gray-900/50 hover:from-gray-700/50 hover:to-gray-800/50 backdrop-blur-sm transition-all duration-300 text-white shadow-lg hover:shadow-orange-500/20 hover:-translate-x-0.5"
+            className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-1 sm:-translate-x-4 md:-translate-x-6 z-20 p-1.5 sm:p-2 rounded-full bg-gray-900/80 hover:bg-gray-800/90 text-white border border-gray-700/50 hover:border-orange-500/50 transition-all duration-300 shadow-lg backdrop-blur-sm"
             aria-label="Depoimento anterior"
           >
-            <ChevronLeft size={20} />
+            <ChevronLeft className="h-4 w-4 sm:h-5 sm:w-5 md:h-6 md:w-6" />
           </button>
 
           <div className="flex space-x-2">
@@ -233,8 +233,10 @@ const TestimonialsSection = () => {
                 key={index}
                 onClick={() => setCurrentIndex(index)}
                 className={cn(
-                  "w-3 h-3 rounded-full transition-colors duration-300",
-                  currentIndex === index ? "bg-gradient-to-r from-orange-400 to-amber-400 w-8" : "bg-gray-600/50 hover:bg-gray-500/70 w-3"
+                  "h-1.5 w-1.5 sm:h-2 sm:w-2 md:h-2.5 md:w-2.5 rounded-full transition-all duration-300",
+                  index === currentIndex
+                    ? "bg-orange-400 w-4 sm:w-6 md:w-8"
+                    : "bg-gray-600 hover:bg-gray-400"
                 )}
                 aria-label={`Ir para depoimento ${index + 1}`}
               />
@@ -243,10 +245,10 @@ const TestimonialsSection = () => {
 
           <button
             onClick={handleNext}
-            className="p-3 rounded-full bg-gradient-to-br from-gray-800/50 to-gray-900/50 hover:from-gray-700/50 hover:to-gray-800/50 backdrop-blur-sm transition-all duration-300 text-white shadow-lg hover:shadow-orange-500/20 hover:translate-x-0.5"
+            className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-1 sm:translate-x-4 md:translate-x-6 z-20 p-1.5 sm:p-2 rounded-full bg-gray-900/80 hover:bg-gray-800/90 text-white border border-gray-700/50 hover:border-orange-500/50 transition-all duration-300 shadow-lg backdrop-blur-sm"
             aria-label="Próximo depoimento"
           >
-            <ChevronRight size={20} />
+            <ChevronRight className="h-4 w-4 sm:h-5 sm:w-5 md:h-6 md:w-6" />
           </button>
         </div>
 
